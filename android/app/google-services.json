@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "175643253769",
+    "project_id": "gallery-app-fa590",
+    "storage_bucket": "gallery-app-fa590.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:175643253769:android:2abcd2fe3cefc3d90fecd8",
+        "android_client_info": {
+          "package_name": "com.example.gallery_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "175643253769-f1hbn9aebgudcu8aq1i298fe8pkutp8a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2zVlgEuHhxNvCzTZyrfKSryWGVUUKe80"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "175643253769-f1hbn9aebgudcu8aq1i298fe8pkutp8a.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "175643253769-45csfk7ms28guspcvbsmui4k9qht48ar.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.galleryApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
