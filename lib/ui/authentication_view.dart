@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gallery_app/net/flutterfire.dart';
 import 'package:gallery_app/ui/home_view.dart';
+import 'package:gallery_app/utlis/colors.dart';
 
 class Authentication extends StatefulWidget {
   const Authentication({super.key});
@@ -19,31 +20,24 @@ class _AuthenticationState extends State<Authentication> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-          color: Colors.blueAccent,
+        decoration: const BoxDecoration(
+          color: backgroundColour,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextFormField(
               controller: _emailField,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: "example@email.com",
-                hintStyle: TextStyle(color: Colors.white),
                 labelText: "Email",
-                labelStyle: TextStyle(
-                  color: Colors.white,
-                ),
               ),
             ),
             TextFormField(
               controller: _passwordField,
               obscureText: true, //hide password characters
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: "Password",
-                labelStyle: TextStyle(
-                  color: Colors.white,
-                ),
               ),
             ),
             Container(
@@ -51,7 +45,6 @@ class _AuthenticationState extends State<Authentication> {
               height: 45,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),
-                color: Colors.white,
               ),
               child: MaterialButton(
                 onPressed: () async {
@@ -66,8 +59,9 @@ class _AuthenticationState extends State<Authentication> {
                       ),
                     );
                   }
+                  //handle error by else and then create or fill a widget with the error
                 },
-                child: Text("Login"),
+                child: const Text("Login"),
               ),
             ),
             Container(
@@ -75,7 +69,6 @@ class _AuthenticationState extends State<Authentication> {
               height: 45,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),
-                color: Colors.white,
               ),
               child: MaterialButton(
                 onPressed: () async {
@@ -90,8 +83,9 @@ class _AuthenticationState extends State<Authentication> {
                       ),
                     );
                   }
+                  //handle error by else and then create or fill a widget with the error
                 },
-                child: Text("Sign Up"),
+                child: const Text("Sign Up"),
               ),
             ),
           ],
