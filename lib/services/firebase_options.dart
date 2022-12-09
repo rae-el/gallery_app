@@ -67,7 +67,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '175643253769',
     projectId: 'gallery-app-fa590',
     storageBucket: 'gallery-app-fa590.appspot.com',
-    iosClientId: '175643253769-45csfk7ms28guspcvbsmui4k9qht48ar.apps.googleusercontent.com',
+    iosClientId:
+        '175643253769-45csfk7ms28guspcvbsmui4k9qht48ar.apps.googleusercontent.com',
     iosBundleId: 'com.example.galleryApp',
   );
 
@@ -77,7 +78,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '175643253769',
     projectId: 'gallery-app-fa590',
     storageBucket: 'gallery-app-fa590.appspot.com',
-    iosClientId: '175643253769-45csfk7ms28guspcvbsmui4k9qht48ar.apps.googleusercontent.com',
+    iosClientId:
+        '175643253769-45csfk7ms28guspcvbsmui4k9qht48ar.apps.googleusercontent.com',
     iosBundleId: 'com.example.galleryApp',
   );
 }

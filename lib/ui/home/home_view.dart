@@ -1,13 +1,9 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gallery_app/profile/profile_view.dart';
-import 'package:gallery_app/ui/add_view.dart';
-import 'package:gallery_app/utlis/colors.dart';
-import 'package:image_picker/image_picker.dart';
-import '../gallery/gallery_event.dart';
+import 'package:gallery_app/ui/profile/profile_view.dart';
+import 'package:gallery_app/ui/add/add_view.dart';
+import 'package:gallery_app/app/colors.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -21,7 +17,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(),
+      appBar: const MainAppBar(),
       body: Container(
         decoration: const BoxDecoration(
           color: backgroundColour,
@@ -71,30 +67,31 @@ class _HomeViewState extends State<HomeView> {
             context,
             MaterialPageRoute(
               // go to the image source action sheet here
-              builder: (context) => AddView(),
+              builder: (context) => const AddView(),
             ),
           );
         },
-        child: Icon(
+        child: const Icon(
           Icons.add,
           color: textColour,
         ),
-        backgroundColor: primaryColour,
       ),
     );
   }
 }
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const MainAppBar({super.key});
+
   @override
   Size get preferredSize => const Size.fromHeight(100);
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text('Gallery'),
+      title: const Text('Gallery'),
       actions: [
         IconButton(
-          icon: Icon(Icons.person),
+          icon: const Icon(Icons.person),
           onPressed: () {
             Navigator.push(
               context,

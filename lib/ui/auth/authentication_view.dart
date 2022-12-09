@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gallery_app/net/flutterfire.dart';
-import 'package:gallery_app/ui/home_view.dart';
-import 'package:gallery_app/utlis/colors.dart';
+import 'package:gallery_app/services/flutterfire.dart';
+import 'package:gallery_app/ui/home/home_view.dart';
+import 'package:gallery_app/app/colors.dart';
 
 class Authentication extends StatefulWidget {
   const Authentication({super.key});
