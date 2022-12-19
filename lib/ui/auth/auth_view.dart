@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:gallery_app/services/flutterfire.dart';
+import 'package:gallery_app/services/auth_service.dart';
 import 'package:gallery_app/ui/home/home_view.dart';
 import 'package:gallery_app/app/colors.dart';
+import 'package:stacked/stacked.dart';/*
 
 class Authentication extends StatefulWidget {
-  const Authentication({super.key});
+  Authentication({super.key});
 
   @override
   State<Authentication> createState() => _AuthenticationState();
@@ -48,8 +49,8 @@ class _AuthenticationState extends State<Authentication> {
               ),
               child: MaterialButton(
                 onPressed: () async {
-                  bool shouldNavigate =
-                      await signIn(_emailField.text, _passwordField.text);
+                  bool shouldNavigate = await _authenticationService.signIn(
+                      _emailField.text, _passwordField.text);
                   if (shouldNavigate) {
                     // Navigate
                     Navigator.push(
@@ -94,3 +95,4 @@ class _AuthenticationState extends State<Authentication> {
     );
   }
 }
+*/

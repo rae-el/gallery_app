@@ -1,79 +1,81 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gallery_app/ui/home/home_view_model.dart';
 import 'package:gallery_app/ui/profile/profile_view.dart';
 import 'package:gallery_app/ui/add/add_view.dart';
 import 'package:gallery_app/app/colors.dart';
+import 'package:stacked/stacked.dart';
 
-class HomeView extends StatefulWidget {
+class HomeView extends StatelessWidget {
   const HomeView({super.key});
   // home view after authentication
 
-  @override
-  State<HomeView> createState() => _HomeViewState();
-}
+  //this has functionality that should be moved to the model
 
-class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const MainAppBar(),
-      body: Container(
-        decoration: const BoxDecoration(
-          color: backgroundColour,
-        ),
-        //fill space of entire screen
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: Center(
-          child: StreamBuilder<QuerySnapshot>(
-            //get info from Firestore
-            stream: FirebaseFirestore.instance
-                //stream builder checks current authenticated user for collection Images
-                .collection('Users')
-                .doc(FirebaseAuth.instance.currentUser!.uid)
-                .collection('Images')
-                .snapshots(),
-            builder:
-                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (!snapshot.hasData) {
-                return const Center(
-                  // while getting data show progress indicator
-                  child: CircularProgressIndicator(),
-                  // need to do something if no data
-                );
-              }
-              return ListView(
-                //get Images and list them as children containers
-                children: snapshot.data!.docs.map((document) {
-                  return Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        // build image here based on the path
-                        Text("Image ${document.id}"),
-                      ],
-                    ),
+    return ViewModelBuilder<HomeViewModel>.reactive(
+      viewModelBuilder: () => HomeViewModel(),
+      builder: (context, model, child) => Scaffold(
+        appBar: const MainAppBar(),
+        body: Container(
+          decoration: const BoxDecoration(
+            color: backgroundColour,
+          ),
+          //fill space of entire screen
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Center(
+            child: StreamBuilder<QuerySnapshot>(
+              //get info from Firestore
+              stream: FirebaseFirestore.instance
+                  //stream builder checks current authenticated user for collection Images
+                  .collection('Users')
+                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                  .collection('Images')
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(
+                    // while getting data show progress indicator
+                    child: CircularProgressIndicator(),
+                    // need to do something if no data
                   );
-                }).toList(),
-              );
-            },
+                }
+                return ListView(
+                  //get Images and list them as children containers
+                  children: snapshot.data!.docs.map((document) {
+                    return Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          // build image here based on the path
+                          Text("Image ${document.id}"),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                );
+              },
+            ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              // go to the image source action sheet here
-              builder: (context) => const AddView(),
-            ),
-          );
-        },
-        child: const Icon(
-          Icons.add,
-          color: textColour,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                // go to the image source action sheet here
+                builder: (context) => const AddView(),
+              ),
+            );
+          },
+          child: const Icon(
+            Icons.add,
+            color: textColour,
+          ),
         ),
       ),
     );
@@ -97,7 +99,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
               context,
               MaterialPageRoute(
                 // go to the image source action sheet here
-                builder: (context) => ProfileView(),
+                builder: (context) => const ProfileView(),
               ),
             );
           },

@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:gallery_app/ui/auth/authentication_view.dart';
-import 'package:gallery_app/ui/startup/startup_view.dart';
+import 'package:gallery_app/app/app.locator.dart';
 import 'package:gallery_app/app/colors.dart';
+import 'package:stacked_services/stacked_services.dart';
+import 'app/app.router.dart';
 import 'services/firebase_options.dart';
 
 void main() async {
+  setupLocator();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  //final router = AppRouter();
 
   // This widget is the root of your application.
   @override
@@ -44,8 +48,8 @@ class MyApp extends StatelessWidget {
           textTheme: ButtonTextTheme.accent,
         ),
       ),
-      //first page is the authentication
-      home: const StartupView(),
+      navigatorKey: StackedService.navigatorKey,
+      onGenerateRoute: StackedRouter().onGenerateRoute,
     );
   }
 }

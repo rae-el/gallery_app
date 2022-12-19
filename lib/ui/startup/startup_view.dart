@@ -10,7 +10,9 @@ class StartupView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<StartupViewModel>.reactive(
+      //this is where I put the view structure
       viewModelBuilder: () => StartupViewModel(),
+      //onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, viewModel, child) => Scaffold(
         body: Center(
           child: Column(
@@ -19,7 +21,7 @@ class StartupView extends StatelessWidget {
               SizedBox(
                 width: 300,
                 height: 100,
-                child: Image.asset('assets/gallery_logo.png'),
+                child: Image.asset(viewModel.logoLocation),
               ),
               const CircularProgressIndicator(
                   strokeWidth: 3,
