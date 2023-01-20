@@ -21,5 +21,5 @@ Future<void> setupLocator(
 
 // Register dependencies
   locator.registerLazySingleton(() => AuthenticationService());
-  locator.registerSingleton(NavigationService());
+  locator.registerLazySingleton(() => NavigationService());
 }

@@ -13,7 +13,7 @@ class StartupView extends StatelessWidget {
       //this is where I put the view structure
       viewModelBuilder: () => StartupViewModel(),
       //onModelReady: (viewModel) => viewModel.initialise(),
-      builder: (context, viewModel, child) => Scaffold(
+      builder: (context, model, child) => Scaffold(
         body: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -21,11 +21,14 @@ class StartupView extends StatelessWidget {
               SizedBox(
                 width: 300,
                 height: 100,
-                child: Image.asset(viewModel.logoLocation),
+                child: Image.asset(model.logoLocation),
               ),
               const CircularProgressIndicator(
                   strokeWidth: 3,
                   valueColor: AlwaysStoppedAnimation(primaryColour)),
+              FloatingActionButton(
+                onPressed: model.navigate,
+              ),
             ],
           ),
         ),
