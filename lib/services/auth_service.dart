@@ -46,4 +46,21 @@ class AuthenticationService {
       return false;
     }
   }
+
+  Future getUserDetails() async {
+    try {
+      var user = await _firebaseAuth.currentUser;
+      var userDetails = {};
+      userDetails['username'] = user?.displayName;
+      userDetails['email'] = user?.email;
+      userDetails['photo'] = user?.photoURL;
+      //need to create a description or have this as part of the gallery db
+      //userDetails['description'] = user?.;
+
+      return userDetails;
+    } catch (e) {
+      print(e); // change this to a message
+      return "";
+    }
+  }
 }

@@ -8,9 +8,10 @@
 import 'package:flutter/material.dart';
 import 'package:gallery_app/ui/auth/auth_view.dart' as _i4;
 import 'package:gallery_app/ui/home/home_view.dart' as _i3;
+import 'package:gallery_app/ui/profile/profile_view.dart' as _i5;
 import 'package:gallery_app/ui/startup/startup_view.dart' as _i2;
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i5;
+import 'package:stacked_services/stacked_services.dart' as _i6;
 
 class Routes {
   static const startupView = '/';
@@ -19,10 +20,13 @@ class Routes {
 
   static const authView = '/auth-view';
 
+  static const profileView = '/profile-view';
+
   static const all = <String>{
     startupView,
     homeView,
     authView,
+    profileView,
   };
 }
 
@@ -39,6 +43,10 @@ class StackedRouter extends _i1.RouterBase {
     _i1.RouteDef(
       Routes.authView,
       page: _i4.AuthView,
+    ),
+    _i1.RouteDef(
+      Routes.profileView,
+      page: _i5.ProfileView,
     ),
   ];
 
@@ -61,6 +69,12 @@ class StackedRouter extends _i1.RouterBase {
         settings: data,
       );
     },
+    _i5.ProfileView: (data) {
+      return MaterialPageRoute<dynamic>(
+        builder: (context) => const _i5.ProfileView(),
+        settings: data,
+      );
+    },
   };
 
   @override
@@ -69,7 +83,7 @@ class StackedRouter extends _i1.RouterBase {
   Map<Type, _i1.StackedRouteFactory> get pagesMap => _pagesMap;
 }
 
-extension NavigatorStateExtension on _i5.NavigationService {
+extension NavigatorStateExtension on _i6.NavigationService {
   Future<dynamic> navigateToStartupView([
     int? routerId,
     bool preventDuplicates = true,
@@ -106,6 +120,20 @@ extension NavigatorStateExtension on _i5.NavigationService {
         transition,
   ]) async {
     return navigateTo<dynamic>(Routes.authView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToProfileView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.profileView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
