@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gallery_app/app/colors.dart';
+import 'package:gallery_app/ui/profile/profile_view_model.dart';
+import 'package:stacked/stacked.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
@@ -21,14 +23,21 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(100);
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      title: const Text('Profile'),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.logout),
-          onPressed: () {},
+    return ViewModelBuilder<ProfileViewModel>.reactive(
+      //this is where I put the view structure
+      viewModelBuilder: () => ProfileViewModel(),
+      //onModelReady: (viewModel) => viewModel.initialise(),
+      builder: (context, model, child) => Scaffold(
+        appBar: AppBar(
+          title: const Text('Profile'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: model.signOut,
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

@@ -1,8 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:stacked/stacked.dart';
+import 'package:stacked_services/stacked_services.dart';
+
+import '../../app/app.locator.dart';
+import '../../app/app.router.dart';
+import '../../services/auth_service.dart';
 
 class ProfileViewModel extends BaseViewModel {
+  final authenticationService = locator<AuthenticationService>();
+  final navigationService = locator<NavigationService>();
+
+  Future signOut() async {
+    if (await authenticationService.signOut()) {
+      navigationService.navigateTo(Routes.authView);
+    } else {
+      navigationService.navigateTo(Routes.homeView);
+    }
+  }
+
   Future? ChangeAvatarRequest() {
     return null;
   }

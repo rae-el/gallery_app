@@ -18,4 +18,9 @@ class ImageViewModel extends BaseViewModel {
   Future navigate() async {
     navigationService.navigateTo(Routes.homeView);
   }
+
+  //gesture functions
+  //double tap, add / remove from liked
+  //pinch, zoom
+  //long hold, option to delete (maybe)
 }

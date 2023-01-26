@@ -16,6 +16,16 @@ class AuthenticationService {
     }
   }
 
+  Future<bool> signOut() async {
+    try {
+      await _firebaseAuth.signOut();
+      return true;
+    } catch (e) {
+      print(e); // change this to a message
+      return false;
+    }
+  }
+
   Future<bool> signUp(String email, String password) async {
     try {
       var signUpResult = await _firebaseAuth.createUserWithEmailAndPassword(
@@ -33,6 +43,16 @@ class AuthenticationService {
       return false;
     } catch (e) {
       print(e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> forgotPassword(String email) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+      return true;
+    } catch (e) {
+      print(e); // change this to a message
       return false;
     }
   }

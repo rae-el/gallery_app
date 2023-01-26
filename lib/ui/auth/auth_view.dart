@@ -44,6 +44,12 @@ class AuthenticationState extends State<AuthView> {
                   labelText: "Password",
                 ),
               ),
+              MaterialButton(
+                onPressed: () async {
+                  await model.forgotPassword(email: _emailField.text);
+                },
+                child: const Text("Forgot password"),
+              ),
               Container(
                 width: MediaQuery.of(context).size.width / 1.4,
                 height: 45,

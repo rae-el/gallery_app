@@ -20,8 +20,10 @@ class HomeView extends StatelessWidget {
           //fill space of entire screen
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          //fill with images
-          child: Center(),
+          child: GestureDetector(
+            //fill with images
+            child: const Center(),
+          )
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: model.addImage,

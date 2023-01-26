@@ -5,7 +5,6 @@ import 'package:stacked_services/stacked_services.dart';
 import '../../app/app.locator.dart';
 import '../../app/app.router.dart';
 
-
 class AuthViewModel extends BaseViewModel {
   final navigationService = locator<NavigationService>();
   final authenticationService = locator<AuthenticationService>();
@@ -28,5 +27,10 @@ class AuthViewModel extends BaseViewModel {
     } else {
       return;
     }
+  }
+
+  Future forgotPassword({required String email}) async {
+    authenticationService.forgotPassword(email);
+    //add error catching
   }
 }

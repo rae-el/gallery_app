@@ -118,4 +118,10 @@ class HomeViewModel extends BaseViewModel {
             ));
   }*/
   }
+
+  //gesture functions
+  //double tap, add / remove from liked
+  //tap, navigate to image view
+  //long hold, option to delete (maybe)
+  //drag, reorder (maybe)
 }
