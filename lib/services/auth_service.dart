@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  String? returnMessage;
 
   Future<bool> signIn(String email, String password) async {
     try {
@@ -9,9 +10,10 @@ class AuthenticationService {
         email: email,
         password: password,
       );
-      return user != null;
+      return true;
     } catch (e) {
-      print(e); // change this to a message
+      print(e); // change this to a message to show in a snack bar
+      returnMessage = e.toString();
       return false;
     }
   }
@@ -22,6 +24,7 @@ class AuthenticationService {
       return true;
     } catch (e) {
       print(e); // change this to a message
+      returnMessage = e.toString();
       return false;
     }
   }
@@ -32,17 +35,19 @@ class AuthenticationService {
         email: email,
         password: password,
       );
-      return signUpResult.user != null;
+      return true;
     } on FirebaseException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.'); // change this to a message
+        returnMessage =
+            'The password provided is too weak.'; // change this to a message
       } else if (e.code == 'email=already-in-use') {
-        print(
-            'An account already exists for that email.'); // change this to a message
+        returnMessage =
+            'An account already exists for that email.'; // change this to a message
       }
       return false;
     } catch (e) {
-      print(e.toString());
+      print(e);
+      returnMessage = e.toString();
       return false;
     }
   }
@@ -51,8 +56,9 @@ class AuthenticationService {
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: email);
       return true;
-    } catch (e) {
+    } on FirebaseException catch (e) {
       print(e); // change this to a message
+      returnMessage = e.toString();
       return false;
     }
   }
@@ -60,9 +66,10 @@ class AuthenticationService {
   Future<bool> isUserLoggedIn() async {
     try {
       var user = await _firebaseAuth.currentUser;
-      return user != null;
-    } catch (e) {
+      return true;
+    } on FirebaseException catch (e) {
       print(e); // change this to a message
+      returnMessage = e.toString();
       return false;
     }
   }
@@ -80,7 +87,8 @@ class AuthenticationService {
       return userDetails;
     } catch (e) {
       print(e); // change this to a message
-      return "";
+      returnMessage = e.toString();
+      return returnMessage;
     }
   }
 }

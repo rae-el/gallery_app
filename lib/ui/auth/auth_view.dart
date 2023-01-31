@@ -13,6 +13,8 @@ class AuthView extends StatefulWidget {
 class AuthenticationState extends State<AuthView> {
   TextEditingController _emailField = TextEditingController();
   TextEditingController _passwordField = TextEditingController();
+  GlobalKey<FormState> _key = GlobalKey<FormState>();
+  String errorMessage = '';
 
   @override
   Widget build(BuildContext context) {
@@ -21,64 +23,71 @@ class AuthenticationState extends State<AuthView> {
       viewModelBuilder: () => AuthViewModel(),
       //onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, model, child) => Scaffold(
-        body: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          decoration: const BoxDecoration(
-            color: backgroundColour,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextFormField(
-                controller: _emailField,
-                decoration: const InputDecoration(
-                  hintText: "example@email.com",
-                  labelText: "Email",
+        body: Form(
+          key: _key,
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            decoration: const BoxDecoration(
+              color: backgroundColour,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextFormField(
+                  controller: _emailField,
+                  validator: model.validateFormEmail,
+                  decoration: const InputDecoration(
+                    hintText: "example@email.com",
+                    labelText: "Email",
+                  ),
                 ),
-              ),
-              TextFormField(
-                controller: _passwordField,
-                obscureText: true, //hide password characters
-                decoration: const InputDecoration(
-                  labelText: "Password",
+                TextFormField(
+                  controller: _passwordField,
+                  validator: model.validateFormPassword,
+                  obscureText: true, //hide password characters
+                  decoration: const InputDecoration(
+                    labelText: "Password",
+                  ),
                 ),
-              ),
-              MaterialButton(
-                onPressed: () async {
-                  await model.forgotPassword(email: _emailField.text);
-                },
-                child: const Text("Forgot password"),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width / 1.4,
-                height: 45,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: MaterialButton(
+                MaterialButton(
                   onPressed: () async {
-                    await model.signIn(
-                        email: _emailField.text, password: _passwordField.text);
+                    await model.forgotPassword(email: _emailField.text);
                   },
-                  child: const Text("Login"),
+                  child: const Text("Forgot password"),
                 ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width / 1.4,
-                height: 45,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.0),
+                Container(
+                  width: MediaQuery.of(context).size.width / 1.4,
+                  height: 45,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: MaterialButton(
+                    onPressed: () async {
+                      await model.signIn(
+                          email: _emailField.text,
+                          password: _passwordField.text);
+                    },
+                    child: const Text("Login"),
+                  ),
                 ),
-                child: MaterialButton(
-                  onPressed: () async {
-                    await model.signUp(
-                        email: _emailField.text, password: _passwordField.text);
-                  },
-                  child: const Text("Sign Up"),
+                Container(
+                  width: MediaQuery.of(context).size.width / 1.4,
+                  height: 45,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: MaterialButton(
+                    onPressed: () async {
+                      await model.signUp(
+                          email: _emailField.text,
+                          password: _passwordField.text);
+                    },
+                    child: const Text("Sign Up"),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
