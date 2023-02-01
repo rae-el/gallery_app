@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final db = FirebaseFirestore.instance;
   String? returnMessage;
 
   Future<bool> signIn(String email, String password) async {
@@ -31,10 +33,12 @@ class AuthenticationService {
 
   Future<bool> signUp(String email, String password) async {
     try {
-      var signUpResult = await _firebaseAuth.createUserWithEmailAndPassword(
+      var newUser = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+      var newUID = newUser.user!.uid;
+      saveUser(newUID);
       return true;
     } on FirebaseException catch (e) {
       if (e.code == 'weak-password') {
@@ -49,6 +53,13 @@ class AuthenticationService {
       print(e);
       returnMessage = e.toString();
       return false;
+    }
+  }
+
+  Future saveUser(String newUser) async {
+    var user = _firebaseAuth.currentUser;
+    if (user?.uid == newUser) {
+      db.collection('users').doc(newUser).set({'email': user?.email});
     }
   }
 
@@ -85,6 +96,19 @@ class AuthenticationService {
       //userDetails['description'] = user?.;
 
       return userDetails;
+    } catch (e) {
+      print(e); // change this to a message
+      returnMessage = e.toString();
+      return returnMessage;
+    }
+  }
+
+  Future<String?> getUserEmail() async {
+    try {
+      var user = await _firebaseAuth.currentUser;
+      var userEmail = user?.email;
+
+      return userEmail;
     } catch (e) {
       print(e); // change this to a message
       returnMessage = e.toString();

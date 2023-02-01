@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gallery_app/ui/profile/profile_view.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -11,6 +12,12 @@ class ProfileViewModel extends BaseViewModel {
   final authenticationService = locator<AuthenticationService>();
   final navigationService = locator<NavigationService>();
 
+  Future<String> showUserEmail(Set set) async {
+    String userEmail = await authenticationService.getUserEmail() as String;
+
+    return userEmail;
+  }
+
   Future signOut() async {
     if (await authenticationService.signOut()) {
       navigationService.navigateTo(Routes.authView);
@@ -19,31 +26,31 @@ class ProfileViewModel extends BaseViewModel {
     }
   }
 
-  Future? ChangeAvatarRequest() {
+  Future? changeAvatarRequest() {
     return null;
   }
 
-  Future? OpenAvatarPicker(Set set) {
+  Future? openAvatarPicker(Set set) {
     final ImageSource imageSource;
 
     //OpenAvatarPicker({required this.imageSource});
     return null;
   }
 
-  Future? GetAvatarPath(Set set) {
+  Future? getAvatarPath(Set set) {
     final String avatarPath;
 
     //GetAvatarPath({required this.avatarPath});
     return null;
   }
 
-  Future? ProfileDescriptionChanged(Set set) {
+  Future? profileDescriptionChanged(Set set) {
     final String description;
     //ProfileDescriptionChanged({required this.description});
     return null;
   }
 
-  Future? SaveProfileChanges(Set set) {
+  Future? saveProfileChanges(Set set) {
     return null;
   }
 }

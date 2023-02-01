@@ -47,101 +47,50 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //put a height here because throwing error when trying to enter description
-    return SafeArea(
-      child: Center(
-        child: Column(
-          children: const [
-            SizedBox(height: 30),
-            Avatar(),
-            ChangeAvatarButton(),
-            SizedBox(height: 30),
-            UsernameTile(),
-            EmailTile(),
-            DescriptionTile(),
-            SaveProfileButton(),
-          ],
+    return ViewModelBuilder<ProfileViewModel>.reactive(
+      //this is where I put the view structure
+      viewModelBuilder: () => ProfileViewModel(),
+      //onModelReady: (viewModel) => viewModel.initialise(),
+      builder: (context, model, child) => Scaffold(
+        body: Center(
+          child: Column(
+            children: [
+              const SizedBox(height: 30),
+              const CircleAvatar(
+                radius: 50,
+                child: Icon(Icons.person),
+              ),
+              TextButton(
+                onPressed: () {},
+                child: const Text('Change Profile Picture'),
+              ),
+              const SizedBox(height: 30),
+              const ListTile(
+                  tileColor: backgroundColour,
+                  leading: Icon(Icons.person),
+                  title: Text('Username')),
+              const ListTile(
+                tileColor: backgroundColour,
+                leading: Icon(Icons.mail),
+                title: Text('email'),
+              ),
+              ListTile(
+                tileColor: backgroundColour,
+                leading: const Icon(Icons.edit),
+                title: TextFormField(
+                  decoration: const InputDecoration.collapsed(
+                      hintText: 'Gallery Description'),
+                  maxLines: null,
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                child: const Text('Save'),
+              ),
+            ],
+          ),
         ),
       ),
-    );
-  }
-}
-
-class Avatar extends StatelessWidget {
-  const Avatar({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const CircleAvatar(
-      radius: 50,
-      child: Icon(Icons.person),
-    );
-  }
-}
-
-class ChangeAvatarButton extends StatelessWidget {
-  const ChangeAvatarButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () {},
-      child: const Text('Change Profile Picture'),
-    );
-  }
-}
-
-class UsernameTile extends StatelessWidget {
-  const UsernameTile({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const ListTile(
-      tileColor: backgroundColour,
-      leading: Icon(Icons.person),
-      title: Text('Username'),
-    );
-  }
-}
-
-class EmailTile extends StatelessWidget {
-  const EmailTile({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const ListTile(
-      tileColor: backgroundColour,
-      leading: Icon(Icons.mail),
-      title: Text('Email'),
-    );
-  }
-}
-
-class DescriptionTile extends StatelessWidget {
-  const DescriptionTile({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      tileColor: backgroundColour,
-      leading: const Icon(Icons.edit),
-      title: TextFormField(
-        decoration:
-            const InputDecoration.collapsed(hintText: 'Gallery Description'),
-        maxLines: null,
-      ),
-    );
-  }
-}
-
-class SaveProfileButton extends StatelessWidget {
-  const SaveProfileButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {},
-      child: const Text('Save'),
     );
   }
 }
