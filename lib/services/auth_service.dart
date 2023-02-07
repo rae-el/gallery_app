@@ -37,9 +37,22 @@ class AuthenticationService {
         email: email,
         password: password,
       );
-      var newUID = newUser.user!.uid;
-      saveUser(newUID);
-      return true;
+      if (newUser.user != null) {
+        try {
+          await db
+              .collection('users')
+              .doc(newUser.user!.uid)
+              .set({'email': newUser.user!.email});
+          return true;
+          //add on firebase exception
+        } catch (e) {
+          print(e);
+          return false;
+        }
+      }
+      //var newUID = newUser.user!.uid;
+      //saveUser(newUID);
+      return false;
     } on FirebaseException catch (e) {
       if (e.code == 'weak-password') {
         returnMessage =
