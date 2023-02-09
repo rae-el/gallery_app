@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gallery_app/models/this_user.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -50,8 +51,6 @@ class AuthenticationService {
           return false;
         }
       }
-      //var newUID = newUser.user!.uid;
-      //saveUser(newUID);
       return false;
     } on FirebaseException catch (e) {
       if (e.code == 'weak-password') {
@@ -66,13 +65,6 @@ class AuthenticationService {
       print(e);
       returnMessage = e.toString();
       return false;
-    }
-  }
-
-  Future saveUser(String newUser) async {
-    var user = _firebaseAuth.currentUser;
-    if (user?.uid == newUser) {
-      db.collection('users').doc(newUser).set({'email': user?.email});
     }
   }
 
@@ -98,28 +90,21 @@ class AuthenticationService {
     }
   }
 
-  Future getUserDetails() async {
-    try {
-      var user = await _firebaseAuth.currentUser;
-      var userDetails = {};
-      userDetails['username'] = user?.displayName;
-      userDetails['email'] = user?.email;
-      userDetails['photo'] = user?.photoURL;
-      //need to create a description or have this as part of the gallery db
-      //userDetails['description'] = user?.;
-
-      return userDetails;
-    } catch (e) {
-      print(e); // change this to a message
-      returnMessage = e.toString();
-      return returnMessage;
-    }
-  }
 
   Future<String?> getUserEmail() async {
     try {
       var user = await _firebaseAuth.currentUser;
+      var userUID = user?.uid;
       var userEmail = user?.email;
+
+      var docRef = db.collection("users").doc(userUID);
+      docRef.get().then(
+        (DocumentSnapshot doc) {
+          final userData = doc.data() as Map<String, dynamic>;
+          print(userData);
+        },
+        onError: (e) => print("Error getting document: $e"),
+      );
 
       return userEmail;
     } catch (e) {

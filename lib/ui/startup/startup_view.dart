@@ -26,9 +26,6 @@ class StartupView extends StatelessWidget {
               const CircularProgressIndicator(
                   strokeWidth: 3,
                   valueColor: AlwaysStoppedAnimation(primaryColour)),
-              FloatingActionButton(
-                onPressed: model.navigate,
-              ),
             ],
           ),
         ),

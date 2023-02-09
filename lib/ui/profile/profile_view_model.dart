@@ -12,6 +12,9 @@ class ProfileViewModel extends BaseViewModel {
   final authenticationService = locator<AuthenticationService>();
   final navigationService = locator<NavigationService>();
 
+  Future<String?> get userEmail async =>
+      await authenticationService.getUserEmail();
+
   Future<String> showUserEmail(Set set) async {
     String userEmail = await authenticationService.getUserEmail() as String;
 

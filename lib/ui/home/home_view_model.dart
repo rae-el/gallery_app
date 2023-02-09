@@ -14,10 +14,10 @@ class HomeViewModel extends BaseViewModel {
     navigationService.navigateTo(Routes.profileView);
   }
 
-  Future getImages() {
-    var user = authenticationService.getUserDetails();
+  /*Future getImages() {
+    //var user = authenticationService.getUserDetails();
     //change this to be receiving the images
-    return user;
+    //return user;
     //populating with images
     /*
     StreamBuilder<QuerySnapshot>(
@@ -52,7 +52,7 @@ class HomeViewModel extends BaseViewModel {
                   }).toList(),
                 );
               },*/
-  }
+  }*/
 
   Future addImage() async {
     //change to adding an image into gallery

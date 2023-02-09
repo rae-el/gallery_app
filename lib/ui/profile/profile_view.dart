@@ -69,10 +69,10 @@ class ProfilePage extends StatelessWidget {
                   tileColor: backgroundColour,
                   leading: Icon(Icons.person),
                   title: Text('Username')),
-              const ListTile(
+              ListTile(
                 tileColor: backgroundColour,
-                leading: Icon(Icons.mail),
-                title: Text('email'),
+                leading: const Icon(Icons.mail),
+                title: Text(model.userEmail as String),
               ),
               ListTile(
                 tileColor: backgroundColour,
