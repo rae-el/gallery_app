@@ -50,47 +50,49 @@ class ProfilePage extends StatelessWidget {
     return ViewModelBuilder<ProfileViewModel>.reactive(
       //this is where I put the view structure
       viewModelBuilder: () => ProfileViewModel(),
-      //onModelReady: (viewModel) => viewModel.initialise(),
-      builder: (context, model, child) => Scaffold(
-        body: Center(
-          child: Column(
-            children: [
-              const SizedBox(height: 30),
-              const CircleAvatar(
-                radius: 50,
-                child: Icon(Icons.person),
-              ),
-              TextButton(
-                onPressed: () {},
-                child: const Text('Change Profile Picture'),
-              ),
-              const SizedBox(height: 30),
-              const ListTile(
-                  tileColor: backgroundColour,
-                  leading: Icon(Icons.person),
-                  title: Text('Username')),
-              ListTile(
-                tileColor: backgroundColour,
-                leading: const Icon(Icons.mail),
-                title: Text(model.userEmail as String),
-              ),
-              ListTile(
-                tileColor: backgroundColour,
-                leading: const Icon(Icons.edit),
-                title: TextFormField(
-                  decoration: const InputDecoration.collapsed(
-                      hintText: 'Gallery Description'),
-                  maxLines: null,
+      onModelReady: (viewModel) => viewModel.initialise(),
+      builder: (context, model, child) => ProfileViewModel().isBusy
+          ? const Center(child: CircularProgressIndicator())
+          : Scaffold(
+              body: Center(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 30),
+                    const CircleAvatar(
+                      radius: 50,
+                      child: Icon(Icons.person),
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: const Text('Change Profile Picture'),
+                    ),
+                    const SizedBox(height: 30),
+                    const ListTile(
+                        tileColor: backgroundColour,
+                        leading: Icon(Icons.person),
+                        title: Text('Username')),
+                    ListTile(
+                      tileColor: backgroundColour,
+                      leading: const Icon(Icons.mail),
+                      title: Text(model.showUserEmail as String),
+                    ),
+                    ListTile(
+                      tileColor: backgroundColour,
+                      leading: const Icon(Icons.edit),
+                      title: TextFormField(
+                        decoration: const InputDecoration.collapsed(
+                            hintText: 'Gallery Description'),
+                        maxLines: null,
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: const Text('Save'),
+                    ),
+                  ],
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {},
-                child: const Text('Save'),
-              ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

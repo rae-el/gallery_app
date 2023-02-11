@@ -8,16 +8,22 @@ import '../../app/app.locator.dart';
 import '../../app/app.router.dart';
 import '../../services/auth_service.dart';
 
-class ProfileViewModel extends BaseViewModel {
+class ProfileViewModel extends BaseViewModel implements Initialisable {
   final authenticationService = locator<AuthenticationService>();
   final navigationService = locator<NavigationService>();
 
-  Future<String?> get userEmail async =>
-      await authenticationService.getUserEmail();
+  @override
+  void initialise() async {
+    runBusyFuture(showUserEmail());
 
-  Future<String> showUserEmail(Set set) async {
-    String userEmail = await authenticationService.getUserEmail() as String;
+    // This will be called when init state cycle runs
+    //this works but so quick that you don't see it, consider adding a delay
+  }
 
+  Future<String> showUserEmail() async {
+    setBusy(true);
+    var userEmailResult = await authenticationService.getUserEmail();
+    var userEmail = userEmailResult ?? "";
     return userEmail;
   }
 
