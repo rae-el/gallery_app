@@ -11,24 +11,37 @@ import '../../services/auth_service.dart';
 class ProfileViewModel extends BaseViewModel implements Initialisable {
   final authenticationService = locator<AuthenticationService>();
   final navigationService = locator<NavigationService>();
+
   String _userEmail = "";
   String get userEmail => _userEmail;
 
+  String _userName = "";
+  String get userName => _userName;
+
+  String _userAvatar = "";
+  String get userAvatar => _userAvatar;
+
+  /*String _userDescription = "";
+  String get userDescription => _userDescription;*/
+
   @override
   void initialise() async {
-    runBusyFuture(getUserEmail());
+    runBusyFuture(retrieveUserData());
     // This will be called when init state cycle runs
     //this works but so quick that you don't see it, consider adding a delay
   }
 
-  Future<bool> getUserEmail() async {
+  Future<bool> retrieveUserData() async {
     setBusy(true);
-    var userEmailResult = await authenticationService.getUserEmail();
-    _userEmail = userEmailResult ?? "";
-    if (_userEmail != "") {
-      print(userEmail);
+    var userData = await authenticationService.getUserData();
+
+    if (userData != "") {
+      _userEmail = userData['email'] ?? "";
+      _userName = userData['userName'] ?? "";
+      _userAvatar = userData['avatar'] ?? "";
       return true;
     } else {
+      //do some error handeling
       return false;
     }
   }

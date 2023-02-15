@@ -82,7 +82,11 @@ class AuthenticationService {
   Future<bool> isUserLoggedIn() async {
     try {
       var user = await _firebaseAuth.currentUser;
-      return true;
+      if (user != null) {
+        return true;
+      } else {
+        return false;
+      }
     } on FirebaseException catch (e) {
       print(e); // change this to a message
       returnMessage = e.toString();
@@ -90,6 +94,48 @@ class AuthenticationService {
     }
   }
 
+  Future getUserData() async {
+    try {
+      var user = _firebaseAuth.currentUser;
+      print(user);
+      var userEmail = user?.email;
+      var userName = user?.displayName;
+      var avatar = user?.photoURL;
+      var userData = {
+        'email': userEmail,
+        'userName': userName,
+        'avatar': avatar,
+      };
+      print(userData);
+      return userData;
+      /*var userUID = user?.uid;
+      print(userUID);
+      if (userUID != null) {
+        print("Getting data for user $userUID");
+        try {
+          var docRef = db.collection("users").doc(userUID);
+          docRef.get().then(
+            (DocumentSnapshot doc) {
+              var userData = doc.data() as Map<String, dynamic>;
+              print("User data from doc snapshot: $userData");
+              return userData;
+            },
+            onError: (e) => print("Error getting document: $e"),
+          );
+          return userUID;
+          //add on firebase exception
+        } catch (e) {
+          print(e);
+          returnMessage = e.toString();
+          return returnMessage;
+        }
+      }*/
+    } catch (e) {
+      print(e); // change this to a message
+      returnMessage = e.toString();
+      return returnMessage;
+    }
+  }
 
   Future<String?> getUserEmail() async {
     try {
@@ -101,7 +147,9 @@ class AuthenticationService {
       docRef.get().then(
         (DocumentSnapshot doc) {
           final userData = doc.data() as Map<String, dynamic>;
-          print(userData);
+          print("User data from doc snapshot: $userData");
+          var email = userData['email'];
+          return email;
         },
         onError: (e) => print("Error getting document: $e"),
       );
