@@ -21,23 +21,22 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
   String _userAvatar = "";
   String get userAvatar => _userAvatar;
 
-  /*String _userDescription = "";
-  String get userDescription => _userDescription;*/
-
   @override
   void initialise() async {
-    runBusyFuture(retrieveUserData());
+    runBusyFuture(askForUserData());
     // This will be called when init state cycle runs
     //this works but so quick that you don't see it, consider adding a delay
   }
 
-  Future<bool> retrieveUserData() async {
+  Future<bool> askForUserData() async {
     setBusy(true);
+    print('asking for user data');
     var userData = await authenticationService.getUserData();
+    print(userData);
 
     if (userData != "") {
-      _userEmail = userData['email'] ?? "";
-      _userName = userData['userName'] ?? "";
+      _userEmail = userData['email'] ?? "Email";
+      _userName = userData['userName'] ?? "Username";
       _userAvatar = userData['avatar'] ?? "";
       return true;
     } else {
@@ -72,13 +71,15 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
     return null;
   }
 
-  Future? profileDescriptionChanged(Set set) {
+  Future? profileNameChanged(Set set) {
     final String description;
     //ProfileDescriptionChanged({required this.description});
     return null;
   }
 
-  Future? saveProfileChanges(Set set) {
-    return null;
+  Future<bool> saveProfileName({
+    required String name,
+  }) async {
+    return true;
   }
 }

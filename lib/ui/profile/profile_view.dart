@@ -8,9 +8,9 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: backgroundColour,
-      appBar: MyAppBar(),
+      appBar: const MyAppBar(),
       body: ProfilePage(),
     );
   }
@@ -43,7 +43,10 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  ProfilePage({super.key});
+
+  final TextEditingController _nameField =
+      TextEditingController(text: ProfileViewModel().userName);
 
   @override
   Widget build(BuildContext context) {
@@ -67,26 +70,30 @@ class ProfilePage extends StatelessWidget {
                       child: const Text('Change Profile Picture'),
                     ),
                     const SizedBox(height: 30),
-                    const ListTile(
-                        tileColor: backgroundColour,
-                        leading: Icon(Icons.person),
-                        title: Text('Username')),
+                    ListTile(
+                      tileColor: backgroundColour,
+                      leading: const Icon(Icons.edit),
+                      title: TextFormField(
+                        controller: _nameField,
+                        decoration: const InputDecoration(
+                          hintText: "Username",
+                        ),
+                      ),
+                    ),
                     ListTile(
                       tileColor: backgroundColour,
                       leading: const Icon(Icons.mail),
                       title: Text(model.userEmail),
                     ),
-                    ListTile(
-                      tileColor: backgroundColour,
-                      leading: const Icon(Icons.edit),
-                      title: TextFormField(
-                        decoration: const InputDecoration.collapsed(
-                            hintText: 'Gallery Description'),
-                        maxLines: null,
-                      ),
+                    TextButton(
+                      onPressed: () {},
+                      child: const Text('Change Password'),
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        await model.saveProfileName(
+                            name: _nameField.text.trim());
+                      },
                       child: const Text('Save'),
                     ),
                   ],

@@ -5,21 +5,47 @@ final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 final db = FirebaseFirestore.instance;
 
 class ThisUser {
+  final String? id;
   final String? email;
   final String? username;
   final String? description;
-  final String? picture;
-  final List<String>? gallery;
+  final String? avatar;
 
   ThisUser({
-    this.email,
-    this.username,
-    this.description,
-    this.picture,
-    this.gallery,
+    this.id,
+    required this.email,
+    required this.username,
+    required this.description,
+    required this.avatar,
   });
 
-  factory ThisUser.fromFirestore(
+  toJson() {
+    return {
+      "email": email,
+      "username": username,
+      "description": description,
+      "avatar": avatar
+    };
+  }
+
+  factory ThisUser.fromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> document) {
+    final data = document.data()!;
+    return ThisUser(
+        id: document.id,
+        email: data["email"],
+        username: data["username"],
+        description: data["description"],
+        avatar: data["avatar"]);
+  }
+
+  static ThisUser fromJson(Map<String, dynamic> json) => ThisUser(
+      email: json['email'],
+      username: json['username'],
+      description: json['description'],
+      avatar: json['avatar']);
+
+  /*factory ThisUser.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
     SnapshotOptions? options,
   ) {
@@ -60,5 +86,5 @@ class ThisUser {
       print("No such user.");
       return "";
     }
-  }
+  }*/
 }

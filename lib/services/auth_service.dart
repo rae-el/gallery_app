@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:gallery_app/models/this_user.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final db = FirebaseFirestore.instance;
+  final usersCollection = FirebaseFirestore.instance.collection('users');
   String? returnMessage;
 
   Future<bool> signIn(String email, String password) async {
@@ -97,6 +99,25 @@ class AuthenticationService {
   Future getUserData() async {
     try {
       var user = _firebaseAuth.currentUser;
+      var uid = user?.uid;
+
+      QuerySnapshot querySnapshot = await usersCollection.get();
+
+      // Get data from docs and convert map to List
+      final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+      final userData = allData[0] as Map;
+      var userEmail = userData['email'];
+      print(userEmail);
+
+      return userData;
+    } catch (e) {
+      return e as String;
+    }
+  }
+
+  Future getUserAuthData() async {
+    try {
+      var user = _firebaseAuth.currentUser;
       print(user);
       var userEmail = user?.email;
       var userName = user?.displayName;
@@ -108,28 +129,6 @@ class AuthenticationService {
       };
       print(userData);
       return userData;
-      /*var userUID = user?.uid;
-      print(userUID);
-      if (userUID != null) {
-        print("Getting data for user $userUID");
-        try {
-          var docRef = db.collection("users").doc(userUID);
-          docRef.get().then(
-            (DocumentSnapshot doc) {
-              var userData = doc.data() as Map<String, dynamic>;
-              print("User data from doc snapshot: $userData");
-              return userData;
-            },
-            onError: (e) => print("Error getting document: $e"),
-          );
-          return userUID;
-          //add on firebase exception
-        } catch (e) {
-          print(e);
-          returnMessage = e.toString();
-          return returnMessage;
-        }
-      }*/
     } catch (e) {
       print(e); // change this to a message
       returnMessage = e.toString();
@@ -137,12 +136,17 @@ class AuthenticationService {
     }
   }
 
-  Future<String?> getUserEmail() async {
-    try {
-      var user = await _firebaseAuth.currentUser;
-      var userUID = user?.uid;
-      var userEmail = user?.email;
+  Future<bool> changeUpdateUser(ThisUser thisUser) async {
+    var user = _firebaseAuth.currentUser;
+    var userUID = user?.uid;
+    await db.collection("users").doc(userUID).update(thisUser.toJson());
+    return false;
+  }
 
+  Future getUserGallery() async {
+    try {
+      var user = _firebaseAuth.currentUser;
+      var userUID = user?.uid;
       var docRef = db.collection("users").doc(userUID);
       docRef.get().then(
         (DocumentSnapshot doc) {
@@ -154,7 +158,7 @@ class AuthenticationService {
         onError: (e) => print("Error getting document: $e"),
       );
 
-      return userEmail;
+      return userUID;
     } catch (e) {
       print(e); // change this to a message
       returnMessage = e.toString();
