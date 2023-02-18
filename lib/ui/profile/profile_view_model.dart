@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gallery_app/models/this_user.dart';
 import 'package:gallery_app/ui/profile/profile_view.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:stacked/stacked.dart';
@@ -12,6 +13,9 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
   final authenticationService = locator<AuthenticationService>();
   final navigationService = locator<NavigationService>();
 
+  String _uid = "";
+  String get uid => _uid;
+
   String _userEmail = "";
   String get userEmail => _userEmail;
 
@@ -20,6 +24,9 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
 
   String _userAvatar = "";
   String get userAvatar => _userAvatar;
+
+  String _userDescription = "";
+  String get userDescription => _userDescription;
 
   @override
   void initialise() async {
@@ -32,12 +39,15 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
     setBusy(true);
     print('asking for user data');
     var userData = await authenticationService.getUserData();
-    print(userData);
+    print('got data for $userData');
 
     if (userData != "") {
+      _uid = userData['id'] ?? "";
+      print(_uid);
       _userEmail = userData['email'] ?? "Email";
       _userName = userData['userName'] ?? "Username";
       _userAvatar = userData['avatar'] ?? "";
+      _userDescription = userData['description'] ?? "Description";
       return true;
     } else {
       //do some error handeling
@@ -77,9 +87,11 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
     return null;
   }
 
-  Future<bool> saveProfileName({
-    required String name,
+  Future<bool> saveProfile({
+    required ThisUser user,
   }) async {
+    print('save profile of $user');
+    await authenticationService.updateUser(user);
     return true;
   }
 }

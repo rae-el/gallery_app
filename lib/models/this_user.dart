@@ -12,7 +12,7 @@ class ThisUser {
   final String? avatar;
 
   ThisUser({
-    this.id,
+    required this.id,
     required this.email,
     required this.username,
     required this.description,
@@ -21,6 +21,7 @@ class ThisUser {
 
   toJson() {
     return {
+      "id": id,
       "email": email,
       "username": username,
       "description": description,
@@ -32,7 +33,7 @@ class ThisUser {
       DocumentSnapshot<Map<String, dynamic>> document) {
     final data = document.data()!;
     return ThisUser(
-        id: document.id,
+        id: data["id"],
         email: data["email"],
         username: data["username"],
         description: data["description"],
@@ -40,6 +41,7 @@ class ThisUser {
   }
 
   static ThisUser fromJson(Map<String, dynamic> json) => ThisUser(
+      id: json['id'],
       email: json['email'],
       username: json['username'],
       description: json['description'],

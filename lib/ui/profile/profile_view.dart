@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gallery_app/app/colors.dart';
+import 'package:gallery_app/models/this_user.dart';
 import 'package:gallery_app/ui/profile/profile_view_model.dart';
 import 'package:stacked/stacked.dart';
 
@@ -47,6 +48,8 @@ class ProfilePage extends StatelessWidget {
 
   final TextEditingController _nameField =
       TextEditingController(text: ProfileViewModel().userName);
+  final TextEditingController _descriptionField =
+      TextEditingController(text: ProfileViewModel().userDescription);
 
   @override
   Widget build(BuildContext context) {
@@ -75,8 +78,15 @@ class ProfilePage extends StatelessWidget {
                       leading: const Icon(Icons.edit),
                       title: TextFormField(
                         controller: _nameField,
+                      ),
+                    ),
+                    ListTile(
+                      tileColor: backgroundColour,
+                      leading: const Icon(Icons.edit),
+                      title: TextFormField(
+                        controller: _descriptionField,
                         decoration: const InputDecoration(
-                          hintText: "Username",
+                          hintText: "Description",
                         ),
                       ),
                     ),
@@ -91,8 +101,13 @@ class ProfilePage extends StatelessWidget {
                     ),
                     ElevatedButton(
                       onPressed: () async {
-                        await model.saveProfileName(
-                            name: _nameField.text.trim());
+                        ThisUser thisUser = ThisUser(
+                            id: model.uid,
+                            email: model.userEmail,
+                            username: _nameField.text.trim(),
+                            description: _descriptionField.text.trim(),
+                            avatar: model.userAvatar);
+                        await model.saveProfile(user: thisUser);
                       },
                       child: const Text('Save'),
                     ),

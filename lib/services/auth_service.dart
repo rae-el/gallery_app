@@ -36,20 +36,34 @@ class AuthenticationService {
 
   Future<bool> signUp(String email, String password) async {
     try {
+      //create user
       var newUser = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
       if (newUser.user != null) {
+        //add user to collection
         try {
           await db
               .collection('users')
               .doc(newUser.user!.uid)
-              .set({'email': newUser.user!.email});
-          return true;
+              .set({'id': newUser.user!.uid, 'email': newUser.user!.email});
+          try {
+            //sign user in
+            await _firebaseAuth.signInWithEmailAndPassword(
+              email: email,
+              password: password,
+            );
+            return true;
+          } catch (e) {
+            returnMessage = e.toString();
+            print(returnMessage);
+            return false;
+          }
           //add on firebase exception
         } catch (e) {
-          print(e);
+          returnMessage = e.toString();
+          print(returnMessage);
           return false;
         }
       }
@@ -106,9 +120,6 @@ class AuthenticationService {
       // Get data from docs and convert map to List
       final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
       final userData = allData[0] as Map;
-      var userEmail = userData['email'];
-      print(userEmail);
-
       return userData;
     } catch (e) {
       return e as String;
@@ -136,11 +147,18 @@ class AuthenticationService {
     }
   }
 
-  Future<bool> changeUpdateUser(ThisUser thisUser) async {
-    var user = _firebaseAuth.currentUser;
-    var userUID = user?.uid;
-    await db.collection("users").doc(userUID).update(thisUser.toJson());
-    return false;
+  Future<bool> updateUser(ThisUser thisUser) async {
+    var user = thisUser.toJson();
+    print(user);
+    var uid = user['id'];
+    print(uid);
+    try {
+      await usersCollection.doc(uid).update(user);
+      return true;
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
   }
 
   Future getUserGallery() async {
