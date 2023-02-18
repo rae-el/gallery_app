@@ -46,10 +46,8 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 class ProfilePage extends StatelessWidget {
   ProfilePage({super.key});
 
-  final TextEditingController _nameField =
-      TextEditingController(text: ProfileViewModel().userName);
-  final TextEditingController _descriptionField =
-      TextEditingController(text: ProfileViewModel().userDescription);
+  final TextEditingController _nameField = TextEditingController();
+  final TextEditingController _descriptionField = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +55,7 @@ class ProfilePage extends StatelessWidget {
       //this is where I put the view structure
       viewModelBuilder: () => ProfileViewModel(),
       onModelReady: (viewModel) => viewModel.initialise(),
-      builder: (context, model, child) => ProfileViewModel().isBusy
+      builder: (context, model, child) => model.isBusy
           ? const Center(child: CircularProgressIndicator())
           : Scaffold(
               body: Center(
@@ -78,6 +76,9 @@ class ProfilePage extends StatelessWidget {
                       leading: const Icon(Icons.edit),
                       title: TextFormField(
                         controller: _nameField,
+                        decoration: InputDecoration(
+                          labelText: model.userName,
+                        ),
                       ),
                     ),
                     ListTile(
@@ -85,8 +86,8 @@ class ProfilePage extends StatelessWidget {
                       leading: const Icon(Icons.edit),
                       title: TextFormField(
                         controller: _descriptionField,
-                        decoration: const InputDecoration(
-                          hintText: "Description",
+                        decoration: InputDecoration(
+                          labelText: model.userDescription,
                         ),
                       ),
                     ),

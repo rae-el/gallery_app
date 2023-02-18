@@ -43,9 +43,8 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
 
     if (userData != "") {
       _uid = userData['id'] ?? "";
-      print(_uid);
       _userEmail = userData['email'] ?? "Email";
-      _userName = userData['userName'] ?? "Username";
+      _userName = userData['username'] ?? "Username";
       _userAvatar = userData['avatar'] ?? "";
       _userDescription = userData['description'] ?? "Description";
       return true;
