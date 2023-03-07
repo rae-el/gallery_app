@@ -9,9 +9,11 @@ import 'package:stacked_services/stacked_services.dart';
 import '../../app/app.locator.dart';
 import '../../app/app.router.dart';
 import '../../services/auth_service.dart';
+import '../../services/user_service.dart';
 
 class ProfileViewModel extends BaseViewModel implements Initialisable {
-  final authenticationService = locator<AuthenticationService>();
+  final userService = locator<UserService>();
+  final authService = locator<AuthenticationService>();
   final navigationService = locator<NavigationService>();
 
   String _uid = "";
@@ -39,7 +41,7 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
   Future<bool> askForUserData() async {
     setBusy(true);
     print('asking for user data');
-    var userData = await authenticationService.getUserData();
+    var userData = await userService.getUserData();
     print('got data for $userData');
 
     if (userData != "") {
@@ -56,7 +58,7 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
   }
 
   Future signOut() async {
-    if (await authenticationService.signOut()) {
+    if (await authService.signOut()) {
       navigationService.navigateTo(Routes.authView);
     } else {
       navigationService.navigateTo(Routes.homeView);
@@ -116,24 +118,11 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
     );
   }
 
-  Future? getAvatarPath(Set set) {
-    final String avatarPath;
-
-    //GetAvatarPath({required this.avatarPath});
-    return null;
-  }
-
-  Future? profileNameChanged(Set set) {
-    final String description;
-    //ProfileDescriptionChanged({required this.description});
-    return null;
-  }
-
   Future<bool> saveProfile({
     required ThisUser user,
   }) async {
     print('save profile of $user');
-    await authenticationService.updateUser(user);
+    await userService.updateUser(user);
     return true;
   }
 }
