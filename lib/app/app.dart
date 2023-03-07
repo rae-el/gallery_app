@@ -14,6 +14,6 @@ import '../ui/profile/profile_view.dart';
   //CupertinoRoute(page: HomeView),
 ], dependencies: [
   LazySingleton(classType: AuthenticationService),
-  LazySingleton(classType: NavigationService),
+  LazySingleton(classType: NavigationService)
 ])
 class AppSetup {}

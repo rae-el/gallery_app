@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gallery_app/models/this_user.dart';
 import 'package:gallery_app/ui/profile/profile_view.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,11 +23,11 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
   String _userName = "";
   String get userName => _userName;
 
-  String _userAvatar = "";
-  String get userAvatar => _userAvatar;
-
   String _userDescription = "";
   String get userDescription => _userDescription;
+
+  XFile? _userImage;
+  XFile? get userImage => _userImage;
 
   @override
   void initialise() async {
@@ -45,7 +46,7 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
       _uid = userData['id'] ?? "";
       _userEmail = userData['email'] ?? "Email";
       _userName = userData['username'] ?? "Username";
-      _userAvatar = userData['avatar'] ?? "";
+      //_userImage = userData['avatar'] ?? "";
       _userDescription = userData['description'] ?? "Description";
       return true;
     } else {
@@ -62,15 +63,57 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
     }
   }
 
-  Future? changeAvatarRequest() {
-    return null;
+  Future? openPicker({required String source}) async {
+    ImagePicker picker = ImagePicker();
+    XFile? image;
+    if (source == "gallery") {
+      image = await picker.pickImage(source: ImageSource.gallery);
+    }
+    if (source == "camera") {
+      image = await picker.pickImage(source: ImageSource.camera);
+    } else {
+      print('source not set');
+      return;
+    }
+    try {
+      if (image == null) {
+        print('image null');
+        return;
+      } else {
+        _userImage = image;
+        //_imagePath = File(image.path);
+        print(_userImage);
+        return;
+      }
+    } on PlatformException catch (e) {
+      print(e);
+      return;
+    }
   }
 
-  Future? openAvatarPicker(Set set) {
-    final ImageSource imageSource;
-
-    //OpenAvatarPicker({required this.imageSource});
-    return null;
+  Future<void> openPickerDialog(context) async {
+    await showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: const Text('Select an Image'),
+          children: <Widget>[
+            SimpleDialogOption(
+              onPressed: () async {
+                await openPicker(source: 'gallery');
+              },
+              child: const Text('Gallery'),
+            ),
+            SimpleDialogOption(
+              onPressed: () async {
+                await openPicker(source: 'camera');
+              },
+              child: const Text('Camera'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future? getAvatarPath(Set set) {

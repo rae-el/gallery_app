@@ -1,17 +1,20 @@
+import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_app/app/colors.dart';
 import 'package:gallery_app/models/this_user.dart';
 import 'package:gallery_app/ui/profile/profile_view_model.dart';
 import 'package:stacked/stacked.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: backgroundColour,
-      appBar: const MyAppBar(),
+      appBar: MyAppBar(),
       body: ProfilePage(),
     );
   }
@@ -43,8 +46,15 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-class ProfilePage extends StatelessWidget {
-  ProfilePage({super.key});
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => ProfileState();
+}
+
+class ProfileState extends State<ProfilePage> {
+  var _descriptionController;
 
   final TextEditingController _nameField = TextEditingController();
   final TextEditingController _descriptionField = TextEditingController();
@@ -54,65 +64,72 @@ class ProfilePage extends StatelessWidget {
     return ViewModelBuilder<ProfileViewModel>.reactive(
       //this is where I put the view structure
       viewModelBuilder: () => ProfileViewModel(),
-      onModelReady: (viewModel) => viewModel.initialise(),
+      //onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, model, child) => model.isBusy
           ? const Center(child: CircularProgressIndicator())
           : Scaffold(
               body: Center(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 30),
-                    const CircleAvatar(
-                      radius: 50,
-                      child: Icon(Icons.person),
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text('Change Profile Picture'),
-                    ),
-                    const SizedBox(height: 30),
-                    ListTile(
-                      tileColor: backgroundColour,
-                      leading: const Icon(Icons.edit),
-                      title: TextFormField(
-                        controller: _nameField,
-                        decoration: InputDecoration(
-                          labelText: model.userName,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 30),
+                      CircleAvatar(
+                        radius: 50,
+                        child: model.userImage == null
+                            ? const Icon(Icons.person)
+                            : Image.file(File(model.userImage!.path)),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          await model.openPickerDialog(context);
+                        },
+                        child: const Text('Change Image'),
+                      ),
+                      const SizedBox(height: 30),
+                      ListTile(
+                        tileColor: backgroundColour,
+                        leading: const Icon(Icons.edit),
+                        title: TextFormField(
+                          controller: _nameField,
+                          decoration: const InputDecoration(
+                            labelText: 'Username',
+                          ),
                         ),
                       ),
-                    ),
-                    ListTile(
-                      tileColor: backgroundColour,
-                      leading: const Icon(Icons.edit),
-                      title: TextFormField(
-                        controller: _descriptionField,
-                        decoration: InputDecoration(
-                          labelText: model.userDescription,
+                      ListTile(
+                        tileColor: backgroundColour,
+                        leading: const Icon(Icons.edit),
+                        title: TextFormField(
+                          controller: TextEditingController(
+                              text: model.userDescription),
+                          decoration: const InputDecoration(
+                            labelText: 'Description',
+                          ),
                         ),
                       ),
-                    ),
-                    ListTile(
-                      tileColor: backgroundColour,
-                      leading: const Icon(Icons.mail),
-                      title: Text(model.userEmail),
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text('Change Password'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        ThisUser thisUser = ThisUser(
-                            id: model.uid,
-                            email: model.userEmail,
-                            username: _nameField.text.trim(),
-                            description: _descriptionField.text.trim(),
-                            avatar: model.userAvatar);
-                        await model.saveProfile(user: thisUser);
-                      },
-                      child: const Text('Save'),
-                    ),
-                  ],
+                      ListTile(
+                        tileColor: backgroundColour,
+                        leading: const Icon(Icons.mail),
+                        title: Text(model.userEmail),
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        child: const Text('Change Password'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          ThisUser thisUser = ThisUser(
+                              id: model.uid,
+                              email: model.userEmail,
+                              username: _nameField.text.trim(),
+                              description: _descriptionField.text.trim(),
+                              avatar: model.userImage);
+                          await model.saveProfile(user: thisUser);
+                        },
+                        child: const Text('Save'),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

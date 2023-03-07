@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_picker/image_picker.dart';
 
 final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 final db = FirebaseFirestore.instance;
@@ -9,7 +10,7 @@ class ThisUser {
   final String? email;
   final String? username;
   final String? description;
-  final String? avatar;
+  final XFile? avatar;
 
   ThisUser({
     required this.id,
