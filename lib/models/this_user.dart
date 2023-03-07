@@ -10,7 +10,8 @@ class ThisUser {
   final String? email;
   final String? username;
   final String? description;
-  final XFile? avatar;
+  //changed avatar from string to xfile, will this cause a database error
+  final String? avatar;
 
   ThisUser({
     required this.id,

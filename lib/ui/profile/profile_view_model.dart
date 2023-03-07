@@ -26,8 +26,8 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
   String _userDescription = "";
   String get userDescription => _userDescription;
 
-  XFile? _userImage;
-  XFile? get userImage => _userImage;
+  String _userImagePath = "";
+  String get userImagePath => _userImagePath;
 
   @override
   void initialise() async {
@@ -46,7 +46,7 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
       _uid = userData['id'] ?? "";
       _userEmail = userData['email'] ?? "Email";
       _userName = userData['username'] ?? "Username";
-      //_userImage = userData['avatar'] ?? "";
+      _userImagePath = userData['avatar'] ?? "";
       _userDescription = userData['description'] ?? "Description";
       return true;
     } else {
@@ -80,11 +80,9 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
         print('image null');
         return;
       } else {
-        _userImage = image;
+        _userImagePath = image.path;
         notifyListeners();
         navigationService.back();
-        //_imagePath = File(image.path);
-        print(_userImage);
         return;
       }
     } on PlatformException catch (e) {

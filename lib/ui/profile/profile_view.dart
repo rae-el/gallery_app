@@ -75,11 +75,11 @@ class ProfileState extends State<ProfilePage> {
                       const SizedBox(height: 30),
                       CircleAvatar(
                         radius: 50,
-                        child: model.userImage == null
+                        child: model.userImagePath == ""
                             ? const Icon(Icons.person)
                             : ClipOval(
                                 child: Image.file(
-                                  File(model.userImage!.path),
+                                  File(model.userImagePath),
                                   width: 100,
                                   height: 100,
                                   fit: BoxFit.cover,
@@ -130,7 +130,7 @@ class ProfileState extends State<ProfilePage> {
                               email: model.userEmail,
                               username: _nameField.text.trim(),
                               description: _descriptionField.text.trim(),
-                              avatar: model.userImage);
+                              avatar: model.userImagePath);
                           await model.saveProfile(user: thisUser);
                         },
                         child: const Text('Save'),
