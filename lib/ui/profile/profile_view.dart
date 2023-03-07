@@ -77,7 +77,14 @@ class ProfileState extends State<ProfilePage> {
                         radius: 50,
                         child: model.userImage == null
                             ? const Icon(Icons.person)
-                            : Image.file(File(model.userImage!.path)),
+                            : ClipOval(
+                                child: Image.file(
+                                  File(model.userImage!.path),
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                       ),
                       TextButton(
                         onPressed: () async {

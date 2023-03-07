@@ -81,6 +81,7 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
         return;
       } else {
         _userImage = image;
+        notifyListeners();
         //_imagePath = File(image.path);
         print(_userImage);
         return;
