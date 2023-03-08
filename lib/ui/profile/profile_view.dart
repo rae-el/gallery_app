@@ -54,17 +54,12 @@ class ProfilePage extends StatefulWidget {
 }
 
 class ProfileState extends State<ProfilePage> {
-  var _descriptionController;
-
-  final TextEditingController _nameField = TextEditingController();
-  final TextEditingController _descriptionField = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProfileViewModel>.reactive(
       //this is where I put the view structure
       viewModelBuilder: () => ProfileViewModel(),
-      //onModelReady: (viewModel) => viewModel.initialise(),
+      onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, model, child) => model.isBusy
           ? const Center(child: CircularProgressIndicator())
           : Scaffold(
@@ -97,7 +92,7 @@ class ProfileState extends State<ProfilePage> {
                         tileColor: backgroundColour,
                         leading: const Icon(Icons.edit),
                         title: TextFormField(
-                          controller: _nameField,
+                          controller: model.nameField,
                           decoration: const InputDecoration(
                             labelText: 'Username',
                           ),
@@ -107,8 +102,7 @@ class ProfileState extends State<ProfilePage> {
                         tileColor: backgroundColour,
                         leading: const Icon(Icons.edit),
                         title: TextFormField(
-                          controller: TextEditingController(
-                              text: model.userDescription),
+                          controller: model.descriptionField,
                           decoration: const InputDecoration(
                             labelText: 'Description',
                           ),
@@ -125,13 +119,7 @@ class ProfileState extends State<ProfilePage> {
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          ThisUser thisUser = ThisUser(
-                              id: model.uid,
-                              email: model.userEmail,
-                              username: _nameField.text.trim(),
-                              description: _descriptionField.text.trim(),
-                              avatar: model.userImagePath);
-                          await model.saveProfile(user: thisUser);
+                          await model.saveProfile();
                         },
                         child: const Text('Save'),
                       ),

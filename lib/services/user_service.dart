@@ -9,10 +9,17 @@ class UserService {
   final usersCollection = FirebaseFirestore.instance.collection('users');
   String? returnMessage;
 
+  String? currentUser() {
+    //add error handeling
+    var user = _firebaseAuth.currentUser;
+    var uid = user?.uid;
+    return uid;
+  }
+
   Future getUserData() async {
     try {
-      var user = _firebaseAuth.currentUser;
-      var uid = user?.uid;
+      //this doesnt actually get current user?
+      var userID = currentUser();
 
       QuerySnapshot querySnapshot = await usersCollection.get();
 

@@ -16,6 +16,9 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
   final authService = locator<AuthenticationService>();
   final navigationService = locator<NavigationService>();
 
+  final TextEditingController nameField = TextEditingController();
+  final TextEditingController descriptionField = TextEditingController();
+
   String _uid = "";
   String get uid => _uid;
 
@@ -39,7 +42,8 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
   }
 
   Future<bool> askForUserData() async {
-    setBusy(true);
+    //this will automatically happen
+    //setBusy(true);
     print('asking for user data');
     var userData = await userService.getUserData();
     print('got data for $userData');
@@ -50,6 +54,9 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
       _userName = userData['username'] ?? "Username";
       _userImagePath = userData['avatar'] ?? "";
       _userDescription = userData['description'] ?? "Description";
+      nameField.text = _userName;
+      descriptionField.text = _userDescription;
+
       return true;
     } else {
       //do some error handeling
@@ -118,11 +125,16 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
     );
   }
 
-  Future<bool> saveProfile({
-    required ThisUser user,
-  }) async {
-    print('save profile of $user');
-    await userService.updateUser(user);
+  Future<bool> saveProfile() async {
+    ThisUser thisUser = ThisUser(
+      id: uid,
+      email: userEmail,
+      username: nameField.text.trim(),
+      description: descriptionField.text.trim(),
+      avatar: userImagePath,
+    );
+    print('save profile of $thisUser');
+    await userService.updateUser(thisUser);
     return true;
   }
 }
