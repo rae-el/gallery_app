@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Image {
@@ -11,7 +13,7 @@ class Image {
     required this.date,
   });
 
-  Map<String, dynamic> toMap(Image image) {
+  toJson() {
     return {
       "path": path,
       "favourite": favourite,

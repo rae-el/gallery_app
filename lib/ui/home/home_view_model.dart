@@ -14,6 +14,12 @@ class HomeViewModel extends BaseViewModel {
     navigationService.navigateTo(Routes.profileView);
   }
 
+  Future addImage() async {
+    //change to adding an image into gallery
+    //does this need to link to other functions or do all in one
+    navigationService.navigateTo(Routes.homeView);
+  }
+
   /*Future getImages() {
     //var user = authenticationService.getUserDetails();
     //change this to be receiving the images
@@ -54,15 +60,10 @@ class HomeViewModel extends BaseViewModel {
               },*/
   }*/
 
-  Future addImage() async {
-    //change to adding an image into gallery
-    //does this need to link to other functions or do all in one
-    navigationService.navigateTo(Routes.homeView);
-  }
-
+  //ignore and use different method
   //when user clicks add image button
-  void _showImageSourceActionSheet(BuildContext context) {
-    /*
+  /*void _showImageSourceActionSheet(BuildContext context) {
+    
   Function(ImageSource) selectImageSource = (imageSource) {
     context.add(OpenImagePicker(imageSource: imageSource));
   };
@@ -116,8 +117,8 @@ class HomeViewModel extends BaseViewModel {
                 ),
               ],
             ));
-  }*/
   }
+  }*/
 
   //gesture functions
   //double tap, add / remove from liked
