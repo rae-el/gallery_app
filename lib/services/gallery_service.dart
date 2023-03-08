@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gallery_app/models/gallery.dart';
-import 'package:gallery_app/models/image.dart';
+import 'package:gallery_app/models/this_image.dart';
 import 'package:gallery_app/services/user_service.dart';
 
 import '../app/app.locator.dart';
@@ -16,11 +16,13 @@ class GalleryService {
     print('in get user gallery');
     try {
       List<Gallery> galleries = [];
-      var userID = userService.currentUser;
+      var userID = userService.currentUser() as String;
       print('Getting user $userID gallery');
       var querySnapshot =
           await galleriesCollection.where('id', isEqualTo: userID).get();
+      print('gallery query snapshot $querySnapshot');
       for (var docSnapshot in querySnapshot.docs) {
+        print('docsnapshot: $docSnapshot');
         galleries.add(Gallery.fromSnapshot(docSnapshot));
       }
       //get first gallery (should only be 1)
@@ -28,16 +30,14 @@ class GalleryService {
       //final userData = allData[0] as Map;
       int numOfGalleries = galleries.length;
       print('There are $numOfGalleries that match this ID');
-      //should i make this length an error check?
-      Gallery userGallery = galleries[0];
-      print('got data for $userGallery');
-
-      if (userGallery != null) {
+      if (numOfGalleries > 0) {
+        Gallery userGallery = galleries[0];
+        print('got data for $userGallery');
         return userGallery;
       } else {
         //if null create gallery
         print('no galleries that make query, create new gallery');
-        var newUserGallery = createNewGallery();
+        var newUserGallery = createNewGallery(userID);
 
         //do some error handeling
         return newUserGallery;
@@ -71,14 +71,21 @@ class GalleryService {
     }
   }
 
-  Future<List<Image>?> getGalleryImages() async {
+  Future<List<ThisImage>?> getGalleryImages() async {
+    List<ThisImage> galleryImages = [];
     try {
-      Gallery userGallery = getUserGallery() as Gallery;
-      if (userGallery != null) {
-        List<Image>? images = userGallery.images;
-        print('listing images: $images');
-        return images;
+      String? galleryId = getGalleryID();
+      if (galleryId != null) {
+        var imagesQuerySnapshot =
+            await galleriesCollection.doc(galleryId).collection("images").get();
+        //convert images query snapshot to a list of images?
+        for (var imagesDocSnapshot in imagesQuerySnapshot.docs) {
+          galleryImages.add(ThisImage.fromSnapshot(imagesDocSnapshot));
+        }
+        print(galleryImages);
+        return galleryImages;
       } else {
+        print('gallery id null');
         //do some error handeling
         return null;
       }
@@ -90,9 +97,8 @@ class GalleryService {
     }
   }
 
-  Future<Gallery?> createNewGallery() async {
+  Future<Gallery?> createNewGallery(String userID) async {
     print('in create new gallery');
-    var userID = userService.currentUser;
     //create new gallery with userid
     try {
       var docRef = await galleriesCollection.add({'id': userID});
@@ -105,7 +111,7 @@ class GalleryService {
     }
   }
 
-  Future<bool> addImageToGallery(Image image) async {
+  Future<bool> addImageToGallery(ThisImage image) async {
     //convert image to json
     var jsonImg = image.toJson();
     print('try adding image $jsonImg to gallery');

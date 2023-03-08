@@ -1,19 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:gallery_app/models/image.dart';
+import 'package:gallery_app/models/this_image.dart';
 
 class Gallery {
   final String? id;
-  final List<Image>? images;
+  //final List<Image>? images;
 
   Gallery({
     required this.id,
-    this.images,
+    //this.images,
   });
 
   toJson() {
     return {
       "id": id,
-      "images": images,
+      //"images": images,
     };
   }
 
@@ -22,13 +22,13 @@ class Gallery {
     final data = document.data()!;
     return Gallery(
       id: data["id"],
-      images: data["images"],
+      //images: data["images"],
     );
   }
 
   static Gallery fromJson(Map<String, dynamic> json) => Gallery(
         id: json['id'],
-        images: (json['images']! as List).cast<Image>(),
+        //images: (json['images']! as List).cast<Image>(),
         //images: List<Image>.from(json['images']),
       );
 }

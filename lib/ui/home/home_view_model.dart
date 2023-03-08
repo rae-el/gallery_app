@@ -1,23 +1,37 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../app/app.locator.dart';
 import '../../app/app.router.dart';
+import '../../models/this_image.dart';
 import '../../services/auth_service.dart';
+import '../../services/gallery_service.dart';
 
 class HomeViewModel extends BaseViewModel {
-  final authenticationService = locator<AuthenticationService>();
   final navigationService = locator<NavigationService>();
+  final galleryService = locator<GalleryService>();
 
   Future navigateToProfile() async {
     navigationService.navigateTo(Routes.profileView);
   }
 
-  Future addImage() async {
-    //change to adding an image into gallery
-    //does this need to link to other functions or do all in one
-    navigationService.navigateTo(Routes.homeView);
+  Future getImages() async {
+    var images = await galleryService.getGalleryImages();
+    print(images);
+  }
+
+  Future<bool> addImage() async {
+    try {
+      ThisImage image =
+          ThisImage(path: 'testimage', favourite: false, date: Timestamp.now());
+      await galleryService.addImageToGallery(image);
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
   }
 
   /*Future getImages() {
