@@ -45,15 +45,16 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
     //this will automatically happen
     //setBusy(true);
     print('asking for user data');
-    var userData = await userService.getUserData();
+    ThisUser? userData = await userService.getUserData();
     print('got data for $userData');
 
     if (userData != "") {
-      _uid = userData['id'] ?? "";
-      _userEmail = userData['email'] ?? "Email";
-      _userName = userData['username'] ?? "Username";
-      _userImagePath = userData['avatar'] ?? "";
-      _userDescription = userData['description'] ?? "Description";
+      _uid = userData!.id ?? "";
+      _userEmail = userData.email ?? "Email";
+      _userName = userData.username ?? "Username";
+      _userImagePath = userData.avatar ?? "";
+      _userDescription = userData.description ?? "Description";
+
       nameField.text = _userName;
       descriptionField.text = _userDescription;
 

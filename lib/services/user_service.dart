@@ -16,19 +16,30 @@ class UserService {
     return uid;
   }
 
-  Future getUserData() async {
+  Future<ThisUser?> getUserData() async {
     try {
-      //this doesnt actually get current user?
-      var userID = currentUser();
+      var userID = currentUser() as String;
 
       QuerySnapshot querySnapshot = await usersCollection.get();
+      print(querySnapshot);
+
+      var userQuerySnapshot = await usersCollection.doc(userID).get();
+      var userDocument = ThisUser.fromSnapshot(userQuerySnapshot);
+      print('user document $userDocument');
+
+      //var userJson = userDocument.toJson();
+      //print(userJson);
+
+      //userSnapshot = ThisUser.fromSnapshot(userQuerySnapshot);
 
       // Get data from docs and convert map to List
-      final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-      final userData = allData[0] as Map;
-      return userData;
+      //need to remove this collection of all data
+      //final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+      //final userData = allData[0] as Map;
+      return userDocument;
     } catch (e) {
-      return e as String;
+      print(e);
+      return null;
     }
   }
 
