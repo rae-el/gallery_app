@@ -48,13 +48,14 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
     ThisUser? userData = await userService.getUserData();
     print('got data for $userData');
 
-    if (userData != "") {
-      _uid = userData!.id ?? "";
-      _userEmail = userData.email ?? "Email";
-      _userName = userData.username ?? "Username";
+    if (userData != null) {
+      _uid = userData.id ?? "";
+      _userEmail = userData.email ?? "";
+      _userName = userData.username ?? "";
       _userImagePath = userData.avatar ?? "";
-      _userDescription = userData.description ?? "Description";
+      _userDescription = userData.description ?? "";
 
+      //assign values to the controllers
       nameField.text = _userName;
       descriptionField.text = _userDescription;
 

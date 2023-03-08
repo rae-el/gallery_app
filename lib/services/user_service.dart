@@ -5,9 +5,21 @@ import 'package:gallery_app/models/this_user.dart';
 
 class UserService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final db = FirebaseFirestore.instance;
   final usersCollection = FirebaseFirestore.instance.collection('users');
   String? returnMessage;
+
+  Future<bool> createNewUser(newUserDetails) async {
+    try {
+      await usersCollection
+          .doc(newUserDetails.uid)
+          .set({'id': newUserDetails.uid, 'email': newUserDetails.email});
+      print('Successfully added new user');
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
 
   String? currentUser() {
     //add error handeling
@@ -26,16 +38,6 @@ class UserService {
       var userQuerySnapshot = await usersCollection.doc(userID).get();
       var userDocument = ThisUser.fromSnapshot(userQuerySnapshot);
       print('user document $userDocument');
-
-      //var userJson = userDocument.toJson();
-      //print(userJson);
-
-      //userSnapshot = ThisUser.fromSnapshot(userQuerySnapshot);
-
-      // Get data from docs and convert map to List
-      //need to remove this collection of all data
-      //final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-      //final userData = allData[0] as Map;
       return userDocument;
     } catch (e) {
       print(e);
@@ -54,29 +56,6 @@ class UserService {
     } catch (e) {
       print(e.toString());
       return false;
-    }
-  }
-
-  Future getUserGallery() async {
-    try {
-      var user = _firebaseAuth.currentUser;
-      var userUID = user?.uid;
-      var docRef = db.collection("users").doc(userUID);
-      docRef.get().then(
-        (DocumentSnapshot doc) {
-          final userData = doc.data() as Map<String, dynamic>;
-          print("User data from doc snapshot: $userData");
-          var email = userData['email'];
-          return email;
-        },
-        onError: (e) => print("Error getting document: $e"),
-      );
-
-      return userUID;
-    } catch (e) {
-      print(e); // change this to a message
-      returnMessage = e.toString();
-      return returnMessage;
     }
   }
 }

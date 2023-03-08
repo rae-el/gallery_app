@@ -2,12 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:gallery_app/models/this_user.dart';
+import 'package:gallery_app/services/user_service.dart';
+
+import '../app/app.locator.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final db = FirebaseFirestore.instance;
   final usersCollection = FirebaseFirestore.instance.collection('users');
   String? returnMessage;
+  final userService = locator<UserService>();
 
   Future<bool> signIn(String email, String password) async {
     try {
@@ -44,22 +48,26 @@ class AuthenticationService {
       if (newUser.user != null) {
         //add user to collection
         try {
-          await db
+          var newUserDetails = newUser.user!;
+          if (await userService.createNewUser(newUserDetails) == true) {
+            try {
+              //sign user in
+              await _firebaseAuth.signInWithEmailAndPassword(
+                email: email,
+                password: password,
+              );
+              return true;
+            } catch (e) {
+              returnMessage = e.toString();
+              print(returnMessage);
+              return false;
+            }
+          }
+          /*await db
               .collection('users')
               .doc(newUser.user!.uid)
-              .set({'id': newUser.user!.uid, 'email': newUser.user!.email});
-          try {
-            //sign user in
-            await _firebaseAuth.signInWithEmailAndPassword(
-              email: email,
-              password: password,
-            );
-            return true;
-          } catch (e) {
-            returnMessage = e.toString();
-            print(returnMessage);
-            return false;
-          }
+              .set({'id': newUser.user!.uid, 'email': newUser.user!.email});*/
+
           //add on firebase exception
         } catch (e) {
           returnMessage = e.toString();
