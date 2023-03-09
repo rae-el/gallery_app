@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:gallery_app/models/gallery.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -9,24 +10,50 @@ import '../../models/this_image.dart';
 import '../../services/auth_service.dart';
 import '../../services/gallery_service.dart';
 
-class HomeViewModel extends BaseViewModel {
+class HomeViewModel extends BaseViewModel implements Initialisable {
   final navigationService = locator<NavigationService>();
   final galleryService = locator<GalleryService>();
+
+  String _galleryId = "";
+  String get galleryId => _galleryId;
+
+  List<ThisImage>? _galleryImages = [];
+  List<ThisImage>? get galleryImages => _galleryImages;
+
+  @override
+  void initialise() async {
+    runBusyFuture(askForGalleryData());
+  }
 
   Future navigateToProfile() async {
     navigationService.navigateTo(Routes.profileView);
   }
 
-  Future getImages() async {
-    var images = await galleryService.getGalleryImages();
-    print(images);
+  Future<bool> askForGalleryData() async {
+    //this will automatically happen
+    //setBusy(true);
+    print('asking for gallery data');
+    Gallery? userGallery = await galleryService.getUserGallery();
+    if (userGallery != null) {
+      _galleryId = userGallery.id ?? "";
+      print('gallery id: $_galleryId');
+      if (_galleryId != null) {
+        _galleryImages = await galleryService.getGalleryImages(_galleryId);
+        return true;
+      }
+      return false;
+    } else {
+      //do some error handeling
+      print('user gallery null, failed to retreive gallery id');
+      return false;
+    }
   }
 
   Future<bool> addImage() async {
     try {
       ThisImage image =
-          ThisImage(path: 'testimage', favourite: false, date: Timestamp.now());
-      await galleryService.addImageToGallery(image);
+          ThisImage(path: 'testimage', favourite: false, date: DateTime.now());
+      await galleryService.addImageToGallery(image, _galleryId);
       return true;
     } catch (e) {
       print(e);

@@ -25,7 +25,6 @@ class UserService {
     print('getting current user');
     //add error handeling
     var user = _firebaseAuth.currentUser;
-    print('current user: $user');
     var uid = user?.uid;
     print('current user id: $uid');
     return uid;

@@ -11,27 +11,9 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewModel>.reactive(
       viewModelBuilder: () => HomeViewModel(),
-      builder: (context, model, child) => Scaffold(
-        appBar: const MainAppBar(),
-        body: Container(
-          decoration: const BoxDecoration(
-            color: backgroundColour,
-          ),
-          //fill space of entire screen
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: GestureDetector(
-            //fill with images
-            child: const Center(),
-          )
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: model.addImage,
-          child: const Icon(
-            Icons.add,
-            color: textColour,
-          ),
-        ),
+      builder: (context, model, child) => const Scaffold(
+        appBar: MainAppBar(),
+        body: HomePage(),
       ),
     );
   }
@@ -55,6 +37,47 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => HomeState();
+}
+
+class HomeState extends State<HomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return ViewModelBuilder<HomeViewModel>.reactive(
+      //this is where I put the view structure
+      viewModelBuilder: () => HomeViewModel(),
+      onModelReady: (viewModel) => viewModel.initialise(),
+      builder: (context, model, child) => model.isBusy
+          ? const Center(child: CircularProgressIndicator())
+          : Scaffold(
+              body: Container(
+                decoration: const BoxDecoration(
+                  color: backgroundColour,
+                ),
+                //fill space of entire screen
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: GestureDetector(
+                  //fill with images
+                  child: const Center(),
+                ),
+              ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: model.addImage,
+                child: const Icon(
+                  Icons.add,
+                  color: textColour,
+                ),
+              ),
+            ),
     );
   }
 }

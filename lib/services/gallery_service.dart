@@ -16,15 +16,22 @@ class GalleryService {
     print('in get user gallery');
     try {
       List<Gallery> galleries = [];
+      //should this current user be more of a state or global variable
       var userID = userService.currentUser() as String;
       print('Getting user $userID gallery');
-      var querySnapshot =
-          await galleriesCollection.where('id', isEqualTo: userID).get();
-      print('gallery query snapshot $querySnapshot');
-      for (var docSnapshot in querySnapshot.docs) {
-        print('docsnapshot: $docSnapshot');
-        galleries.add(Gallery.fromSnapshot(docSnapshot));
+      try {
+        var querySnapshot =
+            await galleriesCollection.where('id', isEqualTo: userID).get();
+        print('gallery query snapshot $querySnapshot');
+        for (var docSnapshot in querySnapshot.docs) {
+          print('docsnapshot: $docSnapshot');
+          galleries.add(Gallery.fromSnapshot(docSnapshot));
+        }
+      } catch (e) {
+        print(e);
+        print('failed in querying galleries collection');
       }
+
       //get first gallery (should only be 1)
       //final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
       //final userData = allData[0] as Map;
@@ -50,12 +57,12 @@ class GalleryService {
     }
   }
 
-  String? getGalleryID() {
+  Future<String?> getGalleryID() async {
     print('in get gallery id');
     try {
-      Gallery userGallery = getUserGallery() as Gallery;
+      Gallery? userGallery = await getUserGallery();
       if (userGallery != null) {
-        String? galleryID = userGallery.id;
+        String? galleryID = userGallery.id ?? "";
         print('gallery id: $galleryID');
         return galleryID;
       } else {
@@ -71,10 +78,9 @@ class GalleryService {
     }
   }
 
-  Future<List<ThisImage>?> getGalleryImages() async {
+  Future<List<ThisImage>?> getGalleryImages(String galleryId) async {
     List<ThisImage> galleryImages = [];
     try {
-      String? galleryId = getGalleryID();
       if (galleryId != null) {
         var imagesQuerySnapshot =
             await galleriesCollection.doc(galleryId).collection("images").get();
@@ -111,12 +117,10 @@ class GalleryService {
     }
   }
 
-  Future<bool> addImageToGallery(ThisImage image) async {
+  Future<bool> addImageToGallery(ThisImage image, String galleryID) async {
     //convert image to json
     var jsonImg = image.toJson();
     print('try adding image $jsonImg to gallery');
-    //get gallery id and create if not exists
-    String? galleryID = getGalleryID();
     if (galleryID != null) {
       //gallery exisits
       await galleriesCollection
