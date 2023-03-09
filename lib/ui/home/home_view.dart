@@ -68,41 +68,49 @@ class HomeState extends State<HomePage> {
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: GestureDetector(
-                    //fill with images
-                    child: StreamBuilder<String>(
-                  stream: model.getMyStream(),
-                  initialData: "",
-                  builder:
-                      ((BuildContext context, AsyncSnapshot<String> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.connectionState ==
-                        ConnectionState.done) {
-                      if (snapshot.hasError) {
-                        return const Text('Error');
-                      } else if (snapshot.hasData) {
-                        return GridView(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                          ),
-                          children: [
-                            //Text(snapshot.data ?? ""),
-                            Image.file(
-                              File(snapshot.data ?? ""),
+                  //return list
+                  child: GridView(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                    ),
+                    children: model.createImages(),
+                  ),
+                  //stream builder method only returning 1 image?
+                  /*child: StreamBuilder<String>(
+                    stream: model.getMyStream(),
+                    initialData: "",
+                    builder: ((BuildContext context,
+                        AsyncSnapshot<String> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.done) {
+                        if (snapshot.hasError) {
+                          return const Text('Error');
+                        } else if (snapshot.hasData) {
+                          return GridView(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
                             ),
-                          ],
-                        );
-                      } else {
-                        return const Text("Empty");
+                            children: [
+                              Image.file(
+                                File(snapshot.data ?? ""),
+                              ),
+                            ],
+                          );
+                        } else {
+                          return const Text("Empty");
+                        }
                       }
-                    }
-                    return const Center(
-                      //pass the error here
-                      child: Text('Error'),
-                    );
-                  }),
-                )),
+                      return const Center(
+                        //pass the error here
+                        child: Text('Error'),
+                      );
+                    }),
+                  ),*/
+                ),
               ),
               floatingActionButton: FloatingActionButton(
                 onPressed: () async {

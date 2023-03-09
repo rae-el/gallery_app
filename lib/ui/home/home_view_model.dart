@@ -22,6 +22,18 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
   String _galleryId = "";
   String get galleryId => _galleryId;
 
+  List<ThisImage>? _galleryImages = [];
+  List<ThisImage>? get galleryImages => _galleryImages;
+
+  List<String> _galleryImagePaths = [];
+  List<String> get galleryImagePaths => _galleryImagePaths;
+
+  List<Image>? _myImages = [];
+  List<Image>? get myImages => _myImages;
+
+  String _imagePath = "";
+  String get imagePath => _imagePath;
+
   @override
   void initialise() async {
     runBusyFuture(askForGalleryData());
@@ -37,12 +49,43 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
     print('asking for gallery data');
     Gallery? userGallery = await galleryService.getUserGallery();
     if (userGallery != null) {
-      return true;
+      _galleryId = userGallery.id ?? "";
+      print('gallery id: $_galleryId');
+
+      if (_galleryId != null) {
+        _galleryImages = await galleryService.getGalleryImages(_galleryId);
+        if (_galleryImages!.isNotEmpty) {
+          for (var galleryImage in _galleryImages!) {
+            _galleryImagePaths.add(galleryImage.path);
+          }
+          return true;
+        }
+        return false;
+      }
+      return false;
     } else {
       //do some error handeling
       print('user gallery null, failed to retreive gallery id');
       return false;
     }
+  }
+
+  createImages() {
+    List<Image> imageBlocks = <Image>[];
+    Image? imageBlock;
+    for (String imagePath in _galleryImagePaths) {
+      try {
+        if (File(imagePath).existsSync()) {
+          imageBlock = new Image.file(File(imagePath));
+          imageBlocks.add(imageBlock);
+        } else {
+          print('image $imagePath not added');
+        }
+      } catch (e) {
+        print(e);
+      }
+    }
+    return imageBlocks;
   }
 
   //mostly repeated code, can i reduce or move?
