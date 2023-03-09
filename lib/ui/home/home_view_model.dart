@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,9 +22,6 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
   String _galleryId = "";
   String get galleryId => _galleryId;
 
-  List<ThisImage>? _galleryImages = [];
-  List<ThisImage>? get galleryImages => _galleryImages;
-
   @override
   void initialise() async {
     runBusyFuture(askForGalleryData());
@@ -37,13 +37,7 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
     print('asking for gallery data');
     Gallery? userGallery = await galleryService.getUserGallery();
     if (userGallery != null) {
-      _galleryId = userGallery.id ?? "";
-      print('gallery id: $_galleryId');
-      if (_galleryId != null) {
-        _galleryImages = await galleryService.getGalleryImages(_galleryId);
-        return true;
-      }
-      return false;
+      return true;
     } else {
       //do some error handeling
       print('user gallery null, failed to retreive gallery id');
@@ -51,7 +45,7 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
     }
   }
 
-  //repeated code
+  //mostly repeated code, can i reduce or move?
   Future? openPicker({required String source}) async {
     ImagePicker picker = ImagePicker();
     XFile? image;
@@ -82,7 +76,7 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
     }
   }
 
-  //repeated code
+  //repeated code, can i reduce or move?
   Future<void> openPickerDialog(context) async {
     await showDialog<void>(
       context: context,
@@ -120,6 +114,16 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
     }
   }
 
+  Stream<String> getMyStream() async* {
+    List<ThisImage>? myGalleryImages =
+        await galleryService.getGalleryImages(_galleryId);
+    if (myGalleryImages!.isNotEmpty) {
+      for (ThisImage galleryImage in myGalleryImages) {
+        print(galleryImage.path);
+        yield galleryImage.path;
+      }
+    }
+  }
   /*Future getImages() {
     //var user = authenticationService.getUserDetails();
     //change this to be receiving the images
