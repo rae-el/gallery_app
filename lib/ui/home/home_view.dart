@@ -71,7 +71,9 @@ class HomeState extends State<HomePage> {
                 ),
               ),
               floatingActionButton: FloatingActionButton(
-                onPressed: model.addImage,
+                onPressed: () async {
+                  await model.openPickerDialog(context);
+                },
                 child: const Icon(
                   Icons.add,
                   color: textColour,

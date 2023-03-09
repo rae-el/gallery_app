@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gallery_app/models/gallery.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -49,10 +51,67 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
     }
   }
 
-  Future<bool> addImage() async {
+  //repeated code
+  Future? openPicker({required String source}) async {
+    ImagePicker picker = ImagePicker();
+    XFile? image;
+    if (source == "gallery") {
+      image = await picker.pickImage(source: ImageSource.gallery);
+    }
+    if (source == "camera") {
+      image = await picker.pickImage(source: ImageSource.camera);
+    } else {
+      print('source not set');
+      return;
+    }
+    try {
+      if (image == null) {
+        print('image null');
+        return;
+      } else {
+        String? newImagePath = image.path;
+        addImage(newImagePath);
+        // add confirmation window?
+        notifyListeners();
+        navigationService.back();
+        return;
+      }
+    } on PlatformException catch (e) {
+      print(e);
+      return;
+    }
+  }
+
+  //repeated code
+  Future<void> openPickerDialog(context) async {
+    await showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: const Text('Select an Image'),
+          children: <Widget>[
+            SimpleDialogOption(
+              onPressed: () async {
+                await openPicker(source: 'gallery');
+              },
+              child: const Text('Gallery'),
+            ),
+            SimpleDialogOption(
+              onPressed: () async {
+                await openPicker(source: 'camera');
+              },
+              child: const Text('Camera'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<bool> addImage(String path) async {
     try {
       ThisImage image =
-          ThisImage(path: 'testimage', favourite: false, date: Timestamp.now());
+          ThisImage(path: path, favourite: false, date: Timestamp.now());
       await galleryService.addImageToGallery(image, _galleryId);
       return true;
     } catch (e) {
