@@ -3,9 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:gallery_app/models/this_user.dart';
 
+import '../models/gallery.dart';
+
 class UserService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final usersCollection = FirebaseFirestore.instance.collection('users');
+  final galleriesCollection =
+      FirebaseFirestore.instance.collection('galleries');
   String? returnMessage;
 
   Future<bool> createNewUser(newUserDetails) async {
@@ -14,7 +18,14 @@ class UserService {
           .doc(newUserDetails.uid)
           .set({'id': newUserDetails.uid, 'email': newUserDetails.email});
       print('Successfully added new user');
-      return true;
+      try {
+        await galleriesCollection.add({'user_id': newUserDetails.uid});
+        print('successfully added new gallery');
+        return true;
+      } catch (e) {
+        print(e);
+        return false;
+      }
     } catch (e) {
       print(e);
       return false;

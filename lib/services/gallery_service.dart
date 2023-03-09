@@ -21,33 +21,36 @@ class GalleryService {
       print('Getting user $userID gallery');
       try {
         var querySnapshot =
-            await galleriesCollection.where('id', isEqualTo: userID).get();
+            await galleriesCollection.where('user_id', isEqualTo: userID).get();
         print('gallery query snapshot $querySnapshot');
         for (var docSnapshot in querySnapshot.docs) {
           print('docsnapshot: $docSnapshot');
           galleries.add(Gallery.fromSnapshot(docSnapshot));
         }
+        //get first gallery (should only be 1)
+        //final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+        //final userData = allData[0] as Map;
+        int numOfGalleries = galleries.length;
+        print('There are $numOfGalleries that match this user ID');
+        if (numOfGalleries == 0) {
+          //if 0 create gallery
+          print('no galleries that meet query, ');
+          //var newUserGallery = createNewGallery(userID);
+          //do some error handeling
+          return null;
+        }
+        if (numOfGalleries == 1) {
+          Gallery userGallery = galleries[0];
+          print('got data for $userGallery');
+          return userGallery;
+        } else {
+          print('number of galleries too high, return null');
+          return null;
+        }
       } catch (e) {
         print(e);
         print('failed in querying galleries collection');
-      }
-
-      //get first gallery (should only be 1)
-      //final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-      //final userData = allData[0] as Map;
-      int numOfGalleries = galleries.length;
-      print('There are $numOfGalleries that match this ID');
-      if (numOfGalleries > 0) {
-        Gallery userGallery = galleries[0];
-        print('got data for $userGallery');
-        return userGallery;
-      } else {
-        //if null create gallery
-        print('no galleries that make query, create new gallery');
-        var newUserGallery = createNewGallery(userID);
-
-        //do some error handeling
-        return newUserGallery;
+        return null;
       }
     } catch (e) {
       print(e); // change this to a message
@@ -107,12 +110,18 @@ class GalleryService {
     print('in create new gallery');
     //create new gallery with userid
     try {
-      var docRef = await galleriesCollection.add({'id': userID});
-      var docSnap = await galleriesCollection.doc(docRef.id).get();
-      var newGallery = Gallery.fromSnapshot(docSnap);
-      return newGallery;
+      var docRef = await galleriesCollection.add({'user_id': userID});
+      print('create new gallery');
+      if (docRef != null) {
+        var docSnap = await galleriesCollection.doc(docRef.id).get();
+        var newGallery = Gallery.fromSnapshot(docSnap);
+        print('add new gallery to list');
+        return newGallery;
+      }
+      print('doc ref null');
     } catch (e) {
       print(e);
+      print('failed to create new gallery');
       return null;
     }
   }
@@ -126,7 +135,9 @@ class GalleryService {
       await galleriesCollection
           .doc(galleryID)
           .collection("images")
-          .add(jsonImg);
+          .add(jsonImg)
+          .then((value) =>
+              print('added document reference to images collection $value'));
       return true;
     } else {
       print('failed adding image to gallery');

@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ThisImage {
-  final String? path;
+  final String path;
   final bool favourite;
-  final DateTime date;
+  final Timestamp date;
 
   ThisImage({
     required this.path,

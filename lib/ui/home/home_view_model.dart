@@ -52,7 +52,7 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
   Future<bool> addImage() async {
     try {
       ThisImage image =
-          ThisImage(path: 'testimage', favourite: false, date: DateTime.now());
+          ThisImage(path: 'testimage', favourite: false, date: Timestamp.now());
       await galleryService.addImageToGallery(image, _galleryId);
       return true;
     } catch (e) {
