@@ -25,13 +25,15 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MainAppBar({super.key});
 
   @override
-  Size get preferredSize => const Size.fromHeight(100);
+  Size get preferredSize => const Size.fromHeight(50);
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewModel>.reactive(
       viewModelBuilder: () => HomeViewModel(),
       builder: (context, model, child) => AppBar(
+        //should make the title the username?
         title: const Text('Gallery'),
+        automaticallyImplyLeading: false,
         actions: [
           IconButton(
             icon: const Icon(Icons.person),
@@ -56,7 +58,8 @@ class HomeState extends State<HomePage> {
     return ViewModelBuilder<HomeViewModel>.reactive(
       //this is where I put the view structure
       viewModelBuilder: () => HomeViewModel(),
-      onModelReady: (viewModel) => viewModel.initialise(),
+      //line below triggers a double initialistion
+      //onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, model, child) => model.isBusy
           ? const Center(child: CircularProgressIndicator())
           : Scaffold(
@@ -76,50 +79,16 @@ class HomeState extends State<HomePage> {
                     ),
                     children: model.createImages(),
                   ),
-                  //stream builder method only returning 1 image?
-                  /*child: StreamBuilder<String>(
-                    stream: model.getMyStream(),
-                    initialData: "",
-                    builder: ((BuildContext context,
-                        AsyncSnapshot<String> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (snapshot.connectionState ==
-                          ConnectionState.done) {
-                        if (snapshot.hasError) {
-                          return const Text('Error');
-                        } else if (snapshot.hasData) {
-                          return GridView(
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                            ),
-                            children: [
-                              Image.file(
-                                File(snapshot.data ?? ""),
-                              ),
-                            ],
-                          );
-                        } else {
-                          return const Text("Empty");
-                        }
-                      }
-                      return const Center(
-                        //pass the error here
-                        child: Text('Error'),
-                      );
-                    }),
-                  ),*/
                 ),
               ),
-              floatingActionButton: FloatingActionButton(
-                onPressed: () async {
-                  await model.openPickerDialog(context);
-                },
-                child: const Icon(
-                  Icons.add,
-                  color: textColour,
-                ),
+              //should this be a persisent footer button instead?
+              bottomNavigationBar: SizedBox(
+                height: 50,
+                child: IconButton(
+                    onPressed: () async {
+                      await model.openPickerDialog(context);
+                    },
+                    icon: const Icon(Icons.add)),
               ),
             ),
     );

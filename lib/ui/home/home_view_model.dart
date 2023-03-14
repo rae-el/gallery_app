@@ -55,6 +55,9 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
       if (_galleryId != null) {
         _galleryImages = await galleryService.getGalleryImages(_galleryId);
         if (_galleryImages!.isNotEmpty) {
+          print('adding gallery image paths to list');
+          //reset to empty list
+          _galleryImagePaths = [];
           for (var galleryImage in _galleryImages!) {
             _galleryImagePaths.add(galleryImage.path);
           }
@@ -72,20 +75,24 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
 
   createImages() {
     List<Image> imageBlocks = <Image>[];
-    Image? imageBlock;
-    for (String imagePath in _galleryImagePaths) {
-      try {
-        if (File(imagePath).existsSync()) {
-          imageBlock = new Image.file(File(imagePath));
-          imageBlocks.add(imageBlock);
-        } else {
-          print('image $imagePath not added');
+    if (_galleryImagePaths.isEmpty) {
+      return new Text('You have no pictures yet!');
+    } else {
+      Image? imageBlock;
+      for (String imagePath in _galleryImagePaths) {
+        try {
+          if (File(imagePath).existsSync()) {
+            imageBlock = new Image.file(File(imagePath));
+            imageBlocks.add(imageBlock);
+          } else {
+            print('image $imagePath not added');
+          }
+        } catch (e) {
+          print(e);
         }
-      } catch (e) {
-        print(e);
       }
+      return imageBlocks;
     }
-    return imageBlocks;
   }
 
   //mostly repeated code, can i reduce or move?
@@ -106,12 +113,17 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
         print('image null');
         return;
       } else {
-        String? newImagePath = image.path;
-        addImage(newImagePath);
-        // add confirmation window?
-        notifyListeners();
         navigationService.back();
-        return;
+        String? newImagePath = image.path;
+        bool addNewImage = await addImage(newImagePath);
+        if (addNewImage) {
+          print('successfully added image and resent query');
+          notifyListeners();
+          return;
+        } else {
+          print("didn't add new image");
+          return;
+        }
       }
     } on PlatformException catch (e) {
       print(e);
@@ -149,8 +161,20 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
     try {
       ThisImage image =
           ThisImage(path: path, favourite: false, date: Timestamp.now());
-      await galleryService.addImageToGallery(image, _galleryId);
-      return true;
+      bool addedImage =
+          await galleryService.addImageToGallery(image, _galleryId);
+      if (addedImage) {
+        print('added image now resend query');
+        bool resendQuery = await askForGalleryData();
+        if (resendQuery) {
+          print('resent query');
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
     } catch (e) {
       print(e);
       return false;

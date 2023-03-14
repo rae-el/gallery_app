@@ -85,8 +85,11 @@ class GalleryService {
     List<ThisImage> galleryImages = [];
     try {
       if (galleryId != null) {
-        var imagesQuerySnapshot =
-            await galleriesCollection.doc(galleryId).collection("images").get();
+        var imagesQuerySnapshot = await galleriesCollection
+            .doc(galleryId)
+            .collection("images")
+            .orderBy('date', descending: true)
+            .get();
         //convert images query snapshot to a list of images?
         for (var imagesDocSnapshot in imagesQuerySnapshot.docs) {
           galleryImages.add(ThisImage.fromSnapshot(imagesDocSnapshot));

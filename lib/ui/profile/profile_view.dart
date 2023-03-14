@@ -24,7 +24,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MyAppBar({super.key});
 
   @override
-  Size get preferredSize => const Size.fromHeight(100);
+  Size get preferredSize => const Size.fromHeight(50);
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProfileViewModel>.reactive(
@@ -59,7 +59,7 @@ class ProfileState extends State<ProfilePage> {
     return ViewModelBuilder<ProfileViewModel>.reactive(
       //this is where I put the view structure
       viewModelBuilder: () => ProfileViewModel(),
-      onModelReady: (viewModel) => viewModel.initialise(),
+      //onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, model, child) => model.isBusy
           ? const Center(child: CircularProgressIndicator())
           : Scaffold(
