@@ -55,6 +55,7 @@ class HomePage extends StatefulWidget {
 class HomeState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    List<Widget> images = <Widget>[];
     return ViewModelBuilder<HomeViewModel>.reactive(
       //this is where I put the view structure
       viewModelBuilder: () => HomeViewModel(),
@@ -70,16 +71,30 @@ class HomeState extends State<HomePage> {
                 //fill space of entire screen
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
-                child: GestureDetector(
-                  //return list
-                  child: GridView(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                    ),
-                    children: model.createImages(),
-                  ),
-                ),
+                child: model.galleryImages == null
+                    ? const Text('Your Gallery Is Empty')
+                    : GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          mainAxisSpacing: 3,
+                          crossAxisSpacing: 3,
+                        ),
+                        itemCount: model.galleryImages!.length,
+                        itemBuilder: (BuildContext context, index) {
+                          return GestureDetector(
+                            /*onTap: () {
+                              print(model.galleryImages![index].path);
+                            },*/
+                            child: Image.file(
+                              File(model.galleryImages![index].path),
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            ),
+                          );
+                        },
+                      ),
               ),
               //should this be a persisent footer button instead?
               bottomNavigationBar: SizedBox(

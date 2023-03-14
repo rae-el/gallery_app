@@ -5,13 +5,16 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:flutter/foundation.dart' as _i7;
 import 'package:flutter/material.dart';
+import 'package:gallery_app/models/this_image.dart' as _i8;
 import 'package:gallery_app/ui/auth/auth_view.dart' as _i4;
 import 'package:gallery_app/ui/home/home_view.dart' as _i3;
+import 'package:gallery_app/ui/image/image_view.dart' as _i6;
 import 'package:gallery_app/ui/profile/profile_view.dart' as _i5;
 import 'package:gallery_app/ui/startup/startup_view.dart' as _i2;
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i6;
+import 'package:stacked_services/stacked_services.dart' as _i9;
 
 class Routes {
   static const startupView = '/';
@@ -22,11 +25,14 @@ class Routes {
 
   static const profileView = '/profile-view';
 
+  static const imageView = '/image-view';
+
   static const all = <String>{
     startupView,
     homeView,
     authView,
     profileView,
+    imageView,
   };
 }
 
@@ -47,6 +53,10 @@ class StackedRouter extends _i1.RouterBase {
     _i1.RouteDef(
       Routes.profileView,
       page: _i5.ProfileView,
+    ),
+    _i1.RouteDef(
+      Routes.imageView,
+      page: _i6.ImageView,
     ),
   ];
 
@@ -75,6 +85,13 @@ class StackedRouter extends _i1.RouterBase {
         settings: data,
       );
     },
+    _i6.ImageView: (data) {
+      final args = data.getArgs<ImageViewArguments>(nullOk: false);
+      return MaterialPageRoute<dynamic>(
+        builder: (context) => _i6.ImageView(key: args.key, image: args.image),
+        settings: data,
+      );
+    },
   };
 
   @override
@@ -83,7 +100,18 @@ class StackedRouter extends _i1.RouterBase {
   Map<Type, _i1.StackedRouteFactory> get pagesMap => _pagesMap;
 }
 
-extension NavigatorStateExtension on _i6.NavigationService {
+class ImageViewArguments {
+  const ImageViewArguments({
+    this.key,
+    required this.image,
+  });
+
+  final _i7.Key? key;
+
+  final _i8.ThisImage image;
+}
+
+extension NavigatorStateExtension on _i9.NavigationService {
   Future<dynamic> navigateToStartupView([
     int? routerId,
     bool preventDuplicates = true,
@@ -134,6 +162,23 @@ extension NavigatorStateExtension on _i6.NavigationService {
         transition,
   ]) async {
     return navigateTo<dynamic>(Routes.profileView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToImageView({
+    _i7.Key? key,
+    required _i8.ThisImage image,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return navigateTo<dynamic>(Routes.imageView,
+        arguments: ImageViewArguments(key: key, image: image),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

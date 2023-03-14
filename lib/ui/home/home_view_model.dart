@@ -43,6 +43,16 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
     navigationService.navigateTo(Routes.profileView);
   }
 
+  Future navigateToImageView(ThisImage image) async {
+    print('navigate to image view');
+    print(image);
+    if (image != null) {
+      navigationService.navigateTo(Routes.imageView, arguments: image);
+    } else {
+      navigationService.navigateTo(Routes.homeView);
+    }
+  }
+
   Future<bool> askForGalleryData() async {
     //this will automatically happen
     //setBusy(true);
@@ -58,31 +68,60 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
           print('adding gallery image paths to list');
           //reset to empty list
           _galleryImagePaths = [];
+          //only add if path exists
           for (var galleryImage in _galleryImages!) {
             _galleryImagePaths.add(galleryImage.path);
           }
           return true;
+        } else {
+          print('gallery images empty');
+          return false;
         }
+      } else {
+        print('gallery id nul');
         return false;
       }
-      return false;
     } else {
-      //do some error handeling
-      print('user gallery null, failed to retreive gallery id');
+      print('user gallery null');
       return false;
     }
   }
 
   createImages() {
-    List<Image> imageBlocks = <Image>[];
-    if (_galleryImagePaths.isEmpty) {
-      return new Text('You have no pictures yet!');
+    /*
+    List<Hero> imageHeros = <Hero>[];
+    List<Widget> empty = [const Text("Sorry you have no images yet!")];
+    if (_galleryImages == null) {
+      print('You have no pictures yet!');
+      return empty;
     } else {
-      Image? imageBlock;
+      Hero? imageHero;
+      for (ThisImage createImage in _galleryImages!) {
+        try {
+          imageHero = Hero(
+            tag: createImage,
+            child: Image.file(File(imagePath)),
+          );
+          imageHeros.add(imageHero);
+        } catch (e) {
+          print(e);
+        }
+      }
+      print('returning heros');
+      return imageHeros;
+      */
+
+    List<Widget> imageBlocks = <Widget>[];
+    if (_galleryImagePaths.isEmpty) {
+      return Text('You have no pictures yet!');
+    } else {
+      Widget? imageBlock;
       for (String imagePath in _galleryImagePaths) {
         try {
           if (File(imagePath).existsSync()) {
-            imageBlock = new Image.file(File(imagePath));
+            imageBlock = GestureDetector(
+              child: Image.file(File(imagePath)),
+            );
             imageBlocks.add(imageBlock);
           } else {
             print('image $imagePath not added');
@@ -191,105 +230,6 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
       }
     }
   }
-  /*Future getImages() {
-    //var user = authenticationService.getUserDetails();
-    //change this to be receiving the images
-    //return user;
-    //populating with images
-    /*
-    StreamBuilder<QuerySnapshot>(
-              //get info from Firestore
-              stream: FirebaseFirestore.instance
-                  //stream builder checks current authenticated user for collection Images
-                  .collection('Users')
-                  .doc(FirebaseAuth.instance.currentUser!.uid)
-                  .collection('Images')
-                  .snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(
-                    // while getting data show progress indicator
-                    child: CircularProgressIndicator(),
-                    // need to do something if no data
-                  );
-                }
-                return ListView(
-                  //get Images and list them as children containers
-                  children: snapshot.data!.docs.map((document) {
-                    return Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          // build image here based on the path
-                          Text("Image ${document.id}"),
-                        ],
-                      ),
-                    );
-                  }).toList(),
-                );
-              },*/
-  }*/
-
-  //ignore and use different method
-  //when user clicks add image button
-  /*void _showImageSourceActionSheet(BuildContext context) {
-    
-  Function(ImageSource) selectImageSource = (imageSource) {
-    context.add(OpenImagePicker(imageSource: imageSource));
-  };
-  if (Platform.isIOS) {
-    // for ios show a popup
-    showCupertinoModalPopup(
-      context: context,
-      builder: (context) => CupertinoActionSheet(
-        actions: [
-          //add camera action
-          CupertinoActionSheetAction(
-            child: Text('Camera'),
-            onPressed: () {
-              Navigator.pop(context);
-              selectImageSource(ImageSource.camera);
-            },
-          ),
-          //add gallery action
-          CupertinoActionSheetAction(
-            child: Text('Gallery'),
-            onPressed: () {
-              Navigator.pop(context);
-              selectImageSource(ImageSource.gallery);
-            },
-          ),
-          //add url action
-        ],
-      ),
-    );
-  } else {
-    // for android and other platforms show a bottom sheet
-    showModalBottomSheet(
-        context: context,
-        builder: (context) => ListView(
-              children: [
-                ListTile(
-                  leading: Icon(Icons.camera_alt),
-                  title: Text('Camera'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    selectImageSource(ImageSource.camera);
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.photo_album),
-                  title: Text('Gallery'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    selectImageSource(ImageSource.gallery);
-                  },
-                ),
-              ],
-            ));
-  }
-  }*/
 
   //gesture functions
   //double tap, add / remove from liked

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gallery_app/models/gallery.dart';
 import 'package:gallery_app/models/this_image.dart';
@@ -91,10 +93,17 @@ class GalleryService {
             .orderBy('date', descending: true)
             .get();
         //convert images query snapshot to a list of images?
-        for (var imagesDocSnapshot in imagesQuerySnapshot.docs) {
-          galleryImages.add(ThisImage.fromSnapshot(imagesDocSnapshot));
+        for (var docSnapshot in imagesQuerySnapshot.docs) {
+          ThisImage imageDocSnapshot = ThisImage.fromSnapshot(docSnapshot);
+          String path = imageDocSnapshot.path;
+          //why is this all the sudden throwing exception and not handleing it
+          if (await File(path).exists()) {
+            galleryImages.add(imageDocSnapshot);
+          } else {
+            print('did not add $imageDocSnapshot');
+          }
         }
-        print(galleryImages);
+        //validate gallery Images
         return galleryImages;
       } else {
         print('gallery id null');
@@ -130,20 +139,26 @@ class GalleryService {
   }
 
   Future<bool> addImageToGallery(ThisImage image, String galleryID) async {
-    //convert image to json
-    var jsonImg = image.toJson();
-    print('try adding image $jsonImg to gallery');
-    if (galleryID != null) {
-      //gallery exisits
-      await galleriesCollection
-          .doc(galleryID)
-          .collection("images")
-          .add(jsonImg)
-          .then((value) =>
-              print('added document reference to images collection $value'));
-      return true;
+    //validate path
+    if (await File(image.path).exists()) {
+      //convert image to json
+      var jsonImg = image.toJson();
+      print('try adding image $jsonImg to gallery');
+      if (galleryID != null) {
+        //gallery exisits
+        await galleriesCollection
+            .doc(galleryID)
+            .collection("images")
+            .add(jsonImg)
+            .then((value) =>
+                print('added document reference to images collection $value'));
+        return true;
+      } else {
+        print('failed adding image to gallery');
+        return false;
+      }
     } else {
-      print('failed adding image to gallery');
+      print('path invalid could not add image');
       return false;
     }
   }
