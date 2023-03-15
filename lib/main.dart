@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Gallery',
       theme: ThemeData(
         //basic theme data that could use some updating
@@ -34,6 +35,8 @@ class MyApp extends StatelessWidget {
           displayLarge: TextStyle(fontWeight: FontWeight.bold),
           bodyLarge: TextStyle(color: textColour),
           bodyMedium: TextStyle(color: textColour),
+          labelLarge: TextStyle(color: textColour, fontSize: 17),
+          labelSmall: TextStyle(color: primaryColour, fontSize: 15),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(

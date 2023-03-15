@@ -9,6 +9,9 @@ class AuthViewModel extends BaseViewModel {
   final navigationService = locator<NavigationService>();
   final authenticationService = locator<AuthenticationService>();
 
+  final String _logoLocation = 'assets/gallery_logo.png';
+  String get logoLocation => _logoLocation;
+
   Future signIn({
     required String email,
     required String password,
