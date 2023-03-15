@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:gallery_app/models/this_image.dart';
 import 'package:gallery_app/ui/home/home_view_model.dart';
 import 'package:gallery_app/app/colors.dart';
 import 'package:stacked/stacked.dart';
@@ -75,7 +76,10 @@ class HomeState extends State<HomePage> {
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: model.galleryImages == null
-                    ? const Text('Your Gallery Is Empty')
+                    ? const Center(
+                        child: Text(
+                            'Your gallery is empty! Start by adding some images!'),
+                      )
                     : GridView.builder(
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
@@ -88,12 +92,18 @@ class HomeState extends State<HomePage> {
                           return GestureDetector(
                             onTap: () {
                               print(model.galleryImages![index].path);
+                              model.navigateToImageView(
+                                image: model.galleryImages![index],
+                              );
                             },
-                            child: Image.file(
-                              File(model.galleryImages![index].path),
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
+                            child: Hero(
+                              tag: model.galleryImages![index],
+                              child: Image.file(
+                                File(model.galleryImages![index].path),
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           );
                         },

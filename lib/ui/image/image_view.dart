@@ -8,7 +8,7 @@ import 'package:stacked/stacked.dart';
 import 'image_view_model.dart';
 
 class ImageView extends StatelessWidget {
-  const ImageView({super.key, required this.image});
+  const ImageView({Key? key, required this.image}) : super(key: key);
 
   //for now just get the path
   final ThisImage image;

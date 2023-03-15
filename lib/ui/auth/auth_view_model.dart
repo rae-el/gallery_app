@@ -6,8 +6,8 @@ import '../../app/app.locator.dart';
 import '../../app/app.router.dart';
 
 class AuthViewModel extends BaseViewModel {
-  final navigationService = locator<NavigationService>();
-  final authenticationService = locator<AuthenticationService>();
+  final _navigationService = locator<NavigationService>();
+  final _authenticationService = locator<AuthenticationService>();
 
   final String _logoLocation = 'assets/gallery_logo.png';
   String get logoLocation => _logoLocation;
@@ -16,8 +16,8 @@ class AuthViewModel extends BaseViewModel {
     required String email,
     required String password,
   }) async {
-    if (await authenticationService.signIn(email, password)) {
-      navigationService.navigateTo(Routes.homeView);
+    if (await _authenticationService.signIn(email, password)) {
+      _navigationService.navigateTo(Routes.homeView);
     }
   }
 
@@ -25,7 +25,7 @@ class AuthViewModel extends BaseViewModel {
     required String email,
     required String password,
   }) async {
-    if (await authenticationService.signUp(email, password)) {
+    if (await _authenticationService.signUp(email, password)) {
       signIn(email: email, password: password);
     } else {
       return;
@@ -33,7 +33,7 @@ class AuthViewModel extends BaseViewModel {
   }
 
   Future forgotPassword({required String email}) async {
-    authenticationService.forgotPassword(email);
+    _authenticationService.forgotPassword(email);
     //add error catching
   }
 

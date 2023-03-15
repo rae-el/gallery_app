@@ -12,9 +12,9 @@ import '../../services/auth_service.dart';
 import '../../services/user_service.dart';
 
 class ProfileViewModel extends BaseViewModel implements Initialisable {
-  final userService = locator<UserService>();
-  final authService = locator<AuthenticationService>();
-  final navigationService = locator<NavigationService>();
+  final _userService = locator<UserService>();
+  final _authService = locator<AuthenticationService>();
+  final _navigationService = locator<NavigationService>();
 
   final TextEditingController nameField = TextEditingController();
   final TextEditingController descriptionField = TextEditingController();
@@ -45,7 +45,7 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
     //this will automatically happen
     //setBusy(true);
     print('asking for user data');
-    ThisUser? userData = await userService.getUserData();
+    ThisUser? userData = await _userService.getUserData();
     print('got data for $userData');
 
     if (userData != null) {
@@ -67,10 +67,10 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
   }
 
   Future signOut() async {
-    if (await authService.signOut()) {
-      navigationService.navigateTo(Routes.authView);
+    if (await _authService.signOut()) {
+      _navigationService.navigateTo(Routes.authView);
     } else {
-      navigationService.navigateTo(Routes.homeView);
+      _navigationService.navigateTo(Routes.homeView);
     }
   }
 
@@ -93,7 +93,7 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
       } else {
         _userImagePath = image.path;
         notifyListeners();
-        navigationService.back();
+        _navigationService.back();
         return;
       }
     } on PlatformException catch (e) {
@@ -136,7 +136,7 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
       avatar: userImagePath,
     );
     print('save profile of $thisUser');
-    await userService.updateUser(thisUser);
+    await _userService.updateUser(thisUser);
     return true;
   }
 }

@@ -16,8 +16,8 @@ import '../../services/auth_service.dart';
 import '../../services/gallery_service.dart';
 
 class HomeViewModel extends BaseViewModel implements Initialisable {
-  final navigationService = locator<NavigationService>();
-  final galleryService = locator<GalleryService>();
+  final _navigationService = locator<NavigationService>();
+  final _galleryService = locator<GalleryService>();
 
   String _galleryId = "";
   String get galleryId => _galleryId;
@@ -40,16 +40,17 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
   }
 
   Future navigateToProfile() async {
-    navigationService.navigateTo(Routes.profileView);
+    _navigationService.navigateTo(Routes.profileView);
   }
 
-  Future navigateToImageView(ThisImage image) async {
+  Future navigateToImageView({required ThisImage image}) async {
     print('navigate to image view');
-    print(image);
     if (image != null) {
-      navigationService.navigateTo(Routes.imageView, arguments: image);
+      _navigationService.navigateTo(Routes.imageView,
+          arguments: ImageViewArguments(image: image));
+      //navigationService.navigateToImageView(image: image);
     } else {
-      navigationService.navigateTo(Routes.homeView);
+      _navigationService.navigateTo(Routes.homeView);
     }
   }
 
@@ -57,13 +58,13 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
     //this will automatically happen
     //setBusy(true);
     print('asking for gallery data');
-    Gallery? userGallery = await galleryService.getUserGallery();
+    Gallery? userGallery = await _galleryService.getUserGallery();
     if (userGallery != null) {
       _galleryId = userGallery.id ?? "";
       print('gallery id: $_galleryId');
 
       if (_galleryId != null) {
-        _galleryImages = await galleryService.getGalleryImages(_galleryId);
+        _galleryImages = await _galleryService.getGalleryImages(_galleryId);
         if (_galleryImages!.isNotEmpty) {
           print('adding gallery image paths to list');
           //reset to empty list
@@ -152,7 +153,7 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
         print('image null');
         return;
       } else {
-        navigationService.back();
+        _navigationService.back();
         String? newImagePath = image.path;
         bool addNewImage = await addImage(newImagePath);
         if (addNewImage) {
@@ -201,7 +202,7 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
       ThisImage image =
           ThisImage(path: path, favourite: false, date: Timestamp.now());
       bool addedImage =
-          await galleryService.addImageToGallery(image, _galleryId);
+          await _galleryService.addImageToGallery(image, _galleryId);
       if (addedImage) {
         print('added image now resend query');
         bool resendQuery = await askForGalleryData();
@@ -222,7 +223,7 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
 
   Stream<String> getMyStream() async* {
     List<ThisImage>? myGalleryImages =
-        await galleryService.getGalleryImages(_galleryId);
+        await _galleryService.getGalleryImages(_galleryId);
     if (myGalleryImages!.isNotEmpty) {
       for (ThisImage galleryImage in myGalleryImages) {
         print(galleryImage.path);
