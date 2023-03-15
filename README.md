@@ -12,10 +12,10 @@ Done
 
 - Signing in
 - Signing up
+- Uploading and removing pictures
 
 To Do
 
-- Uploading and removing pictures
 - Tapping to expand pictures and viewing their details, as well as zooming in and out
 - Sorting pictures
 
