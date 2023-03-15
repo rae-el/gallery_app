@@ -33,11 +33,14 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
       builder: (context, model, child) => AppBar(
         //should make the title the username?
         title: const Text('Gallery'),
+        centerTitle: true,
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
             icon: const Icon(Icons.person),
             onPressed: model.navigateToProfile,
+            iconSize: 25,
+            splashRadius: 25,
           ),
         ],
       ),
@@ -83,9 +86,9 @@ class HomeState extends State<HomePage> {
                         itemCount: model.galleryImages!.length,
                         itemBuilder: (BuildContext context, index) {
                           return GestureDetector(
-                            /*onTap: () {
+                            onTap: () {
                               print(model.galleryImages![index].path);
-                            },*/
+                            },
                             child: Image.file(
                               File(model.galleryImages![index].path),
                               width: 100,
@@ -100,10 +103,13 @@ class HomeState extends State<HomePage> {
               bottomNavigationBar: SizedBox(
                 height: 50,
                 child: IconButton(
-                    onPressed: () async {
-                      await model.openPickerDialog(context);
-                    },
-                    icon: const Icon(Icons.add)),
+                  onPressed: () async {
+                    await model.openPickerDialog(context);
+                  },
+                  icon: const Icon(Icons.add),
+                  iconSize: 25,
+                  splashRadius: 25,
+                ),
               ),
             ),
     );

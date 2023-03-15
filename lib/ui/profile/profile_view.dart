@@ -34,10 +34,15 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
           title: const Text('Profile'),
+          centerTitle: true,
+          //how do you change the leading splash radius
+          leadingWidth: 30,
           actions: [
             IconButton(
               icon: const Icon(Icons.logout),
               onPressed: model.signOut,
+              iconSize: 25,
+              splashRadius: 25,
             ),
           ],
         ),

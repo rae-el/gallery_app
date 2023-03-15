@@ -29,12 +29,11 @@ class MyApp extends StatelessWidget {
         //basic theme data that could use some updating
         brightness: Brightness.dark,
         primaryColor: primaryColour,
-        errorColor: tertiaryColour,
         highlightColor: secondaryColour,
         textTheme: const TextTheme(
-          headline1: TextStyle(fontWeight: FontWeight.bold),
-          bodyText1: TextStyle(color: textColour),
-          bodyText2: TextStyle(color: textColour),
+          displayLarge: TextStyle(fontWeight: FontWeight.bold),
+          bodyLarge: TextStyle(color: textColour),
+          bodyMedium: TextStyle(color: textColour),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -47,6 +46,18 @@ class MyApp extends StatelessWidget {
           shape: RoundedRectangleBorder(),
           textTheme: ButtonTextTheme.accent,
         ),
+        colorScheme: const ColorScheme(
+            error: errorColour,
+            background: backgroundColour,
+            brightness: Brightness.dark,
+            onBackground: textColour,
+            onError: backgroundColour,
+            onPrimary: backgroundColour,
+            onSecondary: backgroundColour,
+            onSurface: textColour,
+            primary: primaryColour,
+            secondary: secondaryColour,
+            surface: secondaryBackgroundColour),
       ),
       navigatorKey: StackedService.navigatorKey,
       onGenerateRoute: StackedRouter().onGenerateRoute,
