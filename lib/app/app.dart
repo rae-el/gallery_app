@@ -20,5 +20,6 @@ import '../ui/profile/profile_view.dart';
   LazySingleton(classType: NavigationService),
   LazySingleton(classType: UserService),
   LazySingleton(classType: GalleryService),
+  LazySingleton(classType: DialogService),
 ])
 class AppSetup {}

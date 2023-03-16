@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:gallery_app/app/app.locator.dart';
 import 'package:gallery_app/app/colors.dart';
+import 'package:gallery_app/ui/shared/setup_dialog_ui.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'app/app.router.dart';
 import 'services/firebase_options.dart';
@@ -12,6 +13,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  setupDialogUi();
   runApp(const MyApp());
 }
 

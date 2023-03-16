@@ -6,3 +6,5 @@ const textColour = Color.fromRGBO(254, 254, 254, 1);
 const primaryColour = Color.fromARGB(255, 103, 152, 249);
 const secondaryColour = Color.fromARGB(255, 99, 183, 248);
 const errorColour = Color.fromARGB(255, 255, 53, 73);
+const warningColour = Color.fromARGB(255, 255, 154, 53);
+const successColour = Color.fromARGB(255, 103, 247, 74);

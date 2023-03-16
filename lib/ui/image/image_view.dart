@@ -94,7 +94,9 @@ class ImageActionState extends State<ActionBar> {
           ),
           BottomNavigationBarItem(
             icon: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                model.requestDelete();
+              },
               icon: const Icon(Icons.delete),
               splashRadius: 25,
             ),
