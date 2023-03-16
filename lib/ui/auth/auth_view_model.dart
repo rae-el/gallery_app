@@ -12,6 +12,9 @@ class AuthViewModel extends BaseViewModel {
   final String _logoLocation = 'assets/gallery_logo.png';
   String get logoLocation => _logoLocation;
 
+  String _formErrorMessage = '';
+  String get formErrorMessage => _formErrorMessage;
+
   Future signIn({
     required String email,
     required String password,
@@ -25,9 +28,15 @@ class AuthViewModel extends BaseViewModel {
     required String email,
     required String password,
   }) async {
-    if (await _authenticationService.signUp(email, password)) {
+    var signUpResponse = await _authenticationService.signUp(email, password);
+    if (signUpResponse == '') {
       signIn(email: email, password: password);
+    } else if (signUpResponse == 'ERROR') {
+      notifyListeners();
+      return;
     } else {
+      _formErrorMessage = signUpResponse;
+      notifyListeners();
       return;
     }
   }

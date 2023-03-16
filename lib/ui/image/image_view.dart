@@ -24,9 +24,11 @@ class ImageView extends StatelessWidget {
         appBar: const MainAppBar(),
         body: Center(
           //make this zoomable
-          child: Hero(
-            tag: image,
-            child: Image.file(File(image.path)),
+          child: GestureDetector(
+            child: Hero(
+              tag: image,
+              child: Image.file(File(image.path)),
+            ),
           ),
         ),
         bottomNavigationBar: const ActionBar(),
@@ -48,14 +50,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
         //should make the title the image title if exists?
         title: const Text(''),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.person),
-            onPressed: model.navigateToProfile,
-            iconSize: 25,
-            splashRadius: 25,
-          ),
-        ],
+        actions: const [],
       ),
     );
   }

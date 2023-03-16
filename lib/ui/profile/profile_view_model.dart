@@ -90,6 +90,10 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
     }
   }
 
+  navigateHome() {
+    _navigationService.navigateTo(Routes.homeView);
+  }
+
   Future? openPicker({required String source}) async {
     ImagePicker picker = ImagePicker();
     XFile? image;
@@ -125,7 +129,7 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
         final dialogResult = await _dialogService.showCustomDialog(
           variant: DialogType.basic,
           data: BasicDialogStatus.warning,
-          title: successTitle,
+          title: warningTitle,
           description: 'Remember to save your changes',
           mainButtonTitle: 'OK',
         );
@@ -167,6 +171,10 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
         );
       },
     );
+  }
+
+  Future requestToChangePassword() async {
+    _navigationService.navigateTo(Routes.changePwView);
   }
 
   Future saveProfile() async {

@@ -37,6 +37,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
           centerTitle: true,
           //how do you change the leading splash radius
           leadingWidth: 30,
+          //automaticallyImplyLeading: false,
           actions: [
             IconButton(
               icon: const Icon(Icons.logout),
@@ -119,7 +120,9 @@ class ProfileState extends State<ProfilePage> {
                         title: Text(model.userEmail),
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          await model.requestToChangePassword();
+                        },
                         child: const Text('Change Password'),
                       ),
                       ElevatedButton(

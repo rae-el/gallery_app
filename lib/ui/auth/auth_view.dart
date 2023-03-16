@@ -3,6 +3,8 @@ import 'package:gallery_app/ui/auth/auth_view_model.dart';
 import 'package:gallery_app/app/colors.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../app/fonts.dart';
+
 class AuthView extends StatefulWidget {
   const AuthView({super.key});
 
@@ -14,7 +16,6 @@ class AuthenticationState extends State<AuthView> {
   TextEditingController _emailField = TextEditingController();
   TextEditingController _passwordField = TextEditingController();
   GlobalKey<FormState> _key = GlobalKey<FormState>();
-  String errorMessage = '';
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +37,7 @@ class AuthenticationState extends State<AuthView> {
               children: [
                 const Text(
                   'Login To Gallery',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30,
-                    color: primaryColour,
-                  ),
+                  style: maxTitleFont,
                 ),
                 SizedBox(
                   width: 225,
@@ -64,6 +61,10 @@ class AuthenticationState extends State<AuthView> {
                     labelText: "Password",
                     contentPadding: EdgeInsets.all(20),
                   ),
+                ),
+                Text(
+                  model.formErrorMessage,
+                  style: formErrorFont,
                 ),
                 MaterialButton(
                   onPressed: () async {
