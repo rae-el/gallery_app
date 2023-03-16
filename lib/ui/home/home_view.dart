@@ -96,6 +96,7 @@ class HomeState extends State<HomePage> {
                                 image: model.galleryImages![index],
                               );
                             },
+                            //add double tap favourite function
                             child: Hero(
                               tag: model.galleryImages![index],
                               child: Image.file(
@@ -110,18 +111,32 @@ class HomeState extends State<HomePage> {
                       ),
               ),
               //should this be a persisent footer button instead?
-              bottomNavigationBar: SizedBox(
-                height: 50,
-                child: IconButton(
-                  onPressed: () async {
-                    await model.openPickerDialog(context);
-                  },
-                  icon: const Icon(Icons.add),
-                  iconSize: 25,
-                  splashRadius: 25,
-                ),
-              ),
+              bottomNavigationBar: const MainBottomBar(),
             ),
+    );
+  }
+}
+
+class MainBottomBar extends StatelessWidget implements PreferredSizeWidget {
+  const MainBottomBar({super.key});
+
+  @override
+  Size get preferredSize => const Size.fromHeight(50);
+  @override
+  Widget build(BuildContext context) {
+    return ViewModelBuilder<HomeViewModel>.reactive(
+      viewModelBuilder: () => HomeViewModel(),
+      builder: (context, model, child) => SizedBox(
+        height: 50,
+        child: IconButton(
+          onPressed: () async {
+            await model.openPickerDialog(context);
+          },
+          icon: const Icon(Icons.add),
+          iconSize: 25,
+          splashRadius: 25,
+        ),
+      ),
     );
   }
 }

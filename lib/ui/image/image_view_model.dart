@@ -1,19 +1,33 @@
 import 'package:gallery_app/app/app.locator.dart';
 import 'package:gallery_app/app/app.router.dart';
+import 'package:gallery_app/ui/image/image_view.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-class ImageViewModel extends BaseViewModel {
-  //get image in question
-  final String _imageLocation = 'assets/gallery_logo.png';
-  String get imageLocation => _imageLocation;
-
+class ImageViewModel extends BaseViewModel implements Initialisable {
   final _navigationService = locator<NavigationService>();
 
-  //check if user logged in, if yes navigate to home, if not navigate to auth view
+  bool _favourited = false;
+  bool get favourited => _favourited;
 
-  Future navigate() async {
+  @override
+  void initialise() async {
+    // TODO: implement initialise
+  }
+
+  Future navigateToHome() async {
     _navigationService.navigateTo(Routes.homeView);
+  }
+
+  Future navigateToProfile() async {
+    _navigationService.navigateTo(Routes.profileView);
+  }
+
+  toggleFavourite() {
+    print('toggle fave');
+    _favourited = !_favourited;
+    notifyListeners();
+    return _favourited;
   }
 
   //gesture functions
