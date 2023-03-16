@@ -12,7 +12,6 @@ class ImageView extends StatelessWidget {
 
   //how do I get this image data to the different classes / model
   final ThisImage image;
-  get currentImage => image;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +30,38 @@ class ImageView extends StatelessWidget {
             ),
           ),
         ),
-        bottomNavigationBar: const ActionBar(),
+        bottomNavigationBar: BottomNavigationBar(
+          fixedColor: textColour,
+          unselectedItemColor: textColour,
+          iconSize: 25,
+          selectedFontSize: 14,
+          unselectedFontSize: 14,
+          unselectedIconTheme: const IconThemeData(size: 24),
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: IconButton(
+                onPressed: () {
+                  model.toggleFavourite(favourite: image.favourite);
+                },
+                icon: image.favourite
+                    ? const Icon(Icons.favorite)
+                    : const Icon(Icons.favorite_outline),
+                splashRadius: 25,
+              ),
+              label: 'Favourite',
+            ),
+            BottomNavigationBarItem(
+              icon: IconButton(
+                onPressed: () {
+                  model.requestDelete();
+                },
+                icon: const Icon(Icons.delete),
+                splashRadius: 25,
+              ),
+              label: 'Delete',
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -51,53 +81,6 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
         title: const Text(''),
         centerTitle: true,
         actions: const [],
-      ),
-    );
-  }
-}
-
-class ActionBar extends StatefulWidget {
-  const ActionBar({super.key});
-  @override
-  State<ActionBar> createState() => ImageActionState();
-}
-
-class ImageActionState extends State<ActionBar> {
-  @override
-  Widget build(BuildContext context) {
-    return ViewModelBuilder<ImageViewModel>.reactive(
-      viewModelBuilder: () => ImageViewModel(),
-      builder: (context, model, child) => BottomNavigationBar(
-        fixedColor: textColour,
-        unselectedItemColor: textColour,
-        iconSize: 25,
-        selectedFontSize: 14,
-        unselectedFontSize: 14,
-        unselectedIconTheme: const IconThemeData(size: 24),
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: IconButton(
-              onPressed: () {
-                model.toggleFavourite();
-              },
-              icon: model.favourited
-                  ? const Icon(Icons.favorite)
-                  : const Icon(Icons.favorite_outline),
-              splashRadius: 25,
-            ),
-            label: 'Favourite',
-          ),
-          BottomNavigationBarItem(
-            icon: IconButton(
-              onPressed: () {
-                model.requestDelete();
-              },
-              icon: const Icon(Icons.delete),
-              splashRadius: 25,
-            ),
-            label: 'Delete',
-          ),
-        ],
       ),
     );
   }

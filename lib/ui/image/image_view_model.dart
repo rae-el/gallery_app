@@ -7,6 +7,7 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../app/messages.dart';
+import '../../models/this_image.dart';
 
 class ImageViewModel extends BaseViewModel implements Initialisable {
   final _navigationService = locator<NavigationService>();
@@ -15,10 +16,11 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
   bool _favourited = false;
   bool get favourited => _favourited;
 
+  ThisImage? _image;
+  ThisImage? get image => _image;
+
   @override
-  void initialise() async {
-    // TODO: implement initialise
-  }
+  void initialise() async {}
 
   Future navigateToHome() async {
     _navigationService.navigateTo(Routes.homeView);
@@ -28,11 +30,11 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
     _navigationService.navigateTo(Routes.profileView);
   }
 
-  toggleFavourite() {
+  toggleFavourite({required bool favourite}) {
     print('toggle fave');
-    _favourited = !_favourited;
+    favourite = !favourite;
     notifyListeners();
-    return _favourited;
+    return favourite;
   }
 
   requestDelete() async {

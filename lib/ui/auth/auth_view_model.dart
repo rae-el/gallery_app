@@ -42,9 +42,24 @@ class AuthViewModel extends BaseViewModel {
   }
 
   Future forgotPassword({required String email}) async {
-    _authenticationService.forgotPassword(email);
+    if (email != '') {
+      var forgotPasswordResponse =
+          await _authenticationService.forgotPassword(email);
+      if (forgotPasswordResponse is String) {
+        _formErrorMessage = forgotPasswordResponse;
+        notifyListeners();
+      } else {
+        notifyListeners();
+        return forgotPasswordResponse;
+      }
+    } else {
+      _formErrorMessage = 'Please input your email';
+      notifyListeners();
+    }
     //add error catching
   }
+
+  validateForm({required String? formEmail, required String? formPassword}) {}
 
   //Form validation
   String? validateFormEmail(String? formEmail) {

@@ -131,6 +131,7 @@ class GalleryService {
         return newGallery;
       }
       print('doc ref null');
+      return null;
     } catch (e) {
       print(e);
       print('failed to create new gallery');

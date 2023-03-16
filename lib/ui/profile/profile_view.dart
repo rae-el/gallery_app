@@ -40,6 +40,12 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
           //automaticallyImplyLeading: false,
           actions: [
             IconButton(
+              icon: const Icon(Icons.home),
+              onPressed: model.navigateHome,
+              iconSize: 25,
+              splashRadius: 25,
+            ),
+            IconButton(
               icon: const Icon(Icons.logout),
               onPressed: model.signOut,
               iconSize: 25,

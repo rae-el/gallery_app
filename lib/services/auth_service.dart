@@ -32,18 +32,15 @@ class AuthenticationService {
       );
       return true;
     } on FirebaseException catch (e) {
-      print(e); // change this to a message to show in a snack bar
+      print(e);
       if (e.code == 'invalid-email') {
         _returnMessage = 'The email you provided is invalid';
       } else if (e.code == 'user-disabled') {
-        _returnMessage =
-            'This account is currently disabled'; // change this to a message
+        _returnMessage = 'This account is currently disabled';
       } else if (e.code == 'user-not-found') {
-        _returnMessage =
-            'This user could not be found'; // change this to a message
+        _returnMessage = 'This user could not be found';
       } else if (e.code == 'wrong-password') {
-        _returnMessage =
-            'Incorrect password, please try again'; // change this to a message
+        _returnMessage = 'Incorrect password, please try again';
       } else {
         print(e);
         _returnMessage = 'Could not sign you in, please try again';
@@ -174,25 +171,14 @@ class AuthenticationService {
         mainButtonTitle: 'OK',
       );
       return dialogResult;
-    } on FirebaseException catch (e) {
+    } on FirebaseAuthException catch (e) {
       if (e.code == 'auth/invalid-email') {
-        final dialogResult = await _dialogService.showCustomDialog(
-          variant: DialogType.basic,
-          data: BasicDialogStatus.error,
-          title: errorTitle,
-          description: 'Invalid Email, please try again',
-          mainButtonTitle: 'OK',
-        );
-        return dialogResult;
+        _returnMessage = 'Invalid Email, please try again';
+        return _returnMessage;
       } else if (e.code == 'auth/user-not-found') {
-        final dialogResult = await _dialogService.showCustomDialog(
-          variant: DialogType.basic,
-          data: BasicDialogStatus.error,
-          title: errorTitle,
-          description: 'User not found, please check your email and try again',
-          mainButtonTitle: 'OK',
-        );
-        return dialogResult;
+        _returnMessage =
+            'User not found, please check your email and try again';
+        return _returnMessage;
       } else {
         final dialogResult = await _dialogService.showCustomDialog(
           variant: DialogType.basic,
