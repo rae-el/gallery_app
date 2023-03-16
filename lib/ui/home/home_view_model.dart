@@ -11,6 +11,9 @@ import 'package:stacked_services/stacked_services.dart';
 
 import '../../app/app.locator.dart';
 import '../../app/app.router.dart';
+import '../../app/messages.dart';
+import '../../enums/basic_dialog_status.dart';
+import '../../enums/dialog_type.dart';
 import '../../models/this_image.dart';
 import '../../services/auth_service.dart';
 import '../../services/gallery_service.dart';
@@ -18,6 +21,7 @@ import '../../services/gallery_service.dart';
 class HomeViewModel extends BaseViewModel implements Initialisable {
   final _navigationService = locator<NavigationService>();
   final _galleryService = locator<GalleryService>();
+  final _dialogService = locator<DialogService>();
 
   String _galleryId = "";
   String get galleryId => _galleryId;
@@ -80,59 +84,37 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
         }
       } else {
         print('gallery id nul');
+        showRetrievingGalleryError();
         return false;
       }
     } else {
       print('user gallery null');
+      showRetrievingGalleryError();
       return false;
     }
   }
 
-  createImages() {
-    /*
-    List<Hero> imageHeros = <Hero>[];
-    List<Widget> empty = [const Text("Sorry you have no images yet!")];
-    if (_galleryImages == null) {
-      print('You have no pictures yet!');
-      return empty;
-    } else {
-      Hero? imageHero;
-      for (ThisImage createImage in _galleryImages!) {
-        try {
-          imageHero = Hero(
-            tag: createImage,
-            child: Image.file(File(imagePath)),
-          );
-          imageHeros.add(imageHero);
-        } catch (e) {
-          print(e);
-        }
-      }
-      print('returning heros');
-      return imageHeros;
-      */
+  showRetrievingGalleryError() async {
+    final dialogResult = await _dialogService.showCustomDialog(
+      variant: DialogType.basic,
+      data: BasicDialogStatus.error,
+      title: errorTitle,
+      description: 'There was a problem retrieving your gallery',
+      mainButtonTitle: 'OK',
+    );
+    return dialogResult;
+  }
 
-    List<Widget> imageBlocks = <Widget>[];
-    if (_galleryImagePaths.isEmpty) {
-      return Text('You have no pictures yet!');
-    } else {
-      Widget? imageBlock;
-      for (String imagePath in _galleryImagePaths) {
-        try {
-          if (File(imagePath).existsSync()) {
-            imageBlock = GestureDetector(
-              child: Image.file(File(imagePath)),
-            );
-            imageBlocks.add(imageBlock);
-          } else {
-            print('image $imagePath not added');
-          }
-        } catch (e) {
-          print(e);
-        }
-      }
-      return imageBlocks;
-    }
+  showAddingImageError() async {
+    final dialogResult = await _dialogService.showCustomDialog(
+      variant: DialogType.basic,
+      data: BasicDialogStatus.error,
+      title: errorTitle,
+      description:
+          'There was a problem adding the image to your gallery, please try again',
+      mainButtonTitle: 'OK',
+    );
+    return dialogResult;
   }
 
   //mostly repeated code, can i reduce or move?
@@ -150,7 +132,6 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
     }
     try {
       if (image == null) {
-        print('image null');
         return;
       } else {
         _navigationService.back();
@@ -159,14 +140,16 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
         if (addNewImage) {
           print('successfully added image and resent query');
           notifyListeners();
+          //why is this no longer updating the view?????
           return;
         } else {
-          print("didn't add new image");
+          showAddingImageError();
           return;
         }
       }
     } on PlatformException catch (e) {
       print(e);
+      showAddingImageError();
       return;
     }
   }
@@ -210,25 +193,17 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
           print('resent query');
           return true;
         } else {
+          showAddingImageError();
           return false;
         }
       } else {
+        showAddingImageError();
         return false;
       }
     } catch (e) {
       print(e);
+      showAddingImageError();
       return false;
-    }
-  }
-
-  Stream<String> getMyStream() async* {
-    List<ThisImage>? myGalleryImages =
-        await _galleryService.getGalleryImages(_galleryId);
-    if (myGalleryImages!.isNotEmpty) {
-      for (ThisImage galleryImage in myGalleryImages) {
-        print(galleryImage.path);
-        yield galleryImage.path;
-      }
     }
   }
 

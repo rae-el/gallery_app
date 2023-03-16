@@ -6,6 +6,8 @@ import 'package:gallery_app/ui/image/image_view.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import '../../app/messages.dart';
+
 class ImageViewModel extends BaseViewModel implements Initialisable {
   final _navigationService = locator<NavigationService>();
   final _dialogService = locator<DialogService>();
@@ -36,8 +38,8 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
   requestDelete() async {
     final dialogResult = await _dialogService.showCustomDialog(
       variant: DialogType.basic,
-      data: BasicDialogStatus.success,
-      title: 'Error',
+      data: BasicDialogStatus.error,
+      title: errorTitle,
       description: 'We cannot delete your image',
       mainButtonTitle: 'OK',
     );

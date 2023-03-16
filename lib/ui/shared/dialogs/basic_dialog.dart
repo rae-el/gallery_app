@@ -45,8 +45,7 @@ class _BasicDialogContent extends StatelessWidget {
           decoration: BoxDecoration(
             color: secondaryBackgroundColour,
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(
-                color: _getStatusColor(request.customData), width: 2),
+            border: Border.all(color: _getStatusColor(request.data), width: 2),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -88,11 +87,11 @@ class _BasicDialogContent extends StatelessWidget {
   }
 }
 
-Color _getStatusColor(dynamic customData) {
+Color _getStatusColor(dynamic data) {
   print('get colour');
   // switch not working??? returning default
-  print(customData);
-  switch (customData) {
+  print(data);
+  switch (data) {
     case BasicDialogStatus.error:
       return errorColour;
     case BasicDialogStatus.warning:

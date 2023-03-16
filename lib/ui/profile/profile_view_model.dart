@@ -8,6 +8,9 @@ import 'package:stacked_services/stacked_services.dart';
 
 import '../../app/app.locator.dart';
 import '../../app/app.router.dart';
+import '../../app/messages.dart';
+import '../../enums/basic_dialog_status.dart';
+import '../../enums/dialog_type.dart';
 import '../../services/auth_service.dart';
 import '../../services/user_service.dart';
 
@@ -15,6 +18,7 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
   final _userService = locator<UserService>();
   final _authService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
+  final _dialogService = locator<DialogService>();
 
   final TextEditingController nameField = TextEditingController();
   final TextEditingController descriptionField = TextEditingController();
@@ -62,8 +66,20 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
       return true;
     } else {
       //do some error handeling
+      showDialogError();
       return false;
     }
+  }
+
+  showDialogError() async {
+    final dialogResult = await _dialogService.showCustomDialog(
+      variant: DialogType.basic,
+      data: BasicDialogStatus.error,
+      title: errorTitle,
+      description: 'There was a problem retrieving user data',
+      mainButtonTitle: 'OK',
+    );
+    return dialogResult;
   }
 
   Future signOut() async {
@@ -83,22 +99,48 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
     if (source == "camera") {
       image = await picker.pickImage(source: ImageSource.camera);
     } else {
-      print('source not set');
-      return;
+      final dialogResult = await _dialogService.showCustomDialog(
+        variant: DialogType.basic,
+        data: BasicDialogStatus.error,
+        title: errorTitle,
+        description: 'There was a problem selecting a photo',
+        mainButtonTitle: 'OK',
+      );
+      return dialogResult;
     }
     try {
       if (image == null) {
-        print('image null');
-        return;
+        final dialogResult = await _dialogService.showCustomDialog(
+          variant: DialogType.basic,
+          data: BasicDialogStatus.error,
+          title: errorTitle,
+          description: 'There was a problem selecting a photo',
+          mainButtonTitle: 'OK',
+        );
+        return dialogResult;
       } else {
         _userImagePath = image.path;
         notifyListeners();
         _navigationService.back();
-        return;
+        final dialogResult = await _dialogService.showCustomDialog(
+          variant: DialogType.basic,
+          data: BasicDialogStatus.warning,
+          title: successTitle,
+          description: 'Remember to save your changes',
+          mainButtonTitle: 'OK',
+        );
+        return dialogResult;
       }
     } on PlatformException catch (e) {
       print(e);
-      return;
+      final dialogResult = await _dialogService.showCustomDialog(
+        variant: DialogType.basic,
+        data: BasicDialogStatus.error,
+        title: errorTitle,
+        description: 'There was a problem selecting a photo',
+        mainButtonTitle: 'OK',
+      );
+      return dialogResult;
     }
   }
 
@@ -127,7 +169,7 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
     );
   }
 
-  Future<bool> saveProfile() async {
+  Future saveProfile() async {
     ThisUser thisUser = ThisUser(
       id: uid,
       email: userEmail,
@@ -136,7 +178,25 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
       avatar: userImagePath,
     );
     print('save profile of $thisUser');
-    await _userService.updateUser(thisUser);
-    return true;
+    bool savedUser = await _userService.updateUser(thisUser);
+    if (savedUser) {
+      final dialogResult = await _dialogService.showCustomDialog(
+        variant: DialogType.basic,
+        data: BasicDialogStatus.success,
+        title: successTitle,
+        description: 'Saved changes to profile',
+        mainButtonTitle: 'OK',
+      );
+      return dialogResult;
+    } else {
+      final dialogResult = await _dialogService.showCustomDialog(
+        variant: DialogType.basic,
+        data: BasicDialogStatus.error,
+        title: errorTitle,
+        description: 'There was a problem saving your profile',
+        mainButtonTitle: 'OK',
+      );
+      return dialogResult;
+    }
   }
 }

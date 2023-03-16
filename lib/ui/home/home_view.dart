@@ -59,7 +59,6 @@ class HomePage extends StatefulWidget {
 class HomeState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    List<Widget> images = <Widget>[];
     return ViewModelBuilder<HomeViewModel>.reactive(
       //this is where I put the view structure
       viewModelBuilder: () => HomeViewModel(),
