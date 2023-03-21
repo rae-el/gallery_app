@@ -19,55 +19,61 @@ class ImageView extends StatelessWidget {
       //this is where I put the view structure
       viewModelBuilder: () => ImageViewModel(image),
       onModelReady: (viewModel) => viewModel.initialise(),
-      builder: (context, model, child) => Scaffold(
-        appBar: AppBar(
-          //should make the title the image title if exists?
-          title: const Text(''),
-          centerTitle: true,
-          actions: const [],
-        ),
-        body: Center(
-          //make this zoomable
-          child: GestureDetector(
-            child: Hero(
-              tag: model.image = image,
-              child: Image.file(File(image.path)),
-            ),
-          ),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          fixedColor: textColour,
-          unselectedItemColor: textColour,
-          iconSize: 25,
-          selectedFontSize: 14,
-          unselectedFontSize: 14,
-          unselectedIconTheme: const IconThemeData(size: 24),
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: IconButton(
-                onPressed: () {
-                  model.toggleFavourite(favourite: model.image!.favourite);
-                },
-                icon: model.image!.favourite
-                    ? const Icon(Icons.favorite)
-                    : const Icon(Icons.favorite_outline),
-                splashRadius: 25,
+      builder: (context, model, child) => model.isBusy
+          ? const Center(child: CircularProgressIndicator())
+          : Scaffold(
+              appBar: AppBar(
+                //should make the title the image title if exists?
+                leading: IconButton(
+                    onPressed: model.navigateToHome,
+                    icon: const Icon(Icons.arrow_back)),
+                title: const Text(''),
+                centerTitle: true,
+                actions: const [],
               ),
-              label: 'Favourite',
-            ),
-            BottomNavigationBarItem(
-              icon: IconButton(
-                onPressed: () {
-                  model.requestDelete();
-                },
-                icon: const Icon(Icons.delete),
-                splashRadius: 25,
+              body: Center(
+                //make this zoomable
+                child: GestureDetector(
+                  child: Hero(
+                    tag: image,
+                    child: Image.file(File(model.image!.path)),
+                  ),
+                ),
               ),
-              label: 'Delete',
+              bottomNavigationBar: BottomNavigationBar(
+                fixedColor: textColour,
+                unselectedItemColor: textColour,
+                iconSize: 25,
+                selectedFontSize: 14,
+                unselectedFontSize: 14,
+                unselectedIconTheme: const IconThemeData(size: 24),
+                items: <BottomNavigationBarItem>[
+                  BottomNavigationBarItem(
+                    icon: IconButton(
+                      onPressed: () {
+                        model.toggleFavourite(
+                            favourite: model.image!.favourite);
+                      },
+                      icon: model.image!.favourite
+                          ? const Icon(Icons.favorite)
+                          : const Icon(Icons.favorite_outline),
+                      splashRadius: 25,
+                    ),
+                    label: 'Favourite',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: IconButton(
+                      onPressed: () {
+                        model.requestDelete();
+                      },
+                      icon: const Icon(Icons.delete),
+                      splashRadius: 25,
+                    ),
+                    label: 'Delete',
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
     );
   }
 }

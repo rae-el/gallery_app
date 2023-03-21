@@ -26,7 +26,6 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
   String? id;
 
   String _galleryId = "";
-  String get galleryId => _galleryId;
 
   List<ThisImage>? _galleryImages = [];
   List<ThisImage>? get galleryImages => _galleryImages;
@@ -45,30 +44,22 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
     _navigationService.navigateTo(Routes.profileView);
   }
 
-  Future<bool> updateImage() async {
+  Future updateImage() async {
+    _galleryId = await _galleryService.getGalleryID() as String;
+    await _galleryService.getGalleryImages(_galleryId);
     id = image!.id;
-    if (id != null) {
-      image = await _imageService.imageInGallery(id);
-      if (image != null) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-    return false;
+    image = await _imageService.imageInGallery(id);
+    notifyListeners();
   }
 
-  updateView() {}
-
-  showUpdateError() async {
-    final dialogResult = await _dialogService.showCustomDialog(
+  Future showUpdateError() async {
+    await _dialogService.showCustomDialog(
       variant: DialogType.basic,
       data: BasicDialogStatus.error,
       title: errorTitle,
       description: 'There was a problem updating your gallery',
       mainButtonTitle: 'OK',
     );
-    return dialogResult;
   }
 
   Future toggleFavourite({required bool favourite}) async {
@@ -78,43 +69,29 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
     if (id != null) {
       String? update = await _imageService.updateFavourite(id, favourite);
       if (update == '') {
-        if (await updateImage()) {
-          notifyListeners();
-          return favourite;
-        } else {
-          final dialogResult = await _dialogService.showCustomDialog(
-            variant: DialogType.basic,
-            data: BasicDialogStatus.error,
-            title: errorTitle,
-            description: 'We cannot update your favourite status',
-            mainButtonTitle: 'OK',
-          );
-          return dialogResult;
-        }
+        updateImage();
       } else {
-        final dialogResult = await _dialogService.showCustomDialog(
+        await _dialogService.showCustomDialog(
           variant: DialogType.basic,
           data: BasicDialogStatus.error,
           title: errorTitle,
           description: 'We cannot update your favourite status',
           mainButtonTitle: 'OK',
         );
-        return dialogResult;
       }
     } else {
       print('id null');
-      final dialogResult = await _dialogService.showCustomDialog(
+      await _dialogService.showCustomDialog(
         variant: DialogType.basic,
         data: BasicDialogStatus.error,
         title: errorTitle,
         description: 'We cannot update your favourite status',
         mainButtonTitle: 'OK',
       );
-      return dialogResult;
     }
   }
 
-  requestDelete() async {
+  Future requestDelete() async {
     id = image!.id;
     final dialogResult = await _dialogService.showCustomDialog(
       variant: DialogType.basic,
@@ -131,7 +108,7 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
           var deleteResponse =
               await _imageService.requestDeleteImage(imageId: id as String);
           if (deleteResponse == '') {
-            final dialogResult = await _dialogService.showCustomDialog(
+            await _dialogService.showCustomDialog(
               variant: DialogType.basic,
               data: BasicDialogStatus.success,
               title: successTitle,
@@ -140,14 +117,13 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
             );
             navigateToHome();
           } else {
-            final dialogResult = await _dialogService.showCustomDialog(
+            await _dialogService.showCustomDialog(
               variant: DialogType.basic,
               data: BasicDialogStatus.error,
               title: errorTitle,
               description: deleteResponse,
               mainButtonTitle: 'OK',
             );
-            return dialogResult;
           }
         }
       } else {
