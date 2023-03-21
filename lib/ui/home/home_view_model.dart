@@ -15,28 +15,30 @@ import '../../app/messages.dart';
 import '../../enums/basic_dialog_status.dart';
 import '../../enums/dialog_type.dart';
 import '../../models/this_image.dart';
+import '../../models/this_user.dart';
 import '../../services/auth_service.dart';
 import '../../services/gallery_service.dart';
+import '../../services/user_service.dart';
 
 class HomeViewModel extends BaseViewModel implements Initialisable {
   final _navigationService = locator<NavigationService>();
   final _galleryService = locator<GalleryService>();
   final _dialogService = locator<DialogService>();
+  final _userService = locator<UserService>();
+
+  Gallery? _userGallery;
 
   String _galleryId = "";
   String get galleryId => _galleryId;
 
-  List<ThisImage>? _galleryImages = [];
+  String _username = "";
+  String get username => _username;
+
+  List<ThisImage>? _galleryImages;
   List<ThisImage>? get galleryImages => _galleryImages;
 
   List<String> _galleryImagePaths = [];
   List<String> get galleryImagePaths => _galleryImagePaths;
-
-  List<Image>? _myImages = [];
-  List<Image>? get myImages => _myImages;
-
-  String _imagePath = "";
-  String get imagePath => _imagePath;
 
   @override
   void initialise() async {
@@ -61,12 +63,21 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
   }
 
   Future<bool> askForGalleryData() async {
+    ThisUser? userData = await _userService.getUserData();
+    print('got data for $userData');
+
+    if (userData != null) {
+      _username = userData.username ?? "";
+    } else {
+      //do some error handeling
+      showRetrievingGalleryError();
+    }
     //this will automatically happen
     //setBusy(true);
     print('asking for gallery data');
-    Gallery? userGallery = await _galleryService.getUserGallery();
-    if (userGallery != null) {
-      _galleryId = userGallery.id ?? "";
+    _userGallery = await _galleryService.getUserGallery();
+    if (_userGallery != null) {
+      _galleryId = _userGallery!.id ?? "";
       print('gallery id: $_galleryId');
 
       if (_galleryId != null) {
@@ -82,7 +93,9 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
           return true;
         } else {
           print('gallery images empty');
-          return false;
+          _galleryImages = null;
+          _galleryImagePaths = [];
+          return true;
         }
       } else {
         print('gallery id nul');
@@ -193,6 +206,7 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
         bool resendQuery = await askForGalleryData();
         if (resendQuery) {
           print('resent query');
+          notifyListeners();
           return true;
         } else {
           showAddingImageError();

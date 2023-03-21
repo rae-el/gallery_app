@@ -34,7 +34,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
       viewModelBuilder: () => HomeViewModel(),
       builder: (context, model, child) => AppBar(
         //should make the title the username?
-        title: const Text('Gallery'),
+        title: Text(model.username),
         centerTitle: true,
         automaticallyImplyLeading: false,
         actions: [
@@ -64,7 +64,7 @@ class HomeState extends State<HomePage> {
       //this is where I put the view structure
       viewModelBuilder: () => HomeViewModel(),
       //line below triggers a double initialistion
-      //onModelReady: (viewModel) => viewModel.initialise(),
+      onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, model, child) => model.isBusy
           ? const Center(child: CircularProgressIndicator())
           : Scaffold(
@@ -132,32 +132,18 @@ class HomeState extends State<HomePage> {
                       ),
               ),
               //should this be a persisent footer button instead?
-              bottomNavigationBar: const MainBottomBar(),
+              bottomNavigationBar: SizedBox(
+                height: 50,
+                child: IconButton(
+                  onPressed: () async {
+                    await model.openPickerDialog(context);
+                  },
+                  icon: const Icon(Icons.add),
+                  iconSize: 25,
+                  splashRadius: 25,
+                ),
+              ),
             ),
-    );
-  }
-}
-
-class MainBottomBar extends StatelessWidget implements PreferredSizeWidget {
-  const MainBottomBar({super.key});
-
-  @override
-  Size get preferredSize => const Size.fromHeight(50);
-  @override
-  Widget build(BuildContext context) {
-    return ViewModelBuilder<HomeViewModel>.reactive(
-      viewModelBuilder: () => HomeViewModel(),
-      builder: (context, model, child) => SizedBox(
-        height: 50,
-        child: IconButton(
-          onPressed: () async {
-            await model.openPickerDialog(context);
-          },
-          icon: const Icon(Icons.add),
-          iconSize: 25,
-          splashRadius: 25,
-        ),
-      ),
     );
   }
 }
