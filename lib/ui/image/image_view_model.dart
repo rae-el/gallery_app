@@ -113,14 +113,45 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
   }
 
   requestDelete() async {
+    id = image!.id;
     final dialogResult = await _dialogService.showCustomDialog(
       variant: DialogType.basic,
-      data: BasicDialogStatus.error,
-      title: errorTitle,
-      description: 'We cannot delete your image',
-      mainButtonTitle: 'OK',
+      data: BasicDialogStatus.warning,
+      title: 'DELETE',
+      description: 'Are you sure you would like to delete this image?',
+      mainButtonTitle: 'YES',
+      secondaryButtonTitle: 'CANCEL',
     );
-    return dialogResult;
+    if (dialogResult != null) {
+      if (dialogResult.confirmed) {
+        print('confirmed delete');
+        if (id != null) {
+          var deleteResponse =
+              await _imageService.requestDeleteImage(imageId: id as String);
+          if (deleteResponse == '') {
+            final dialogResult = await _dialogService.showCustomDialog(
+              variant: DialogType.basic,
+              data: BasicDialogStatus.success,
+              title: successTitle,
+              description: 'Deleted Image',
+              mainButtonTitle: 'OK',
+            );
+            return dialogResult;
+          } else {
+            final dialogResult = await _dialogService.showCustomDialog(
+              variant: DialogType.basic,
+              data: BasicDialogStatus.error,
+              title: errorTitle,
+              description: deleteResponse,
+              mainButtonTitle: 'OK',
+            );
+            return dialogResult;
+          }
+        }
+      } else {
+        print('cancelled delete');
+      }
+    }
   }
 
   //gesture functions
