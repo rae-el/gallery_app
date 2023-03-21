@@ -43,6 +43,7 @@ dependencies:
   stacked: ^3.0.1
   stacked_services:
   flutter_hooks: ^0.18.5+1
+  reorderables: ^0.6.0
 
 dev_dependencies:
   flutter_test:

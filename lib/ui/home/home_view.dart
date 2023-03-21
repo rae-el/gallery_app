@@ -5,6 +5,7 @@ import 'package:gallery_app/models/this_image.dart';
 import 'package:gallery_app/ui/home/home_view_model.dart';
 import 'package:gallery_app/app/colors.dart';
 import 'package:stacked/stacked.dart';
+import 'package:reorderables/reorderables.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -58,6 +59,7 @@ class HomePage extends StatefulWidget {
 }
 
 class HomeState extends State<HomePage> {
+  late List<ThisImage> _items;
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewModel>.reactive(
@@ -80,16 +82,18 @@ class HomeState extends State<HomePage> {
                         child: Text(
                             'Your gallery is empty! Start by adding some images!'),
                       )
-                    : GridView.builder(
-                        gridDelegate:
+                    : ReorderableListView.builder(
+                        /*gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,
                           mainAxisSpacing: 3,
                           crossAxisSpacing: 3,
-                        ),
+                        ),*/
                         itemCount: model.galleryImages!.length,
                         itemBuilder: (BuildContext context, index) {
+                          _items = model.galleryImages!;
                           return GestureDetector(
+                            key: Key('$index'),
                             onTap: () {
                               print(model.galleryImages![index].path);
                               model.navigateToImageView(
@@ -100,6 +104,7 @@ class HomeState extends State<HomePage> {
                             child: Hero(
                               tag: model.galleryImages![index],
                               child: Stack(
+                                fit: StackFit.passthrough,
                                 children: [
                                   Image.file(
                                     File(model.galleryImages![index].path),
@@ -128,6 +133,13 @@ class HomeState extends State<HomePage> {
                               ),
                             ),
                           );
+                        },
+                        onReorder: (int oldIndex, int newIndex) {
+                          if (oldIndex < newIndex) {
+                            newIndex -= 1;
+                          }
+                          final ThisImage item = _items.removeAt(oldIndex);
+                          _items.insert(newIndex, item);
                         },
                       ),
               ),
