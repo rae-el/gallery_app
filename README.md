@@ -13,10 +13,13 @@ Done
 - Signing in
 - Signing up
 - Uploading and removing pictures
+- Tapping to expand pictures and viewing their details
+- Favourite pictures
+- Delete pictures
 
 To Do
 
-- Tapping to expand pictures and viewing their details, as well as zooming in and out
+- Zooming in and out
 - Sorting pictures
 
 #### Models
