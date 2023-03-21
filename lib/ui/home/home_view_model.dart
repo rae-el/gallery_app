@@ -206,7 +206,6 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
         bool resendQuery = await askForGalleryData();
         if (resendQuery) {
           print('resent query');
-          notifyListeners();
           return true;
         } else {
           showAddingImageError();
