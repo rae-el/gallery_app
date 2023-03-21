@@ -58,6 +58,8 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
     return false;
   }
 
+  updateView() {}
+
   showUpdateError() async {
     final dialogResult = await _dialogService.showCustomDialog(
       variant: DialogType.basic,
@@ -136,7 +138,7 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
               description: 'Deleted Image',
               mainButtonTitle: 'OK',
             );
-            return dialogResult;
+            navigateToHome();
           } else {
             final dialogResult = await _dialogService.showCustomDialog(
               variant: DialogType.basic,
