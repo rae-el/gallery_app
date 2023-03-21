@@ -96,6 +96,7 @@ class GalleryService {
         for (var docSnapshot in imagesQuerySnapshot.docs) {
           ThisImage imageDocSnapshot = ThisImage.fromSnapshot(docSnapshot);
           String path = imageDocSnapshot.path;
+          //print(imageDocSnapshot.id);
           //why is this all the sudden throwing exception and not handleing it
           if (await File(path).exists()) {
             galleryImages.add(imageDocSnapshot);

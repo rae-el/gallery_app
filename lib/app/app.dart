@@ -2,6 +2,7 @@ import 'package:gallery_app/services/auth_service.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 import '../services/gallery_service.dart';
+import '../services/image_service.dart';
 import '../services/user_service.dart';
 import '../ui/change_pw/change_pw_view.dart';
 import '../ui/home/home_view.dart';
@@ -24,5 +25,6 @@ import '../ui/profile/profile_view.dart';
   LazySingleton(classType: UserService),
   LazySingleton(classType: GalleryService),
   LazySingleton(classType: DialogService),
+  LazySingleton(classType: ImageService),
 ])
 class AppSetup {}

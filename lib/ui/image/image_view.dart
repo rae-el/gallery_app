@@ -17,15 +17,20 @@ class ImageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ImageViewModel>.reactive(
       //this is where I put the view structure
-      viewModelBuilder: () => ImageViewModel(),
-      //onModelReady: (viewModel) => viewModel.initialise(),
+      viewModelBuilder: () => ImageViewModel(image),
+      onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, model, child) => Scaffold(
-        appBar: const MainAppBar(),
+        appBar: AppBar(
+          //should make the title the image title if exists?
+          title: const Text(''),
+          centerTitle: true,
+          actions: const [],
+        ),
         body: Center(
           //make this zoomable
           child: GestureDetector(
             child: Hero(
-              tag: image,
+              tag: model.image = image,
               child: Image.file(File(image.path)),
             ),
           ),
@@ -41,9 +46,9 @@ class ImageView extends StatelessWidget {
             BottomNavigationBarItem(
               icon: IconButton(
                 onPressed: () {
-                  model.toggleFavourite(favourite: image.favourite);
+                  model.toggleFavourite(favourite: model.image!.favourite);
                 },
-                icon: image.favourite
+                icon: model.image!.favourite
                     ? const Icon(Icons.favorite)
                     : const Icon(Icons.favorite_outline),
                 splashRadius: 25,
@@ -62,25 +67,6 @@ class ImageView extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const MainAppBar({super.key});
-
-  @override
-  Size get preferredSize => const Size.fromHeight(50);
-  @override
-  Widget build(BuildContext context) {
-    return ViewModelBuilder<ImageViewModel>.reactive(
-      viewModelBuilder: () => ImageViewModel(),
-      builder: (context, model, child) => AppBar(
-        //should make the title the image title if exists?
-        title: const Text(''),
-        centerTitle: true,
-        actions: const [],
       ),
     );
   }

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gallery_app/app/colors.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-import '../../../app/fonts.dart';
-import '../../../enums/basic_dialog_status.dart';
+import '../../app/fonts.dart';
+import '../../enums/basic_dialog_status.dart';
 
 class BasicDialog extends StatelessWidget {
   final DialogRequest request;

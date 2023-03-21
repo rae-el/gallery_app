@@ -50,6 +50,8 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
   Future navigateToImageView({required ThisImage image}) async {
     print('navigate to image view');
     if (image != null) {
+      var i = image.toJson();
+      print('navigate to view of $i');
       _navigationService.navigateTo(Routes.imageView,
           arguments: ImageViewArguments(image: image));
       //navigationService.navigateToImageView(image: image);
