@@ -99,11 +99,32 @@ class HomeState extends State<HomePage> {
                             //add double tap favourite function
                             child: Hero(
                               tag: model.galleryImages![index],
-                              child: Image.file(
-                                File(model.galleryImages![index].path),
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.cover,
+                              child: Stack(
+                                children: [
+                                  Image.file(
+                                    File(model.galleryImages![index].path),
+                                    width: 150,
+                                    height: 150,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  model.galleryImages![index].favourite
+                                      ? const PositionedDirectional(
+                                          end: 0,
+                                          bottom: 0,
+                                          child: Icon(
+                                            Icons.favorite,
+                                            size: 20,
+                                          ),
+                                        )
+                                      : const PositionedDirectional(
+                                          end: 0,
+                                          bottom: 0,
+                                          child: Icon(
+                                            Icons.favorite_outline,
+                                            size: 20,
+                                          ),
+                                        ),
+                                ],
                               ),
                             ),
                           );
