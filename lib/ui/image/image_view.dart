@@ -10,7 +10,6 @@ import 'image_view_model.dart';
 class ImageView extends StatelessWidget {
   const ImageView({Key? key, required this.image}) : super(key: key);
 
-  //how do I get this image data to the different classes / model
   final ThisImage image;
 
   @override
@@ -32,14 +31,18 @@ class ImageView extends StatelessWidget {
                 actions: const [],
               ),
               body: Center(
-                //make this zoomable
-                child: GestureDetector(
-                  child: Hero(
-                    tag: image,
-                    child: Image.file(File(model.image!.path)),
-                  ),
+                  //make this zoomable
+                  child: InteractiveViewer(
+                boundaryMargin: const EdgeInsets.all(1),
+                minScale: 0.1,
+                maxScale: 100,
+                child: Hero(
+                  tag: image,
+                  child: Image.file(File(model.image!.path)),
                 ),
-              ),
+              )
+                  //ImageWidget(image: image),
+                  ),
               bottomNavigationBar: BottomNavigationBar(
                 fixedColor: textColour,
                 unselectedItemColor: textColour,
@@ -74,6 +77,57 @@ class ImageView extends StatelessWidget {
                 ],
               ),
             ),
+    );
+  }
+}
+
+class ImageWidget extends StatefulWidget {
+  const ImageWidget({super.key, required this.image});
+
+  final ThisImage image;
+
+  @override
+  State<ImageWidget> createState() => ImageState(image: image);
+}
+
+class ImageState extends State<ImageWidget> {
+  final ThisImage image;
+
+  ImageState({required this.image});
+  double _scaleFactor = 1.0;
+  double _baseScaleFactor = 1.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      //make this zoomable
+      child: GestureDetector(
+        onScaleStart: (details) {
+          _baseScaleFactor = _scaleFactor;
+        },
+        onScaleUpdate: (details) {
+          print('scale update');
+          if (details.scale == 1.0) {
+            return;
+          } else {
+            setState(() {
+              print('scale');
+              _scaleFactor = _baseScaleFactor * details.scale;
+            });
+          }
+        },
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Hero(
+            tag: image,
+            child: Image.file(
+              File(image.path),
+              scale: _scaleFactor,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
