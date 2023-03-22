@@ -16,11 +16,12 @@ Done
 - Tapping to expand pictures and viewing their details
 - Favourite pictures
 - Delete pictures
-
-To Do
-
 - Zooming in and out
 - Sorting pictures
+
+To Do
+- local ordering
+
 
 #### Models
 
