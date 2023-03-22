@@ -68,7 +68,14 @@ class HomeState extends State<HomePage> {
       //line below triggers a double initialistion
       onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, model, child) => model.isBusy
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width / 4,
+                child: const LinearProgressIndicator(
+                  color: secondaryBackgroundColour,
+                ),
+              ),
+            )
           : Scaffold(
               body: Container(
                 decoration: const BoxDecoration(
@@ -82,64 +89,72 @@ class HomeState extends State<HomePage> {
                         child: Text(
                             'Your gallery is empty! Start by adding some images!'),
                       )
-                    : ReorderableListView.builder(
-                        /*gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          mainAxisSpacing: 3,
-                          crossAxisSpacing: 3,
-                        ),*/
-                        itemCount: model.galleryImages!.length,
-                        itemBuilder: (BuildContext context, index) {
+                    : ReorderableWrap(
+                        maxMainAxisCount: 3,
+                        minMainAxisCount: 3,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        alignment: WrapAlignment.spaceEvenly,
+                        spacing: 3,
+                        runAlignment: WrapAlignment.spaceEvenly,
+                        runSpacing: 3,
+                        padding: const EdgeInsets.all(1),
+                        children:
+                            List.generate(model.galleryImages!.length, (index) {
                           _items = model.galleryImages!;
-                          return GestureDetector(
-                            key: Key('$index'),
-                            onTap: () {
-                              print(model.galleryImages![index].path);
-                              model.navigateToImageView(
-                                image: model.galleryImages![index],
-                              );
-                            },
-                            //add double tap favourite function
-                            child: Hero(
-                              tag: model.galleryImages![index],
-                              child: Stack(
-                                fit: StackFit.passthrough,
-                                children: [
-                                  Image.file(
-                                    File(model.galleryImages![index].path),
-                                    width: 150,
-                                    height: 150,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  model.galleryImages![index].favourite
-                                      ? const PositionedDirectional(
-                                          end: 0,
-                                          bottom: 0,
-                                          child: Icon(
-                                            Icons.favorite,
-                                            size: 20,
+                          return SizedBox(
+                            width: 135,
+                            height: 135,
+                            child: GestureDetector(
+                              key: Key('$index'),
+                              onTap: () {
+                                print(model.galleryImages![index].path);
+                                model.navigateToImageView(
+                                  image: model.galleryImages![index],
+                                );
+                              },
+                              //add double tap favourite function
+                              child: Hero(
+                                tag: model.galleryImages![index],
+                                child: Stack(
+                                  fit: StackFit.passthrough,
+                                  children: [
+                                    Image.file(
+                                      File(model.galleryImages![index].path),
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    model.galleryImages![index].favourite
+                                        ? const PositionedDirectional(
+                                            end: 0,
+                                            bottom: 0,
+                                            child: Icon(
+                                              Icons.favorite,
+                                              size: 20,
+                                            ),
+                                          )
+                                        : const PositionedDirectional(
+                                            end: 0,
+                                            bottom: 0,
+                                            child: Icon(
+                                              Icons.favorite_outline,
+                                              size: 20,
+                                            ),
                                           ),
-                                        )
-                                      : const PositionedDirectional(
-                                          end: 0,
-                                          bottom: 0,
-                                          child: Icon(
-                                            Icons.favorite_outline,
-                                            size: 20,
-                                          ),
-                                        ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           );
-                        },
+                        }),
                         onReorder: (int oldIndex, int newIndex) {
-                          if (oldIndex < newIndex) {
-                            newIndex -= 1;
-                          }
-                          final ThisImage item = _items.removeAt(oldIndex);
-                          _items.insert(newIndex, item);
+                          setState(() {
+                            if (oldIndex < newIndex) {
+                              newIndex -= 1;
+                            }
+                            final ThisImage item = _items.removeAt(oldIndex);
+                            _items.insert(newIndex, item);
+                          });
                         },
                       ),
               ),

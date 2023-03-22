@@ -19,7 +19,14 @@ class ImageView extends StatelessWidget {
       viewModelBuilder: () => ImageViewModel(image),
       onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, model, child) => model.isBusy
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width / 4,
+                child: const LinearProgressIndicator(
+                  color: secondaryBackgroundColour,
+                ),
+              ),
+            )
           : Scaffold(
               appBar: AppBar(
                 //should make the title the image title if exists?

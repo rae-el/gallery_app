@@ -73,7 +73,14 @@ class ProfileState extends State<ProfilePage> {
       viewModelBuilder: () => ProfileViewModel(),
       //onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, model, child) => model.isBusy
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width / 4,
+                child: const LinearProgressIndicator(
+                  color: secondaryBackgroundColour,
+                ),
+              ),
+            )
           : Scaffold(
               body: Center(
                 child: SingleChildScrollView(
