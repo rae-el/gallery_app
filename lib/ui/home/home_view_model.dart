@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gallery_app/models/gallery.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -14,6 +13,7 @@ import '../../app/app.router.dart';
 import '../../app/messages.dart';
 import '../../enums/basic_dialog_status.dart';
 import '../../enums/dialog_type.dart';
+import '../../models/gallery.dart';
 import '../../models/this_image.dart';
 import '../../models/this_user.dart';
 import '../../services/auth_service.dart';
@@ -71,47 +71,44 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
 
     if (userData != null) {
       _username = userData.username ?? "";
-    } else {
-      //do some error handeling
-      showRetrievingGalleryError();
-    }
-    //this will automatically happen
-    //setBusy(true);
-    print('asking for gallery data');
-    _userGallery = await _galleryService.getUserGallery();
-    if (_userGallery != null) {
-      _galleryId = _userGallery!.id ?? "";
-      print('gallery id: $_galleryId');
+      print('got username $_username');
+      //this will automatically happen
+      //setBusy(true);
+      print('asking for gallery data');
+      _userGallery = await _galleryService.getUserGallery();
+      if (_userGallery != null) {
+        _galleryId = _userGallery!.id ?? "";
+        print('gallery id: $_galleryId');
 
-      if (_galleryId != null) {
-        _galleryImages = await _galleryService.getGalleryImages(_galleryId);
-        if (_galleryImages!.isNotEmpty) {
-          if (_galleryImages!.length == _preferredOrder!.length) {
-            _galleryImages = _preferredOrder;
-          }
-          print('adding gallery image paths to list');
-          //reset to empty list
-          _galleryImagePaths = [];
-          //only add if path exists
-          for (var galleryImage in _galleryImages!) {
-            _galleryImagePaths.add(galleryImage.path);
-          }
-
-          return true;
-        } else {
-          print('gallery images empty');
+        if (_galleryId != null) {
           _galleryImages = null;
           _galleryImagePaths = [];
-          return true;
+          _galleryImages = await _galleryService.getGalleryImages(_galleryId);
+          if (_galleryImages == null || _galleryImages!.isEmpty) {
+            print('gallery images empty');
+            return true;
+          } else {
+            print('adding gallery image paths to list');
+            //reset to empty list
+
+            //only add if path exists
+            for (var galleryImage in _galleryImages!) {
+              _galleryImagePaths.add(galleryImage.path);
+            }
+
+            return true;
+          }
+        } else {
+          print('gallery id nul');
+          _navigationService.clearStackAndShow(Routes.authView);
+          return false;
         }
       } else {
-        print('gallery id nul');
-        showRetrievingGalleryError();
+        _navigationService.clearStackAndShow(Routes.authView);
         return false;
       }
     } else {
-      print('user gallery null');
-      showRetrievingGalleryError();
+      _navigationService.clearStackAndShow(Routes.authView);
       return false;
     }
   }
@@ -203,14 +200,23 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
   }
 
   Future<bool> addImage(String path) async {
+    print('add image to gallery $_galleryId');
     try {
-      ThisImage image =
-          ThisImage(path: path, favourite: false, date: Timestamp.now());
+      ThisImage image = ThisImage(
+          path: path,
+          favourite: false,
+          date: Timestamp.now(),
+          preferred_index: 0);
       bool addedImage =
           await _galleryService.addImageToGallery(image, _galleryId);
       if (addedImage) {
-        galleryImages!.insert(0, image);
-        notifyListeners();
+        if (galleryImages == null || galleryImages!.isEmpty) {
+          askForGalleryData();
+        } else {
+          galleryImages!.insert(0, image);
+          notifyListeners();
+        }
+
         return true;
         /*print('added image now resend query');
         bool resendQuery = await askForGalleryData();
@@ -233,25 +239,48 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
   }
 
   onReorder({required int oldIndex, required int newIndex}) {
+    int index = 0;
     if (oldIndex < newIndex) {
       newIndex -= 1;
     }
     final ThisImage item = galleryImages!.removeAt(oldIndex);
     galleryImages!.insert(newIndex, item);
 
-    _preferredOrder = galleryImages;
+    if (galleryImages!.length > 1) {
+      for (var image in galleryImages!) {
+        image.preferred_index = index;
+        index++;
+      }
+      _galleryService.reorderGallery(galleryImages!);
+    }
   }
 
   reorderAcending() {
+    int index = 0;
     galleryImages!.sort((a, b) => a.date.compareTo(b.date));
 
     notifyListeners();
+    if (galleryImages!.length > 1) {
+      for (var image in galleryImages!) {
+        image.preferred_index = index;
+        index++;
+      }
+      _galleryService.reorderGallery(galleryImages!);
+    }
   }
 
   reorderDecending() {
+    int index = 0;
     galleryImages!.sort((a, b) => b.date.compareTo(a.date));
 
     notifyListeners();
+    if (galleryImages!.length > 1) {
+      for (var image in galleryImages!) {
+        image.preferred_index = index;
+        index++;
+      }
+      _galleryService.reorderGallery(galleryImages!);
+    }
   }
 
   //gesture functions

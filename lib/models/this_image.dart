@@ -7,12 +7,14 @@ class ThisImage {
   final String path;
   final bool favourite;
   final Timestamp date;
+  int? preferred_index;
 
   ThisImage({
     this.id,
     required this.path,
     required this.favourite,
     required this.date,
+    required this.preferred_index,
   });
 
   toJson() {
@@ -21,6 +23,7 @@ class ThisImage {
       "path": path,
       "favourite": favourite,
       "date": date,
+      "preferred_index": preferred_index,
     };
   }
 
@@ -28,6 +31,7 @@ class ThisImage {
         path: json['path'],
         favourite: json['favourite'],
         date: json['date'],
+        preferred_index: json['preferred_index'],
       );
 
   factory ThisImage.fromSnapshot(
@@ -39,6 +43,7 @@ class ThisImage {
       path: data["path"],
       favourite: data["favourite"],
       date: data["date"],
+      preferred_index: data["preferred_index"],
     );
   }
 }

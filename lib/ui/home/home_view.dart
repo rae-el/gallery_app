@@ -80,7 +80,7 @@ class HomeState extends State<HomePage> {
               body: Column(
                 children: [
                   SizedBox(
-                    height: 50,
+                    height: 35,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       reverse: true,
@@ -91,7 +91,7 @@ class HomeState extends State<HomePage> {
                           },
                           icon: const Icon(Icons.arrow_downward),
                           iconSize: 20,
-                          splashRadius: 20,
+                          splashRadius: 18,
                         ),
                         IconButton(
                           onPressed: () async {
@@ -99,7 +99,7 @@ class HomeState extends State<HomePage> {
                           },
                           icon: const Icon(Icons.arrow_upward),
                           iconSize: 20,
-                          splashRadius: 20,
+                          splashRadius: 18,
                         ),
                         const Center(
                           child: Text(
@@ -115,11 +115,10 @@ class HomeState extends State<HomePage> {
                     ),
                     //fill space of entire screen
                     width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height - 210,
+                    height: MediaQuery.of(context).size.height - 196,
                     child: model.galleryImages == null
                         ? const Center(
-                            child: Text(
-                                'Your gallery is empty! Start by adding some images!'),
+                            child: Text('Start by adding some images!'),
                           )
                         : ReorderableWrap(
                             maxMainAxisCount: 3,
