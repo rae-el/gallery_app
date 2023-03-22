@@ -40,6 +40,9 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
   List<String> _galleryImagePaths = [];
   List<String> get galleryImagePaths => _galleryImagePaths;
 
+  List<ThisImage>? _preferredOrder;
+  List<ThisImage>? get preferredOrder => _preferredOrder;
+
   @override
   void initialise() async {
     runBusyFuture(askForGalleryData());
@@ -83,6 +86,9 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
       if (_galleryId != null) {
         _galleryImages = await _galleryService.getGalleryImages(_galleryId);
         if (_galleryImages!.isNotEmpty) {
+          if (_galleryImages!.length == _preferredOrder!.length) {
+            _galleryImages = _preferredOrder;
+          }
           print('adding gallery image paths to list');
           //reset to empty list
           _galleryImagePaths = [];
@@ -90,6 +96,7 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
           for (var galleryImage in _galleryImages!) {
             _galleryImagePaths.add(galleryImage.path);
           }
+
           return true;
         } else {
           print('gallery images empty');
@@ -202,7 +209,10 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
       bool addedImage =
           await _galleryService.addImageToGallery(image, _galleryId);
       if (addedImage) {
-        print('added image now resend query');
+        galleryImages!.insert(0, image);
+        notifyListeners();
+        return true;
+        /*print('added image now resend query');
         bool resendQuery = await askForGalleryData();
         if (resendQuery) {
           print('resent query');
@@ -210,7 +220,7 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
         } else {
           showAddingImageError();
           return false;
-        }
+        }*/
       } else {
         showAddingImageError();
         return false;
@@ -228,6 +238,20 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
     }
     final ThisImage item = galleryImages!.removeAt(oldIndex);
     galleryImages!.insert(newIndex, item);
+
+    _preferredOrder = galleryImages;
+  }
+
+  reorderAcending() {
+    galleryImages!.sort((a, b) => a.date.compareTo(b.date));
+
+    notifyListeners();
+  }
+
+  reorderDecending() {
+    galleryImages!.sort((a, b) => b.date.compareTo(a.date));
+
+    notifyListeners();
   }
 
   //gesture functions

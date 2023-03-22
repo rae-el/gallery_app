@@ -77,83 +77,115 @@ class HomeState extends State<HomePage> {
               ),
             )
           : Scaffold(
-              body: Container(
-                decoration: const BoxDecoration(
-                  color: backgroundColour,
-                ),
-                //fill space of entire screen
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: model.galleryImages == null
-                    ? const Center(
-                        child: Text(
-                            'Your gallery is empty! Start by adding some images!'),
-                      )
-                    : ReorderableWrap(
-                        maxMainAxisCount: 3,
-                        minMainAxisCount: 3,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        alignment: WrapAlignment.spaceEvenly,
-                        spacing: 3,
-                        runAlignment: WrapAlignment.spaceEvenly,
-                        runSpacing: 3,
-                        padding: const EdgeInsets.all(1),
-                        children:
-                            List.generate(model.galleryImages!.length, (index) {
-                          //_items = model.galleryImages!;
-                          return SizedBox(
-                            width: 135,
-                            height: 135,
-                            child: GestureDetector(
-                              key: Key('$index'),
-                              onTap: () {
-                                print(model.galleryImages![index].path);
-                                model.navigateToImageView(
-                                  image: model.galleryImages![index],
-                                );
-                              },
-                              //add double tap favourite function
-                              child: Hero(
-                                tag: model.galleryImages![index],
-                                child: Stack(
-                                  fit: StackFit.passthrough,
-                                  children: [
-                                    Image.file(
-                                      File(model.galleryImages![index].path),
-                                      width: 100,
-                                      height: 100,
-                                      fit: BoxFit.cover,
+              body: Column(
+                children: [
+                  SizedBox(
+                    height: 50,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      reverse: true,
+                      children: [
+                        IconButton(
+                          onPressed: () async {
+                            await model.reorderDecending();
+                          },
+                          icon: const Icon(Icons.arrow_downward),
+                          iconSize: 20,
+                          splashRadius: 20,
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            await model.reorderAcending();
+                          },
+                          icon: const Icon(Icons.arrow_upward),
+                          iconSize: 20,
+                          splashRadius: 20,
+                        ),
+                        const Center(
+                          child: Text(
+                            '',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    decoration: const BoxDecoration(
+                      color: backgroundColour,
+                    ),
+                    //fill space of entire screen
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height - 210,
+                    child: model.galleryImages == null
+                        ? const Center(
+                            child: Text(
+                                'Your gallery is empty! Start by adding some images!'),
+                          )
+                        : ReorderableWrap(
+                            maxMainAxisCount: 3,
+                            minMainAxisCount: 3,
+                            spacing: 3,
+                            runSpacing: 3,
+                            padding: const EdgeInsets.all(1),
+                            children: List.generate(model.galleryImages!.length,
+                                (index) {
+                              //_items = model.galleryImages!;
+                              return SizedBox(
+                                width: 135,
+                                height: 135,
+                                child: GestureDetector(
+                                  key: Key('$index'),
+                                  onTap: () {
+                                    print(model.galleryImages![index].path);
+                                    model.navigateToImageView(
+                                      image: model.galleryImages![index],
+                                    );
+                                  },
+                                  //add double tap favourite function
+                                  child: Hero(
+                                    tag: model.galleryImages![index],
+                                    child: Stack(
+                                      fit: StackFit.passthrough,
+                                      children: [
+                                        Image.file(
+                                          File(
+                                              model.galleryImages![index].path),
+                                          width: 100,
+                                          height: 100,
+                                          fit: BoxFit.cover,
+                                        ),
+                                        model.galleryImages![index].favourite
+                                            ? const PositionedDirectional(
+                                                end: 0,
+                                                bottom: 0,
+                                                child: Icon(
+                                                  Icons.favorite,
+                                                  size: 20,
+                                                ),
+                                              )
+                                            : const PositionedDirectional(
+                                                end: 0,
+                                                bottom: 0,
+                                                child: Icon(
+                                                  Icons.favorite_outline,
+                                                  size: 20,
+                                                ),
+                                              ),
+                                      ],
                                     ),
-                                    model.galleryImages![index].favourite
-                                        ? const PositionedDirectional(
-                                            end: 0,
-                                            bottom: 0,
-                                            child: Icon(
-                                              Icons.favorite,
-                                              size: 20,
-                                            ),
-                                          )
-                                        : const PositionedDirectional(
-                                            end: 0,
-                                            bottom: 0,
-                                            child: Icon(
-                                              Icons.favorite_outline,
-                                              size: 20,
-                                            ),
-                                          ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            ),
-                          );
-                        }),
-                        onReorder: (int oldIndex, int newIndex) {
-                          setState(() {
-                            model.onReorder(
-                                oldIndex: oldIndex, newIndex: newIndex);
-                          });
-                        },
-                      ),
+                              );
+                            }),
+                            onReorder: (int oldIndex, int newIndex) {
+                              setState(() {
+                                model.onReorder(
+                                    oldIndex: oldIndex, newIndex: newIndex);
+                              });
+                            },
+                          ),
+                  ),
+                ],
               ),
               //should this be a persisent footer button instead?
               bottomNavigationBar: SizedBox(

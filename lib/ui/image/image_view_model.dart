@@ -108,13 +108,6 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
           var deleteResponse =
               await _imageService.requestDeleteImage(imageId: id as String);
           if (deleteResponse == '') {
-            await _dialogService.showCustomDialog(
-              variant: DialogType.basic,
-              data: BasicDialogStatus.success,
-              title: successTitle,
-              description: 'Deleted Image',
-              mainButtonTitle: 'OK',
-            );
             navigateToHome();
           } else {
             await _dialogService.showCustomDialog(
