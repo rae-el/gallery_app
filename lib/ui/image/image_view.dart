@@ -61,10 +61,9 @@ class ImageView extends StatelessWidget {
                   BottomNavigationBarItem(
                     icon: IconButton(
                       onPressed: () {
-                        model.toggleFavourite(
-                            favourite: model.image!.favourite);
+                        model.toggleFavourite();
                       },
-                      icon: model.image!.favourite
+                      icon: model.faveIcon
                           ? const Icon(Icons.favorite)
                           : const Icon(Icons.favorite_outline),
                       splashRadius: 25,

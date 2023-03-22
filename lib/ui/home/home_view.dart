@@ -38,12 +38,22 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
         title: Text(model.username),
         centerTitle: true,
         automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: () async {
+            await model.saveOrder();
+          },
+          icon: const Icon(Icons.save),
+          iconSize: 20,
+          splashRadius: 18,
+          tooltip: 'Save current order',
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.person),
             onPressed: model.navigateToProfile,
             iconSize: 25,
             splashRadius: 25,
+            tooltip: 'Head to profile',
           ),
         ],
       ),
@@ -51,15 +61,9 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  @override
-  State<HomePage> createState() => HomeState();
-}
-
-class HomeState extends State<HomePage> {
-  late List<ThisImage> _items;
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewModel>.reactive(
@@ -83,7 +87,6 @@ class HomeState extends State<HomePage> {
                     height: 35,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
-                      reverse: true,
                       children: [
                         IconButton(
                           onPressed: () async {
@@ -92,6 +95,7 @@ class HomeState extends State<HomePage> {
                           icon: const Icon(Icons.arrow_downward),
                           iconSize: 20,
                           splashRadius: 18,
+                          tooltip: 'Order by decending date',
                         ),
                         IconButton(
                           onPressed: () async {
@@ -100,11 +104,28 @@ class HomeState extends State<HomePage> {
                           icon: const Icon(Icons.arrow_upward),
                           iconSize: 20,
                           splashRadius: 18,
+                          tooltip: 'Order by acending date',
                         ),
-                        const Center(
-                          child: Text(
-                            '',
-                          ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.height / 4,
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            await model.reorderByNonFavourite();
+                          },
+                          icon: const Icon(Icons.favorite_border),
+                          iconSize: 20,
+                          splashRadius: 18,
+                          tooltip: 'Order by non-favourite',
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            await model.reorderByFavourite();
+                          },
+                          icon: const Icon(Icons.favorite),
+                          iconSize: 20,
+                          splashRadius: 18,
+                          tooltip: 'Order by favourite',
                         ),
                       ],
                     ),
@@ -177,10 +198,8 @@ class HomeState extends State<HomePage> {
                               );
                             }),
                             onReorder: (int oldIndex, int newIndex) {
-                              setState(() {
-                                model.onReorder(
-                                    oldIndex: oldIndex, newIndex: newIndex);
-                              });
+                              model.onReorder(
+                                  oldIndex: oldIndex, newIndex: newIndex);
                             },
                           ),
                   ),
@@ -196,6 +215,7 @@ class HomeState extends State<HomePage> {
                   icon: const Icon(Icons.add),
                   iconSize: 25,
                   splashRadius: 25,
+                  tooltip: 'Add new image',
                 ),
               ),
             ),

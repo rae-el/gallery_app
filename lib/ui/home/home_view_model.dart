@@ -49,6 +49,7 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
   }
 
   Future navigateToProfile() async {
+    //_galleryService.reorderGallery(galleryImages!);
     _navigationService.navigateTo(Routes.profileView);
   }
 
@@ -159,7 +160,6 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
         if (addNewImage) {
           print('successfully added image and resent query');
           notifyListeners();
-          //why is this no longer updating the view?????
           return;
         } else {
           showAddingImageError();
@@ -218,15 +218,6 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
         }
 
         return true;
-        /*print('added image now resend query');
-        bool resendQuery = await askForGalleryData();
-        if (resendQuery) {
-          print('resent query');
-          return true;
-        } else {
-          showAddingImageError();
-          return false;
-        }*/
       } else {
         showAddingImageError();
         return false;
@@ -240,22 +231,21 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
 
   onReorder({required int oldIndex, required int newIndex}) {
     int index = 0;
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
+
     final ThisImage item = galleryImages!.removeAt(oldIndex);
     galleryImages!.insert(newIndex, item);
+
+    notifyListeners();
 
     if (galleryImages!.length > 1) {
       for (var image in galleryImages!) {
         image.preferred_index = index;
         index++;
       }
-      _galleryService.reorderGallery(galleryImages!);
     }
   }
 
-  reorderAcending() {
+  Future reorderAcending() async {
     int index = 0;
     galleryImages!.sort((a, b) => a.date.compareTo(b.date));
 
@@ -265,11 +255,11 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
         image.preferred_index = index;
         index++;
       }
-      _galleryService.reorderGallery(galleryImages!);
+      //_galleryService.reorderGallery(galleryImages!);
     }
   }
 
-  reorderDecending() {
+  Future reorderDecending() async {
     int index = 0;
     galleryImages!.sort((a, b) => b.date.compareTo(a.date));
 
@@ -279,7 +269,66 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
         image.preferred_index = index;
         index++;
       }
-      _galleryService.reorderGallery(galleryImages!);
+      //_galleryService.reorderGallery(galleryImages!);
+    }
+  }
+
+  Future reorderByFavourite() async {
+    List<ThisImage> _favouriteImages = [];
+    List<ThisImage> _nonFavouriteImages = [];
+    print('order by favourite');
+    for (var image in _galleryImages!) {
+      if (image.favourite == true) {
+        _favouriteImages.add(image);
+      } else {
+        _nonFavouriteImages.add(image);
+      }
+    }
+    var favouritesFirst = _favouriteImages + _nonFavouriteImages;
+
+    _galleryImages = favouritesFirst;
+
+    notifyListeners();
+    return;
+  }
+
+  Future reorderByNonFavourite() async {
+    List<ThisImage> _favouriteImages = [];
+    List<ThisImage> _nonFavouriteImages = [];
+    print('order by favourite');
+    for (var image in _galleryImages!) {
+      if (image.favourite == true) {
+        _favouriteImages.add(image);
+      } else {
+        _nonFavouriteImages.add(image);
+      }
+    }
+    var nonFavouritesFirst = _nonFavouriteImages + _favouriteImages;
+
+    _galleryImages = nonFavouritesFirst;
+
+    notifyListeners();
+    return;
+  }
+
+  Future saveOrder() async {
+    var reorderResult = await _galleryService.reorderGallery(galleryImages!);
+    if (reorderResult) {
+      await _dialogService.showCustomDialog(
+        variant: DialogType.basic,
+        data: BasicDialogStatus.success,
+        title: successTitle,
+        description: 'Saved your new order',
+        mainButtonTitle: 'OK',
+      );
+    } else {
+      await _dialogService.showCustomDialog(
+        variant: DialogType.basic,
+        data: BasicDialogStatus.error,
+        title: errorTitle,
+        description: 'There was a problem saving your order, please try again',
+        mainButtonTitle: 'OK',
+      );
     }
   }
 

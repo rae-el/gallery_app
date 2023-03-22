@@ -94,7 +94,7 @@ class GalleryService {
       if (galleryId != null) {
         var imagesQuerySnapshot = await galleriesCollection
             .doc(galleryId)
-            .collection("images")
+            .collection('images')
             .orderBy('preferred_index')
             .get();
         //convert images query snapshot to a list of images?
@@ -155,7 +155,7 @@ class GalleryService {
         //gallery exisits
         await galleriesCollection
             .doc(galleryID)
-            .collection("images")
+            .collection('images')
             .add(jsonImg)
             .then((value) =>
                 print('added document reference to images collection $value'));
@@ -192,11 +192,14 @@ class GalleryService {
           await galleriesCollection
               .doc(_galleryID)
               .collection('images')
-              .add(jsonImg);
+              .doc(image.id)
+              .set(jsonImg);
         } catch (e) {
           print(e);
+          return false;
         }
       }
+
       return true;
     } else {
       print('failed reordering gallery');

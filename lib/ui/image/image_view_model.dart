@@ -27,6 +27,8 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
 
   String _galleryId = "";
 
+  bool faveIcon = false;
+
   List<ThisImage>? _galleryImages = [];
   List<ThisImage>? get galleryImages => _galleryImages;
 
@@ -34,7 +36,9 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
   List<String> get galleryImagePaths => _galleryImagePaths;
 
   @override
-  void initialise() async {}
+  void initialise() async {
+    faveIcon = image!.favourite;
+  }
 
   Future navigateToHome() async {
     _navigationService.navigateTo(Routes.homeView);
@@ -49,7 +53,6 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
     await _galleryService.getGalleryImages(_galleryId);
     id = image!.id;
     image = await _imageService.imageInGallery(id);
-    notifyListeners();
   }
 
   Future showUpdateError() async {
@@ -62,10 +65,12 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
     );
   }
 
-  Future toggleFavourite({required bool favourite}) async {
+  Future toggleFavourite() async {
     id = image!.id;
     print('toggle fave');
-    favourite = !favourite;
+    faveIcon = !faveIcon;
+    notifyListeners();
+    bool favourite = !image!.favourite;
     if (id != null) {
       String? update = await _imageService.updateFavourite(id, favourite);
       if (update == '') {
