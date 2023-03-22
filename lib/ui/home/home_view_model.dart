@@ -222,6 +222,14 @@ class HomeViewModel extends BaseViewModel implements Initialisable {
     }
   }
 
+  onReorder({required int oldIndex, required int newIndex}) {
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    final ThisImage item = galleryImages!.removeAt(oldIndex);
+    galleryImages!.insert(newIndex, item);
+  }
+
   //gesture functions
   //double tap, add / remove from liked
   //tap, navigate to image view

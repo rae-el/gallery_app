@@ -100,7 +100,7 @@ class HomeState extends State<HomePage> {
                         padding: const EdgeInsets.all(1),
                         children:
                             List.generate(model.galleryImages!.length, (index) {
-                          _items = model.galleryImages!;
+                          //_items = model.galleryImages!;
                           return SizedBox(
                             width: 135,
                             height: 135,
@@ -149,11 +149,8 @@ class HomeState extends State<HomePage> {
                         }),
                         onReorder: (int oldIndex, int newIndex) {
                           setState(() {
-                            if (oldIndex < newIndex) {
-                              newIndex -= 1;
-                            }
-                            final ThisImage item = _items.removeAt(oldIndex);
-                            _items.insert(newIndex, item);
+                            model.onReorder(
+                                oldIndex: oldIndex, newIndex: newIndex);
                           });
                         },
                       ),
