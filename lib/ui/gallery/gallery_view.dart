@@ -178,7 +178,7 @@ class HomePage extends StatelessWidget {
                       tooltip: 'Enable Draggable Reordering',
                     ),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width / 4.8,
+                      width: MediaQuery.of(context).size.width / 4.9,
                     ),
                     IconButton(
                       onPressed: () async {
