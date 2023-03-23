@@ -5,19 +5,19 @@ import 'package:gallery_app/app/colors.dart';
 import 'package:gallery_app/models/this_image.dart';
 import 'package:stacked/stacked.dart';
 
+import '../gallery/gallery_view_model.dart';
 import 'image_view_model.dart';
 
-class ImageView extends StatelessWidget {
+class ImageView extends ViewModelWidget<GalleryViewModel> {
   const ImageView({Key? key, required this.image}) : super(key: key);
 
   final ThisImage image;
 
   @override
-  Widget build(BuildContext context) {
-    return ViewModelBuilder<ImageViewModel>.reactive(
+  Widget build(BuildContext context, GalleryViewModel viewModel) {
+    return ViewModelBuilder<GalleryViewModel>.reactive(
       //this is where I put the view structure
-      viewModelBuilder: () => ImageViewModel(image),
-      onModelReady: (viewModel) => viewModel.initialise(),
+      viewModelBuilder: () => GalleryViewModel(),
       builder: (context, model, child) => model.isBusy
           ? Center(
               child: SizedBox(
@@ -30,7 +30,7 @@ class ImageView extends StatelessWidget {
           : Scaffold(
               appBar: AppBar(
                 //should make the title the image title if exists?
-                
+
                 title: const Text(''),
                 centerTitle: true,
                 actions: const [],
@@ -83,6 +83,9 @@ class ImageView extends StatelessWidget {
             ),
     );
   }
+
+  @override
+  GalleryViewModel viewModelBuilder(BuildContext context) => GalleryViewModel();
 }
 
 class ImageWidget extends StatefulWidget {

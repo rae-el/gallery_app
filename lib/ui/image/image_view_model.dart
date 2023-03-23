@@ -3,7 +3,7 @@ import 'package:gallery_app/app/app.router.dart';
 import 'package:gallery_app/enums/basic_dialog_status.dart';
 import 'package:gallery_app/enums/dialog_type.dart';
 import 'package:gallery_app/services/image_service.dart';
-import 'package:gallery_app/ui/home/gallery_view_model.dart';
+import 'package:gallery_app/ui/gallery/gallery_view_model.dart';
 import 'package:gallery_app/ui/image/image_view.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -40,7 +40,7 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
     faveIcon = image!.favourite;
   }
 
-  Future navigateToHome() async {
+  Future navigateToGallery() async {
     _navigationService.navigateTo(Routes.galleryView);
   }
 
@@ -113,7 +113,7 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
           var deleteResponse =
               await _imageService.requestDeleteImage(imageId: id as String);
           if (deleteResponse == '') {
-            navigateToHome();
+            navigateToGallery();
           } else {
             await _dialogService.showCustomDialog(
               variant: DialogType.basic,

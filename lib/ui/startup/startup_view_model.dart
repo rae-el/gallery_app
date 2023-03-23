@@ -19,7 +19,7 @@ class StartupViewModel extends BaseViewModel implements Initialisable {
     // This will be called when init state cycle runs
     //this works but so quick that you don't see it, consider adding a delay
   }
-  //check if user logged in, if yes navigate to home, if not navigate to auth view
+  //check if user logged in, if yes navigate to gallery, if not navigate to auth view
 
   Future navigate() async {
     setBusy(true);

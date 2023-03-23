@@ -5,7 +5,7 @@ import '../services/gallery_service.dart';
 import '../services/image_service.dart';
 import '../services/user_service.dart';
 import '../ui/change_pw/change_pw_view.dart';
-import '../ui/home/gallery_view.dart';
+import '../ui/gallery/gallery_view.dart';
 import '../ui/image/image_view.dart';
 import '../ui/startup/startup_view.dart';
 import '../ui/auth/auth_view.dart';

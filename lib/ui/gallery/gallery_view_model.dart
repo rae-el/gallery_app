@@ -18,13 +18,27 @@ import '../../models/this_image.dart';
 import '../../models/this_user.dart';
 import '../../services/auth_service.dart';
 import '../../services/gallery_service.dart';
+import '../../services/image_service.dart';
 import '../../services/user_service.dart';
 
 class GalleryViewModel extends BaseViewModel implements Initialisable {
   final _navigationService = locator<NavigationService>();
   final _galleryService = locator<GalleryService>();
+  final _imageService = locator<ImageService>();
   final _dialogService = locator<DialogService>();
   final _userService = locator<UserService>();
+
+  ThisImage? image;
+
+  String? id;
+
+  bool faveIcon = false;
+
+  List<ThisImage>? _galleryImages = [];
+  List<ThisImage>? get galleryImages => _galleryImages;
+
+  List<String> _galleryImagePaths = [];
+  List<String> get galleryImagePaths => _galleryImagePaths;
 
   Gallery? _userGallery;
 
@@ -33,12 +47,6 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
 
   String _username = "";
   String get username => _username;
-
-  List<ThisImage>? _galleryImages;
-  List<ThisImage>? get galleryImages => _galleryImages;
-
-  List<String> _galleryImagePaths = [];
-  List<String> get galleryImagePaths => _galleryImagePaths;
 
   List<ThisImage>? _preferredOrder;
   List<ThisImage>? get preferredOrder => _preferredOrder;
@@ -329,6 +337,88 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
         description: 'There was a problem saving your order, please try again',
         mainButtonTitle: 'OK',
       );
+    }
+  }
+
+  Future updateImage() async {
+    _galleryId = await _galleryService.getGalleryID() as String;
+    await _galleryService.getGalleryImages(_galleryId);
+    id = image!.id;
+    image = await _imageService.imageInGallery(id);
+  }
+
+  Future showUpdateError() async {
+    await _dialogService.showCustomDialog(
+      variant: DialogType.basic,
+      data: BasicDialogStatus.error,
+      title: errorTitle,
+      description: 'There was a problem updating your gallery',
+      mainButtonTitle: 'OK',
+    );
+  }
+
+  Future toggleFavourite() async {
+    id = image!.id;
+    print('toggle fave');
+    faveIcon = !faveIcon;
+    notifyListeners();
+    bool favourite = !image!.favourite;
+    if (id != null) {
+      String? update = await _imageService.updateFavourite(id, favourite);
+      if (update == '') {
+        updateImage();
+      } else {
+        await _dialogService.showCustomDialog(
+          variant: DialogType.basic,
+          data: BasicDialogStatus.error,
+          title: errorTitle,
+          description: 'We cannot update your favourite status',
+          mainButtonTitle: 'OK',
+        );
+      }
+    } else {
+      print('id null');
+      await _dialogService.showCustomDialog(
+        variant: DialogType.basic,
+        data: BasicDialogStatus.error,
+        title: errorTitle,
+        description: 'We cannot update your favourite status',
+        mainButtonTitle: 'OK',
+      );
+    }
+  }
+
+  Future requestDelete() async {
+    id = image!.id;
+    final dialogResult = await _dialogService.showCustomDialog(
+      variant: DialogType.basic,
+      data: BasicDialogStatus.warning,
+      title: 'DELETE',
+      description: 'Are you sure you would like to delete this image?',
+      mainButtonTitle: 'YES',
+      secondaryButtonTitle: 'CANCEL',
+    );
+    if (dialogResult != null) {
+      if (dialogResult.confirmed) {
+        print('confirmed delete');
+        if (id != null) {
+          var deleteResponse =
+              await _imageService.requestDeleteImage(imageId: id as String);
+          if (deleteResponse == '') {
+            _navigationService.back();
+          } else {
+            await _dialogService.showCustomDialog(
+              variant: DialogType.basic,
+              data: BasicDialogStatus.error,
+              title: errorTitle,
+              description: deleteResponse,
+              mainButtonTitle: 'OK',
+            );
+          }
+        }
+      } else {
+        print('cancelled delete');
+      }
     }
   }
 

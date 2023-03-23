@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:gallery_app/models/this_image.dart';
-import 'package:gallery_app/ui/home/gallery_view_model.dart';
+import 'package:gallery_app/ui/gallery/gallery_view_model.dart';
 import 'package:gallery_app/app/colors.dart';
 import 'package:stacked/stacked.dart';
 import 'package:reorderables/reorderables.dart';
@@ -11,11 +11,13 @@ class GalleryView extends StatelessWidget {
   const GalleryView({super.key});
   // home view after authentication
   // should be the main gallery
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<GalleryViewModel>.reactive(
       viewModelBuilder: () => GalleryViewModel(),
-      //onModelReady: (viewModel) => viewModel.initialise(),
+      onModelReady: (viewModel) => viewModel.initialise(),
+      disposeViewModel: false,
       builder: (context, model, child) => const Scaffold(
         appBar: MainAppBar(),
         body: HomePage(),
@@ -33,6 +35,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<GalleryViewModel>.reactive(
       viewModelBuilder: () => GalleryViewModel(),
+      disposeViewModel: false,
       builder: (context, model, child) => AppBar(
         //should make the title the username?
         title: Text(model.username),
@@ -69,8 +72,9 @@ class HomePage extends StatelessWidget {
     return ViewModelBuilder<GalleryViewModel>.reactive(
       //this is where I put the view structure
       viewModelBuilder: () => GalleryViewModel(),
+      disposeViewModel: false,
       //line below triggers a double initialistion
-      onModelReady: (viewModel) => viewModel.initialise(),
+      //onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, model, child) => model.isBusy
           ? Center(
               child: SizedBox(
