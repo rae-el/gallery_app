@@ -12,12 +12,16 @@ Done
 
 - Signing in
 - Signing up
+- Uploading pictures (camera or gallery)
+- Tap to expand and view details
+- Favourite pictures
+- Delete pictures
+- Zoom in and out
+- Sort pictures
 
 To Do
+- Local ordering
 
-- Uploading and removing pictures
-- Tapping to expand pictures and viewing their details, as well as zooming in and out
-- Sorting pictures
 
 #### Models
 

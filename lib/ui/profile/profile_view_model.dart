@@ -8,13 +8,17 @@ import 'package:stacked_services/stacked_services.dart';
 
 import '../../app/app.locator.dart';
 import '../../app/app.router.dart';
+import '../../app/messages.dart';
+import '../../enums/basic_dialog_status.dart';
+import '../../enums/dialog_type.dart';
 import '../../services/auth_service.dart';
 import '../../services/user_service.dart';
 
 class ProfileViewModel extends BaseViewModel implements Initialisable {
-  final userService = locator<UserService>();
-  final authService = locator<AuthenticationService>();
-  final navigationService = locator<NavigationService>();
+  final _userService = locator<UserService>();
+  final _authService = locator<AuthenticationService>();
+  final _navigationService = locator<NavigationService>();
+  final _dialogService = locator<DialogService>();
 
   final TextEditingController nameField = TextEditingController();
   final TextEditingController descriptionField = TextEditingController();
@@ -45,7 +49,7 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
     //this will automatically happen
     //setBusy(true);
     print('asking for user data');
-    ThisUser? userData = await userService.getUserData();
+    ThisUser? userData = await _userService.getUserData();
     print('got data for $userData');
 
     if (userData != null) {
@@ -62,15 +66,27 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
       return true;
     } else {
       //do some error handeling
+      showDialogError();
       return false;
     }
   }
 
+  showDialogError() async {
+    final dialogResult = await _dialogService.showCustomDialog(
+      variant: DialogType.basic,
+      data: BasicDialogStatus.error,
+      title: errorTitle,
+      description: 'There was a problem retrieving user data',
+      mainButtonTitle: 'OK',
+    );
+    return dialogResult;
+  }
+
   Future signOut() async {
-    if (await authService.signOut()) {
-      navigationService.navigateTo(Routes.authView);
+    if (await _authService.signOut()) {
+      _navigationService.navigateTo(Routes.authView);
     } else {
-      navigationService.navigateTo(Routes.homeView);
+      _navigationService.navigateTo(Routes.galleryView);
     }
   }
 
@@ -83,22 +99,48 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
     if (source == "camera") {
       image = await picker.pickImage(source: ImageSource.camera);
     } else {
-      print('source not set');
-      return;
+      final dialogResult = await _dialogService.showCustomDialog(
+        variant: DialogType.basic,
+        data: BasicDialogStatus.error,
+        title: errorTitle,
+        description: 'There was a problem selecting a photo',
+        mainButtonTitle: 'OK',
+      );
+      return dialogResult;
     }
     try {
       if (image == null) {
-        print('image null');
-        return;
+        final dialogResult = await _dialogService.showCustomDialog(
+          variant: DialogType.basic,
+          data: BasicDialogStatus.error,
+          title: errorTitle,
+          description: 'There was a problem selecting a photo',
+          mainButtonTitle: 'OK',
+        );
+        return dialogResult;
       } else {
         _userImagePath = image.path;
         notifyListeners();
-        navigationService.back();
-        return;
+        _navigationService.back();
+        final dialogResult = await _dialogService.showCustomDialog(
+          variant: DialogType.basic,
+          data: BasicDialogStatus.warning,
+          title: warningTitle,
+          description: 'Remember to save your changes',
+          mainButtonTitle: 'OK',
+        );
+        return dialogResult;
       }
     } on PlatformException catch (e) {
       print(e);
-      return;
+      final dialogResult = await _dialogService.showCustomDialog(
+        variant: DialogType.basic,
+        data: BasicDialogStatus.error,
+        title: errorTitle,
+        description: 'There was a problem selecting a photo',
+        mainButtonTitle: 'OK',
+      );
+      return dialogResult;
     }
   }
 
@@ -127,7 +169,11 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
     );
   }
 
-  Future<bool> saveProfile() async {
+  Future requestToChangePassword() async {
+    _navigationService.navigateTo(Routes.changePwView);
+  }
+
+  Future saveProfile() async {
     ThisUser thisUser = ThisUser(
       id: uid,
       email: userEmail,
@@ -136,7 +182,25 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
       avatar: userImagePath,
     );
     print('save profile of $thisUser');
-    await userService.updateUser(thisUser);
-    return true;
+    bool savedUser = await _userService.updateUser(thisUser);
+    if (savedUser) {
+      final dialogResult = await _dialogService.showCustomDialog(
+        variant: DialogType.basic,
+        data: BasicDialogStatus.success,
+        title: successTitle,
+        description: 'Saved changes to profile',
+        mainButtonTitle: 'OK',
+      );
+      return dialogResult;
+    } else {
+      final dialogResult = await _dialogService.showCustomDialog(
+        variant: DialogType.basic,
+        data: BasicDialogStatus.error,
+        title: errorTitle,
+        description: 'There was a problem saving your profile',
+        mainButtonTitle: 'OK',
+      );
+      return dialogResult;
+    }
   }
 }

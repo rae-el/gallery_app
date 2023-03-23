@@ -14,16 +14,21 @@ class GalleryService {
 
   String? returnMessage;
 
+  String? _galleryID;
+
+  String _userID = "";
+
   Future<Gallery?> getUserGallery() async {
     print('in get user gallery');
     try {
       List<Gallery> galleries = [];
       //should this current user be more of a state or global variable
-      var userID = userService.currentUser() as String;
-      print('Getting user $userID gallery');
+      _userID = userService.currentUser() as String;
+      print('Getting user $_userID gallery');
       try {
-        var querySnapshot =
-            await galleriesCollection.where('user_id', isEqualTo: userID).get();
+        var querySnapshot = await galleriesCollection
+            .where('user_id', isEqualTo: _userID)
+            .get();
         print('gallery query snapshot $querySnapshot');
         for (var docSnapshot in querySnapshot.docs) {
           print('docsnapshot: $docSnapshot');
@@ -67,9 +72,9 @@ class GalleryService {
     try {
       Gallery? userGallery = await getUserGallery();
       if (userGallery != null) {
-        String? galleryID = userGallery.id ?? "";
-        print('gallery id: $galleryID');
-        return galleryID;
+        _galleryID = userGallery.id ?? "";
+        print('gallery id: $_galleryID');
+        return _galleryID;
       } else {
         //do some error handeling
         print('user gallery null, failed to retreive gallery id');
@@ -89,13 +94,14 @@ class GalleryService {
       if (galleryId != null) {
         var imagesQuerySnapshot = await galleriesCollection
             .doc(galleryId)
-            .collection("images")
-            .orderBy('date', descending: true)
+            .collection('images')
+            .orderBy('preferred_index')
             .get();
         //convert images query snapshot to a list of images?
         for (var docSnapshot in imagesQuerySnapshot.docs) {
           ThisImage imageDocSnapshot = ThisImage.fromSnapshot(docSnapshot);
           String path = imageDocSnapshot.path;
+          //print(imageDocSnapshot.id);
           //why is this all the sudden throwing exception and not handleing it
           if (await File(path).exists()) {
             galleryImages.add(imageDocSnapshot);
@@ -113,7 +119,7 @@ class GalleryService {
     } catch (e) {
       print(e); // change this to a message
       returnMessage = e.toString();
-      print(returnMessage);
+
       return null;
     }
   }
@@ -131,6 +137,7 @@ class GalleryService {
         return newGallery;
       }
       print('doc ref null');
+      return null;
     } catch (e) {
       print(e);
       print('failed to create new gallery');
@@ -148,7 +155,7 @@ class GalleryService {
         //gallery exisits
         await galleriesCollection
             .doc(galleryID)
-            .collection("images")
+            .collection('images')
             .add(jsonImg)
             .then((value) =>
                 print('added document reference to images collection $value'));
@@ -159,6 +166,43 @@ class GalleryService {
       }
     } else {
       print('path invalid could not add image');
+      return false;
+    }
+  }
+
+  Future<bool> reorderGallery(List<ThisImage>? reorderedGalleryImages) async {
+    print('in gallery service reorder');
+    _galleryID = await getGalleryID();
+    print('Gallery id $_galleryID');
+    print(reorderedGalleryImages);
+    if (_galleryID != null && reorderedGalleryImages!.length > 1) {
+      //gallery exisits
+      await galleriesCollection
+          .doc(_galleryID)
+          .collection('images')
+          .get()
+          .then((value) {
+        for (DocumentSnapshot snapshot in value.docs) {
+          snapshot.reference.delete();
+        }
+      });
+      for (var image in reorderedGalleryImages) {
+        var jsonImg = image.toJson();
+        try {
+          await galleriesCollection
+              .doc(_galleryID)
+              .collection('images')
+              .doc(image.id)
+              .set(jsonImg);
+        } catch (e) {
+          print(e);
+          return false;
+        }
+      }
+
+      return true;
+    } else {
+      print('failed reordering gallery');
       return false;
     }
   }

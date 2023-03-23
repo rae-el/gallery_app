@@ -6,15 +6,21 @@ import '../../app/app.locator.dart';
 import '../../app/app.router.dart';
 
 class AuthViewModel extends BaseViewModel {
-  final navigationService = locator<NavigationService>();
-  final authenticationService = locator<AuthenticationService>();
+  final _navigationService = locator<NavigationService>();
+  final _authenticationService = locator<AuthenticationService>();
+
+  final String _logoLocation = 'assets/gallery_logo.png';
+  String get logoLocation => _logoLocation;
+
+  String _formErrorMessage = '';
+  String get formErrorMessage => _formErrorMessage;
 
   Future signIn({
     required String email,
     required String password,
   }) async {
-    if (await authenticationService.signIn(email, password)) {
-      navigationService.navigateTo(Routes.homeView);
+    if (await _authenticationService.signIn(email, password)) {
+      _navigationService.navigateTo(Routes.galleryView);
     }
   }
 
@@ -22,17 +28,38 @@ class AuthViewModel extends BaseViewModel {
     required String email,
     required String password,
   }) async {
-    if (await authenticationService.signUp(email, password)) {
+    var signUpResponse = await _authenticationService.signUp(email, password);
+    if (signUpResponse == '') {
       signIn(email: email, password: password);
+    } else if (signUpResponse == 'ERROR') {
+      notifyListeners();
+      return;
     } else {
+      _formErrorMessage = signUpResponse;
+      notifyListeners();
       return;
     }
   }
 
   Future forgotPassword({required String email}) async {
-    authenticationService.forgotPassword(email);
+    if (email != '') {
+      var forgotPasswordResponse =
+          await _authenticationService.forgotPassword(email);
+      if (forgotPasswordResponse is String) {
+        _formErrorMessage = forgotPasswordResponse;
+        notifyListeners();
+      } else {
+        notifyListeners();
+        return forgotPasswordResponse;
+      }
+    } else {
+      _formErrorMessage = 'Please input your email';
+      notifyListeners();
+    }
     //add error catching
   }
+
+  validateForm({required String? formEmail, required String? formPassword}) {}
 
   //Form validation
   String? validateFormEmail(String? formEmail) {

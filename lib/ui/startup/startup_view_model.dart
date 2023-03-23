@@ -10,8 +10,8 @@ class StartupViewModel extends BaseViewModel implements Initialisable {
   final String _logoLocation = 'assets/gallery_logo.png';
   String get logoLocation => _logoLocation;
 
-  final authenticationService = locator<AuthenticationService>();
-  final navigationService = locator<NavigationService>();
+  final _authenticationService = locator<AuthenticationService>();
+  final _navigationService = locator<NavigationService>();
 
   @override
   void initialise() async {
@@ -23,10 +23,10 @@ class StartupViewModel extends BaseViewModel implements Initialisable {
 
   Future navigate() async {
     setBusy(true);
-    if (await authenticationService.isUserLoggedIn()) {
-      navigationService.navigateTo(Routes.homeView);
+    if (await _authenticationService.isUserLoggedIn()) {
+      _navigationService.navigateTo(Routes.galleryView);
     } else {
-      navigationService.navigateTo(Routes.authView);
+      _navigationService.navigateTo(Routes.authView);
     }
   }
 }

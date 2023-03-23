@@ -34,10 +34,16 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
           title: const Text('Profile'),
+          centerTitle: true,
+          //how do you change the leading splash radius
+          leadingWidth: 30,
+          //automaticallyImplyLeading: false,
           actions: [
             IconButton(
               icon: const Icon(Icons.logout),
               onPressed: model.signOut,
+              iconSize: 25,
+              splashRadius: 25,
             ),
           ],
         ),
@@ -61,7 +67,14 @@ class ProfileState extends State<ProfilePage> {
       viewModelBuilder: () => ProfileViewModel(),
       //onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, model, child) => model.isBusy
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width / 4,
+                child: const LinearProgressIndicator(
+                  color: secondaryBackgroundColour,
+                ),
+              ),
+            )
           : Scaffold(
               body: Center(
                 child: SingleChildScrollView(
@@ -114,7 +127,9 @@ class ProfileState extends State<ProfilePage> {
                         title: Text(model.userEmail),
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          await model.requestToChangePassword();
+                        },
                         child: const Text('Change Password'),
                       ),
                       ElevatedButton(
