@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class ThisImage {
   final String? id;
   final String path;
-  final bool favourite;
+  bool favourite;
   final Timestamp date;
   int? preferred_index;
 

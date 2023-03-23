@@ -38,15 +38,6 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
         title: Text(model.username),
         centerTitle: true,
         automaticallyImplyLeading: false,
-        leading: IconButton(
-          onPressed: () async {
-            await model.saveOrder();
-          },
-          icon: const Icon(Icons.save),
-          iconSize: 20,
-          splashRadius: 18,
-          tooltip: 'Save current order',
-        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.person),
@@ -107,25 +98,16 @@ class HomePage extends StatelessWidget {
                           tooltip: 'Order by acending date',
                         ),
                         SizedBox(
-                          width: MediaQuery.of(context).size.height / 4,
+                          width: MediaQuery.of(context).size.height / 3.3,
                         ),
                         IconButton(
                           onPressed: () async {
-                            await model.reorderByNonFavourite();
-                          },
-                          icon: const Icon(Icons.favorite_border),
-                          iconSize: 20,
-                          splashRadius: 18,
-                          tooltip: 'Order by non-favourite',
-                        ),
-                        IconButton(
-                          onPressed: () async {
-                            await model.reorderByFavourite();
+                            await model.filterFavourites();
                           },
                           icon: const Icon(Icons.favorite),
                           iconSize: 20,
                           splashRadius: 18,
-                          tooltip: 'Order by favourite',
+                          tooltip: 'Filter favourites',
                         ),
                       ],
                     ),
@@ -147,8 +129,8 @@ class HomePage extends StatelessWidget {
                             spacing: 3,
                             runSpacing: 3,
                             padding: const EdgeInsets.all(1),
-                            children: List.generate(model.galleryImages!.length,
-                                (index) {
+                            children: List.generate(
+                                model.galleryImagesShown!.length, (index) {
                               //_items = model.galleryImages!;
                               return SizedBox(
                                 width: 135,
@@ -156,25 +138,33 @@ class HomePage extends StatelessWidget {
                                 child: GestureDetector(
                                   key: Key('$index'),
                                   onTap: () {
-                                    print(model.galleryImages![index].path);
+                                    print(
+                                        model.galleryImagesShown![index].path);
                                     model.navigateToImageView(
-                                      image: model.galleryImages![index],
+                                      image: model.galleryImagesShown![index],
                                     );
+                                  },
+                                  onDoubleTap: () {
+                                    print('doubled tapped');
+                                    model.toggleFavourite(
+                                        image:
+                                            model.galleryImagesShown![index]);
                                   },
                                   //add double tap favourite function
                                   child: Hero(
-                                    tag: model.galleryImages![index],
+                                    tag: model.galleryImagesShown![index],
                                     child: Stack(
                                       fit: StackFit.passthrough,
                                       children: [
                                         Image.file(
-                                          File(
-                                              model.galleryImages![index].path),
+                                          File(model
+                                              .galleryImagesShown![index].path),
                                           width: 100,
                                           height: 100,
                                           fit: BoxFit.cover,
                                         ),
-                                        model.galleryImages![index].favourite
+                                        model.galleryImagesShown![index]
+                                                .favourite
                                             ? const PositionedDirectional(
                                                 end: 0,
                                                 bottom: 0,

@@ -18,6 +18,7 @@ import '../../models/this_image.dart';
 import '../../models/this_user.dart';
 import '../../services/auth_service.dart';
 import '../../services/gallery_service.dart';
+import '../../services/image_service.dart';
 import '../../services/user_service.dart';
 
 class GalleryViewModel extends BaseViewModel implements Initialisable {
@@ -25,6 +26,7 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
   final _galleryService = locator<GalleryService>();
   final _dialogService = locator<DialogService>();
   final _userService = locator<UserService>();
+  final _imageService = locator<ImageService>();
 
   Gallery? _userGallery;
 
@@ -37,11 +39,18 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
   List<ThisImage>? _galleryImages;
   List<ThisImage>? get galleryImages => _galleryImages;
 
+  List<ThisImage>? _galleryImagesShown;
+  List<ThisImage>? get galleryImagesShown => _galleryImagesShown;
+
   List<String> _galleryImagePaths = [];
   List<String> get galleryImagePaths => _galleryImagePaths;
 
   List<ThisImage>? _preferredOrder;
   List<ThisImage>? get preferredOrder => _preferredOrder;
+
+  String? id;
+
+  bool faveIcon = false;
 
   @override
   void initialise() async {
@@ -83,6 +92,7 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
 
         if (_galleryId != null) {
           _galleryImages = null;
+          _galleryImagesShown = null;
           _galleryImagePaths = [];
           _galleryImages = await _galleryService.getGalleryImages(_galleryId);
           if (_galleryImages == null || _galleryImages!.isEmpty) {
@@ -91,10 +101,12 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
           } else {
             print('adding gallery image paths to list');
             //reset to empty list
-
+            _galleryImagesShown = [];
             //only add if path exists
             for (var galleryImage in _galleryImages!) {
               _galleryImagePaths.add(galleryImage.path);
+
+              _galleryImagesShown!.add(galleryImage);
             }
 
             return true;
@@ -210,10 +222,10 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
       bool addedImage =
           await _galleryService.addImageToGallery(image, _galleryId);
       if (addedImage) {
-        if (galleryImages == null || galleryImages!.isEmpty) {
+        if (_galleryImages == null || _galleryImages!.isEmpty) {
           askForGalleryData();
         } else {
-          galleryImages!.insert(0, image);
+          _galleryImagesShown!.insert(0, image);
           notifyListeners();
         }
 
@@ -232,13 +244,13 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
   onReorder({required int oldIndex, required int newIndex}) {
     int index = 0;
 
-    final ThisImage item = galleryImages!.removeAt(oldIndex);
-    galleryImages!.insert(newIndex, item);
+    final ThisImage item = _galleryImagesShown!.removeAt(oldIndex);
+    _galleryImagesShown!.insert(newIndex, item);
 
     notifyListeners();
 
-    if (galleryImages!.length > 1) {
-      for (var image in galleryImages!) {
+    if (_galleryImagesShown!.length > 1) {
+      for (var image in _galleryImagesShown!) {
         image.preferred_index = index;
         index++;
       }
@@ -247,11 +259,11 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
 
   Future reorderAcending() async {
     int index = 0;
-    galleryImages!.sort((a, b) => a.date.compareTo(b.date));
+    _galleryImagesShown!.sort((a, b) => a.date.compareTo(b.date));
 
     notifyListeners();
-    if (galleryImages!.length > 1) {
-      for (var image in galleryImages!) {
+    if (_galleryImagesShown!.length > 1) {
+      for (var image in _galleryImagesShown!) {
         image.preferred_index = index;
         index++;
       }
@@ -261,11 +273,11 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
 
   Future reorderDecending() async {
     int index = 0;
-    galleryImages!.sort((a, b) => b.date.compareTo(a.date));
+    _galleryImagesShown!.sort((a, b) => b.date.compareTo(a.date));
 
     notifyListeners();
-    if (galleryImages!.length > 1) {
-      for (var image in galleryImages!) {
+    if (_galleryImagesShown!.length > 1) {
+      for (var image in _galleryImagesShown!) {
         image.preferred_index = index;
         index++;
       }
@@ -273,63 +285,95 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
     }
   }
 
-  Future reorderByFavourite() async {
+  Future filterFavourites() async {
     List<ThisImage> _favouriteImages = [];
-    List<ThisImage> _nonFavouriteImages = [];
-    print('order by favourite');
-    for (var image in _galleryImages!) {
+    for (var image in _galleryImagesShown!) {
       if (image.favourite == true) {
         _favouriteImages.add(image);
-      } else {
-        _nonFavouriteImages.add(image);
       }
     }
-    var favouritesFirst = _favouriteImages + _nonFavouriteImages;
 
-    _galleryImages = favouritesFirst;
-
-    notifyListeners();
-    return;
-  }
-
-  Future reorderByNonFavourite() async {
-    List<ThisImage> _favouriteImages = [];
-    List<ThisImage> _nonFavouriteImages = [];
-    print('order by favourite');
-    for (var image in _galleryImages!) {
-      if (image.favourite == true) {
-        _favouriteImages.add(image);
-      } else {
-        _nonFavouriteImages.add(image);
-      }
+    if (_galleryImagesShown!.length == _favouriteImages.length) {
+      _galleryImagesShown = _galleryImages!;
+    } else {
+      _galleryImagesShown = _favouriteImages;
     }
-    var nonFavouritesFirst = _nonFavouriteImages + _favouriteImages;
-
-    _galleryImages = nonFavouritesFirst;
 
     notifyListeners();
     return;
   }
 
   Future saveOrder() async {
-    var reorderResult = await _galleryService.reorderGallery(galleryImages!);
-    if (reorderResult) {
+    if (_galleryImages!.length == _galleryImagesShown!.length) {
+      var reorderResult =
+          await _galleryService.reorderGallery(_galleryImagesShown!);
+      if (reorderResult) {
+        await _dialogService.showCustomDialog(
+          variant: DialogType.basic,
+          data: BasicDialogStatus.success,
+          title: successTitle,
+          description: 'Saved your new order',
+          mainButtonTitle: 'OK',
+        );
+      } else {
+        await _dialogService.showCustomDialog(
+          variant: DialogType.basic,
+          data: BasicDialogStatus.error,
+          title: errorTitle,
+          description:
+              'There was a problem saving your order, please try again',
+          mainButtonTitle: 'OK',
+        );
+      }
+    }
+  }
+
+  Future toggleFavourite({required ThisImage image}) async {
+    id = image.id;
+    print('toggle fave');
+    faveIcon = !faveIcon;
+    for (var imageShown in _galleryImagesShown!) {
+      if (imageShown.id == image.id) {
+        imageShown.favourite = !imageShown.favourite;
+      }
+    }
+    notifyListeners();
+    //update in firebase
+    requestFavouriteToggle(image: image);
+    bool favourite = !image.favourite;
+    if (id != null) {
+    } else {
+      print('id null');
       await _dialogService.showCustomDialog(
         variant: DialogType.basic,
-        data: BasicDialogStatus.success,
-        title: successTitle,
-        description: 'Saved your new order',
+        data: BasicDialogStatus.error,
+        title: errorTitle,
+        description: 'We cannot update your favourite status',
         mainButtonTitle: 'OK',
       );
+    }
+  }
+
+  Future requestFavouriteToggle({required ThisImage image}) async {
+    String? update =
+        await _imageService.updateFavourite(image.id, image.favourite);
+    if (update == '') {
+      updateImage(image: image);
     } else {
       await _dialogService.showCustomDialog(
         variant: DialogType.basic,
         data: BasicDialogStatus.error,
         title: errorTitle,
-        description: 'There was a problem saving your order, please try again',
+        description: 'We cannot update your favourite status',
         mainButtonTitle: 'OK',
       );
     }
+  }
+
+  Future updateImage({required ThisImage image}) async {
+    await _galleryService.getGalleryImages(_galleryId);
+    id = image.id;
+    image = await _imageService.imageInGallery(id);
   }
 
   //gesture functions

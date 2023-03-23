@@ -40,7 +40,7 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
     faveIcon = image!.favourite;
   }
 
-  Future navigateToHome() async {
+  Future navigateToGallery() async {
     _navigationService.navigateTo(Routes.galleryView);
   }
 
@@ -113,7 +113,7 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
           var deleteResponse =
               await _imageService.requestDeleteImage(imageId: id as String);
           if (deleteResponse == '') {
-            navigateToHome();
+            navigateToGallery();
           } else {
             await _dialogService.showCustomDialog(
               variant: DialogType.basic,
