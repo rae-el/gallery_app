@@ -62,7 +62,7 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
           arguments: ImageViewArguments(image: image));
       //navigationService.navigateToImageView(image: image);
     } else {
-      _navigationService.navigateTo(Routes.homeView);
+      _navigationService.navigateTo(Routes.galleryView);
     }
   }
 

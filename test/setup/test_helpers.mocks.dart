@@ -6,8 +6,16 @@
 import 'dart:async' as _i4;
 
 import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
+import 'package:flutter/material.dart' as _i6;
+import 'package:gallery_app/models/gallery.dart' as _i8;
+import 'package:gallery_app/models/this_image.dart' as _i9;
+import 'package:gallery_app/models/this_user.dart' as _i12;
 import 'package:gallery_app/services/auth_service.dart' as _i3;
+import 'package:gallery_app/services/gallery_service.dart' as _i7;
+import 'package:gallery_app/services/image_service.dart' as _i10;
+import 'package:gallery_app/services/user_service.dart' as _i11;
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:stacked_services/stacked_services.dart' as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -193,4 +201,577 @@ class MockAuthenticationService extends _i1.Mock
         returnValue: _i4.Future<dynamic>.value(),
         returnValueForMissingStub: _i4.Future<dynamic>.value(),
       ) as _i4.Future<dynamic>);
+}
+
+/// A class which mocks [NavigationService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockNavigationService extends _i1.Mock implements _i5.NavigationService {
+  @override
+  String get previousRoute => (super.noSuchMethod(
+        Invocation.getter(#previousRoute),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String);
+  @override
+  String get currentRoute => (super.noSuchMethod(
+        Invocation.getter(#currentRoute),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String);
+  @override
+  _i6.GlobalKey<_i6.NavigatorState>? nestedNavigationKey(int? index) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #nestedNavigationKey,
+          [index],
+        ),
+        returnValueForMissingStub: null,
+      ) as _i6.GlobalKey<_i6.NavigatorState>?);
+  @override
+  void config({
+    bool? enableLog,
+    bool? defaultPopGesture,
+    bool? defaultOpaqueRoute,
+    Duration? defaultDurationTransition,
+    bool? defaultGlobalState,
+    _i5.Transition? defaultTransitionStyle,
+    String? defaultTransition,
+  }) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #config,
+          [],
+          {
+            #enableLog: enableLog,
+            #defaultPopGesture: defaultPopGesture,
+            #defaultOpaqueRoute: defaultOpaqueRoute,
+            #defaultDurationTransition: defaultDurationTransition,
+            #defaultGlobalState: defaultGlobalState,
+            #defaultTransitionStyle: defaultTransitionStyle,
+            #defaultTransition: defaultTransition,
+          },
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  _i4.Future<T?>? navigateWithTransition<T>(
+    _i6.Widget? page, {
+    bool? opaque,
+    String? transition = r'',
+    Duration? duration,
+    bool? popGesture,
+    int? id,
+    _i6.Curve? curve,
+    bool? fullscreenDialog = false,
+    bool? preventDuplicates = true,
+    _i5.Transition? transitionClass,
+    _i5.Transition? transitionStyle,
+    String? routeName,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #navigateWithTransition,
+          [page],
+          {
+            #opaque: opaque,
+            #transition: transition,
+            #duration: duration,
+            #popGesture: popGesture,
+            #id: id,
+            #curve: curve,
+            #fullscreenDialog: fullscreenDialog,
+            #preventDuplicates: preventDuplicates,
+            #transitionClass: transitionClass,
+            #transitionStyle: transitionStyle,
+            #routeName: routeName,
+          },
+        ),
+        returnValueForMissingStub: null,
+      ) as _i4.Future<T?>?);
+  @override
+  _i4.Future<T?>? replaceWithTransition<T>(
+    _i6.Widget? page, {
+    bool? opaque,
+    String? transition = r'',
+    Duration? duration,
+    bool? popGesture,
+    int? id,
+    _i6.Curve? curve,
+    bool? fullscreenDialog = false,
+    bool? preventDuplicates = true,
+    _i5.Transition? transitionClass,
+    _i5.Transition? transitionStyle,
+    String? routeName,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #replaceWithTransition,
+          [page],
+          {
+            #opaque: opaque,
+            #transition: transition,
+            #duration: duration,
+            #popGesture: popGesture,
+            #id: id,
+            #curve: curve,
+            #fullscreenDialog: fullscreenDialog,
+            #preventDuplicates: preventDuplicates,
+            #transitionClass: transitionClass,
+            #transitionStyle: transitionStyle,
+            #routeName: routeName,
+          },
+        ),
+        returnValueForMissingStub: null,
+      ) as _i4.Future<T?>?);
+  @override
+  bool back<T>({
+    dynamic result,
+    int? id,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #back,
+          [],
+          {
+            #result: result,
+            #id: id,
+          },
+        ),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+  @override
+  void popUntil(
+    _i6.RoutePredicate? predicate, {
+    int? id,
+  }) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #popUntil,
+          [predicate],
+          {#id: id},
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void popRepeated(int? popTimes) => super.noSuchMethod(
+        Invocation.method(
+          #popRepeated,
+          [popTimes],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  _i4.Future<T?>? navigateTo<T>(
+    String? routeName, {
+    dynamic arguments,
+    int? id,
+    bool? preventDuplicates = true,
+    Map<String, String>? parameters,
+    _i6.RouteTransitionsBuilder? transition,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #navigateTo,
+          [routeName],
+          {
+            #arguments: arguments,
+            #id: id,
+            #preventDuplicates: preventDuplicates,
+            #parameters: parameters,
+            #transition: transition,
+          },
+        ),
+        returnValueForMissingStub: null,
+      ) as _i4.Future<T?>?);
+  @override
+  _i4.Future<T?>? navigateToView<T>(
+    _i6.Widget? view, {
+    dynamic arguments,
+    int? id,
+    bool? opaque,
+    _i6.Curve? curve,
+    Duration? duration,
+    bool? fullscreenDialog = false,
+    bool? popGesture,
+    bool? preventDuplicates = true,
+    _i5.Transition? transition,
+    _i5.Transition? transitionStyle,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #navigateToView,
+          [view],
+          {
+            #arguments: arguments,
+            #id: id,
+            #opaque: opaque,
+            #curve: curve,
+            #duration: duration,
+            #fullscreenDialog: fullscreenDialog,
+            #popGesture: popGesture,
+            #preventDuplicates: preventDuplicates,
+            #transition: transition,
+            #transitionStyle: transitionStyle,
+          },
+        ),
+        returnValueForMissingStub: null,
+      ) as _i4.Future<T?>?);
+  @override
+  _i4.Future<T?>? replaceWith<T>(
+    String? routeName, {
+    dynamic arguments,
+    int? id,
+    bool? preventDuplicates = true,
+    Map<String, String>? parameters,
+    _i6.RouteTransitionsBuilder? transition,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #replaceWith,
+          [routeName],
+          {
+            #arguments: arguments,
+            #id: id,
+            #preventDuplicates: preventDuplicates,
+            #parameters: parameters,
+            #transition: transition,
+          },
+        ),
+        returnValueForMissingStub: null,
+      ) as _i4.Future<T?>?);
+  @override
+  _i4.Future<T?>? clearStackAndShow<T>(
+    String? routeName, {
+    dynamic arguments,
+    int? id,
+    Map<String, String>? parameters,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #clearStackAndShow,
+          [routeName],
+          {
+            #arguments: arguments,
+            #id: id,
+            #parameters: parameters,
+          },
+        ),
+        returnValueForMissingStub: null,
+      ) as _i4.Future<T?>?);
+  @override
+  _i4.Future<T?>? clearStackAndShowView<T>(
+    _i6.Widget? view, {
+    dynamic arguments,
+    int? id,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #clearStackAndShowView,
+          [view],
+          {
+            #arguments: arguments,
+            #id: id,
+          },
+        ),
+        returnValueForMissingStub: null,
+      ) as _i4.Future<T?>?);
+  @override
+  _i4.Future<T?>? clearTillFirstAndShow<T>(
+    String? routeName, {
+    dynamic arguments,
+    int? id,
+    bool? preventDuplicates = true,
+    Map<String, String>? parameters,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #clearTillFirstAndShow,
+          [routeName],
+          {
+            #arguments: arguments,
+            #id: id,
+            #preventDuplicates: preventDuplicates,
+            #parameters: parameters,
+          },
+        ),
+        returnValueForMissingStub: null,
+      ) as _i4.Future<T?>?);
+  @override
+  _i4.Future<T?>? clearTillFirstAndShowView<T>(
+    _i6.Widget? view, {
+    dynamic arguments,
+    int? id,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #clearTillFirstAndShowView,
+          [view],
+          {
+            #arguments: arguments,
+            #id: id,
+          },
+        ),
+        returnValueForMissingStub: null,
+      ) as _i4.Future<T?>?);
+  @override
+  _i4.Future<T?>? pushNamedAndRemoveUntil<T>(
+    String? routeName, {
+    _i6.RoutePredicate? predicate,
+    dynamic arguments,
+    int? id,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #pushNamedAndRemoveUntil,
+          [routeName],
+          {
+            #predicate: predicate,
+            #arguments: arguments,
+            #id: id,
+          },
+        ),
+        returnValueForMissingStub: null,
+      ) as _i4.Future<T?>?);
+}
+
+/// A class which mocks [GalleryService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGalleryService extends _i1.Mock implements _i7.GalleryService {
+  @override
+  _i2.CollectionReference<Map<String, dynamic>> get galleriesCollection =>
+      (super.noSuchMethod(
+        Invocation.getter(#galleriesCollection),
+        returnValue: _FakeCollectionReference_1<Map<String, dynamic>>(
+          this,
+          Invocation.getter(#galleriesCollection),
+        ),
+        returnValueForMissingStub:
+            _FakeCollectionReference_1<Map<String, dynamic>>(
+          this,
+          Invocation.getter(#galleriesCollection),
+        ),
+      ) as _i2.CollectionReference<Map<String, dynamic>>);
+  @override
+  set returnMessage(String? _returnMessage) => super.noSuchMethod(
+        Invocation.setter(
+          #returnMessage,
+          _returnMessage,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  _i4.Future<_i8.Gallery?> getUserGallery() => (super.noSuchMethod(
+        Invocation.method(
+          #getUserGallery,
+          [],
+        ),
+        returnValue: _i4.Future<_i8.Gallery?>.value(),
+        returnValueForMissingStub: _i4.Future<_i8.Gallery?>.value(),
+      ) as _i4.Future<_i8.Gallery?>);
+  @override
+  _i4.Future<String?> getGalleryID() => (super.noSuchMethod(
+        Invocation.method(
+          #getGalleryID,
+          [],
+        ),
+        returnValue: _i4.Future<String?>.value(),
+        returnValueForMissingStub: _i4.Future<String?>.value(),
+      ) as _i4.Future<String?>);
+  @override
+  _i4.Future<List<_i9.ThisImage>?> getGalleryImages(String? galleryId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getGalleryImages,
+          [galleryId],
+        ),
+        returnValue: _i4.Future<List<_i9.ThisImage>?>.value(),
+        returnValueForMissingStub: _i4.Future<List<_i9.ThisImage>?>.value(),
+      ) as _i4.Future<List<_i9.ThisImage>?>);
+  @override
+  _i4.Future<_i8.Gallery?> createNewGallery(String? userID) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #createNewGallery,
+          [userID],
+        ),
+        returnValue: _i4.Future<_i8.Gallery?>.value(),
+        returnValueForMissingStub: _i4.Future<_i8.Gallery?>.value(),
+      ) as _i4.Future<_i8.Gallery?>);
+  @override
+  _i4.Future<bool> addImageToGallery(
+    _i9.ThisImage? image,
+    String? galleryID,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #addImageToGallery,
+          [
+            image,
+            galleryID,
+          ],
+        ),
+        returnValue: _i4.Future<bool>.value(false),
+        returnValueForMissingStub: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
+  @override
+  _i4.Future<bool> reorderGallery(
+          List<_i9.ThisImage>? reorderedGalleryImages) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #reorderGallery,
+          [reorderedGalleryImages],
+        ),
+        returnValue: _i4.Future<bool>.value(false),
+        returnValueForMissingStub: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
+}
+
+/// A class which mocks [ImageService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockImageService extends _i1.Mock implements _i10.ImageService {
+  @override
+  _i2.CollectionReference<Map<String, dynamic>> get galleriesCollection =>
+      (super.noSuchMethod(
+        Invocation.getter(#galleriesCollection),
+        returnValue: _FakeCollectionReference_1<Map<String, dynamic>>(
+          this,
+          Invocation.getter(#galleriesCollection),
+        ),
+        returnValueForMissingStub:
+            _FakeCollectionReference_1<Map<String, dynamic>>(
+          this,
+          Invocation.getter(#galleriesCollection),
+        ),
+      ) as _i2.CollectionReference<Map<String, dynamic>>);
+  @override
+  String get returnMessage => (super.noSuchMethod(
+        Invocation.getter(#returnMessage),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String);
+  @override
+  set returnMessage(String? _returnMessage) => super.noSuchMethod(
+        Invocation.setter(
+          #returnMessage,
+          _returnMessage,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  set thisImage(_i9.ThisImage? _thisImage) => super.noSuchMethod(
+        Invocation.setter(
+          #thisImage,
+          _thisImage,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  _i4.Future<dynamic> imageInGallery(String? imageId) => (super.noSuchMethod(
+        Invocation.method(
+          #imageInGallery,
+          [imageId],
+        ),
+        returnValue: _i4.Future<dynamic>.value(),
+        returnValueForMissingStub: _i4.Future<dynamic>.value(),
+      ) as _i4.Future<dynamic>);
+  @override
+  _i4.Future<dynamic> updateFavourite(
+    String? imageId,
+    bool? fave,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateFavourite,
+          [
+            imageId,
+            fave,
+          ],
+        ),
+        returnValue: _i4.Future<dynamic>.value(),
+        returnValueForMissingStub: _i4.Future<dynamic>.value(),
+      ) as _i4.Future<dynamic>);
+  @override
+  _i4.Future<dynamic> requestDeleteImage({required String? imageId}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #requestDeleteImage,
+          [],
+          {#imageId: imageId},
+        ),
+        returnValue: _i4.Future<dynamic>.value(),
+        returnValueForMissingStub: _i4.Future<dynamic>.value(),
+      ) as _i4.Future<dynamic>);
+}
+
+/// A class which mocks [UserService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockUserService extends _i1.Mock implements _i11.UserService {
+  @override
+  _i2.CollectionReference<Map<String, dynamic>> get usersCollection =>
+      (super.noSuchMethod(
+        Invocation.getter(#usersCollection),
+        returnValue: _FakeCollectionReference_1<Map<String, dynamic>>(
+          this,
+          Invocation.getter(#usersCollection),
+        ),
+        returnValueForMissingStub:
+            _FakeCollectionReference_1<Map<String, dynamic>>(
+          this,
+          Invocation.getter(#usersCollection),
+        ),
+      ) as _i2.CollectionReference<Map<String, dynamic>>);
+  @override
+  _i2.CollectionReference<Map<String, dynamic>> get galleriesCollection =>
+      (super.noSuchMethod(
+        Invocation.getter(#galleriesCollection),
+        returnValue: _FakeCollectionReference_1<Map<String, dynamic>>(
+          this,
+          Invocation.getter(#galleriesCollection),
+        ),
+        returnValueForMissingStub:
+            _FakeCollectionReference_1<Map<String, dynamic>>(
+          this,
+          Invocation.getter(#galleriesCollection),
+        ),
+      ) as _i2.CollectionReference<Map<String, dynamic>>);
+  @override
+  set returnMessage(String? _returnMessage) => super.noSuchMethod(
+        Invocation.setter(
+          #returnMessage,
+          _returnMessage,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  _i4.Future<bool> createNewUser(dynamic newUserDetails) => (super.noSuchMethod(
+        Invocation.method(
+          #createNewUser,
+          [newUserDetails],
+        ),
+        returnValue: _i4.Future<bool>.value(false),
+        returnValueForMissingStub: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
+  @override
+  _i4.Future<_i12.ThisUser?> getUserData() => (super.noSuchMethod(
+        Invocation.method(
+          #getUserData,
+          [],
+        ),
+        returnValue: _i4.Future<_i12.ThisUser?>.value(),
+        returnValueForMissingStub: _i4.Future<_i12.ThisUser?>.value(),
+      ) as _i4.Future<_i12.ThisUser?>);
+  @override
+  _i4.Future<bool> updateUser(_i12.ThisUser? thisUser) => (super.noSuchMethod(
+        Invocation.method(
+          #updateUser,
+          [thisUser],
+        ),
+        returnValue: _i4.Future<bool>.value(false),
+        returnValueForMissingStub: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
 }

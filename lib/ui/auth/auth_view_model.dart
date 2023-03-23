@@ -20,7 +20,7 @@ class AuthViewModel extends BaseViewModel {
     required String password,
   }) async {
     if (await _authenticationService.signIn(email, password)) {
-      _navigationService.navigateTo(Routes.homeView);
+      _navigationService.navigateTo(Routes.galleryView);
     }
   }
 

@@ -24,7 +24,7 @@ class StartupViewModel extends BaseViewModel implements Initialisable {
   Future navigate() async {
     setBusy(true);
     if (await _authenticationService.isUserLoggedIn()) {
-      _navigationService.navigateTo(Routes.homeView);
+      _navigationService.navigateTo(Routes.galleryView);
     } else {
       _navigationService.navigateTo(Routes.authView);
     }

@@ -20,7 +20,7 @@ import 'package:stacked_services/stacked_services.dart' as _i10;
 class Routes {
   static const startupView = '/';
 
-  static const homeView = '/home-view';
+  static const galleryView = '/gallery-view';
 
   static const authView = '/auth-view';
 
@@ -32,7 +32,7 @@ class Routes {
 
   static const all = <String>{
     startupView,
-    homeView,
+    galleryView,
     authView,
     profileView,
     changePwView,
@@ -47,7 +47,7 @@ class StackedRouter extends _i1.RouterBase {
       page: _i2.StartupView,
     ),
     _i1.RouteDef(
-      Routes.homeView,
+      Routes.galleryView,
       page: _i3.GalleryView,
     ),
     _i1.RouteDef(
@@ -140,14 +140,14 @@ extension NavigatorStateExtension on _i10.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToHomeView([
+  Future<dynamic> navigateToGalleryView([
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
   ]) async {
-    return navigateTo<dynamic>(Routes.homeView,
+    return navigateTo<dynamic>(Routes.galleryView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

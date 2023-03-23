@@ -41,7 +41,7 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
   }
 
   Future navigateToHome() async {
-    _navigationService.navigateTo(Routes.homeView);
+    _navigationService.navigateTo(Routes.galleryView);
   }
 
   Future navigateToProfile() async {
