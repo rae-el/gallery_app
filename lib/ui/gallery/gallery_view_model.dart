@@ -56,6 +56,8 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
 
   bool draggableReordering = false;
 
+  bool decendingOrder = false;
+
   @override
   void initialise() async {
     runBusyFuture(askForGalleryData());
@@ -261,6 +263,25 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
     }
   }
 
+  Future reorderAcendingDecending() async {
+    int index = 0;
+    if (!decendingOrder) {
+      _galleryImagesShown!.sort((a, b) => b.date.compareTo(a.date));
+    } else {
+      _galleryImagesShown!.sort((a, b) => a.date.compareTo(b.date));
+    }
+
+    decendingOrder = !decendingOrder;
+
+    notifyListeners();
+    if (_galleryImagesShown!.length > 1) {
+      for (var image in _galleryImagesShown!) {
+        image.preferred_index = index;
+        index++;
+      }
+    }
+  }
+
   Future reorderAcending() async {
     int index = 0;
     _galleryImagesShown!.sort((a, b) => a.date.compareTo(b.date));
@@ -271,7 +292,6 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
         image.preferred_index = index;
         index++;
       }
-      //_galleryService.reorderGallery(galleryImages!);
     }
   }
 
@@ -285,7 +305,6 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
         image.preferred_index = index;
         index++;
       }
-      //_galleryService.reorderGallery(galleryImages!);
     }
   }
 

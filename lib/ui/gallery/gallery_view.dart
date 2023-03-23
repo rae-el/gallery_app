@@ -80,33 +80,24 @@ class HomePage extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       children: [
                         IconButton(
+                          onPressed: () async {
+                            await model.reorderAcendingDecending();
+                          },
+                          icon: const Icon(Icons.swap_vert),
+                          iconSize: 20,
+                          splashRadius: 18,
+                          tooltip: 'Order By Date',
+                        ),
+                        IconButton(
                           onPressed: () {
                             model.toggleDraggableReordering();
                           },
                           icon: model.draggableReordering
-                              ? Icon(Icons.grid_view)
-                              : Icon(Icons.move_down),
+                              ? const Icon(Icons.grid_view)
+                              : const Icon(Icons.move_down),
                           iconSize: 20,
                           splashRadius: 18,
                           tooltip: 'Enable Draggable Reordering',
-                        ),
-                        IconButton(
-                          onPressed: () async {
-                            await model.reorderDecending();
-                          },
-                          icon: const Icon(Icons.arrow_downward),
-                          iconSize: 20,
-                          splashRadius: 18,
-                          tooltip: 'Newest Images First',
-                        ),
-                        IconButton(
-                          onPressed: () async {
-                            await model.reorderAcending();
-                          },
-                          icon: const Icon(Icons.arrow_upward),
-                          iconSize: 20,
-                          splashRadius: 18,
-                          tooltip: 'Newest Images Last',
                         ),
                         IconButton(
                           onPressed: () async {
