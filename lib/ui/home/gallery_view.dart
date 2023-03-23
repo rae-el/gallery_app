@@ -2,19 +2,19 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:gallery_app/models/this_image.dart';
-import 'package:gallery_app/ui/home/home_view_model.dart';
+import 'package:gallery_app/ui/home/gallery_view_model.dart';
 import 'package:gallery_app/app/colors.dart';
 import 'package:stacked/stacked.dart';
 import 'package:reorderables/reorderables.dart';
 
-class HomeView extends StatelessWidget {
-  const HomeView({super.key});
+class GalleryView extends StatelessWidget {
+  const GalleryView({super.key});
   // home view after authentication
   // should be the main gallery
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<HomeViewModel>.reactive(
-      viewModelBuilder: () => HomeViewModel(),
+    return ViewModelBuilder<GalleryViewModel>.reactive(
+      viewModelBuilder: () => GalleryViewModel(),
       //onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, model, child) => const Scaffold(
         appBar: MainAppBar(),
@@ -31,8 +31,8 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(50);
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<HomeViewModel>.reactive(
-      viewModelBuilder: () => HomeViewModel(),
+    return ViewModelBuilder<GalleryViewModel>.reactive(
+      viewModelBuilder: () => GalleryViewModel(),
       builder: (context, model, child) => AppBar(
         //should make the title the username?
         title: Text(model.username),
@@ -66,9 +66,9 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<HomeViewModel>.reactive(
+    return ViewModelBuilder<GalleryViewModel>.reactive(
       //this is where I put the view structure
-      viewModelBuilder: () => HomeViewModel(),
+      viewModelBuilder: () => GalleryViewModel(),
       //line below triggers a double initialistion
       onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, model, child) => model.isBusy

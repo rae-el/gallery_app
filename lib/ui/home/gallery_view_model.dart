@@ -20,7 +20,7 @@ import '../../services/auth_service.dart';
 import '../../services/gallery_service.dart';
 import '../../services/user_service.dart';
 
-class HomeViewModel extends BaseViewModel implements Initialisable {
+class GalleryViewModel extends BaseViewModel implements Initialisable {
   final _navigationService = locator<NavigationService>();
   final _galleryService = locator<GalleryService>();
   final _dialogService = locator<DialogService>();

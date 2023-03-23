@@ -90,10 +90,6 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
     }
   }
 
-  navigateHome() {
-    _navigationService.navigateTo(Routes.homeView);
-  }
-
   Future? openPicker({required String source}) async {
     ImagePicker picker = ImagePicker();
     XFile? image;

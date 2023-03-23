@@ -30,9 +30,7 @@ class ImageView extends StatelessWidget {
           : Scaffold(
               appBar: AppBar(
                 //should make the title the image title if exists?
-                leading: IconButton(
-                    onPressed: model.navigateToHome,
-                    icon: const Icon(Icons.arrow_back)),
+                
                 title: const Text(''),
                 centerTitle: true,
                 actions: const [],

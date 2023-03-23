@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:gallery_app/models/this_image.dart' as _i9;
 import 'package:gallery_app/ui/auth/auth_view.dart' as _i4;
 import 'package:gallery_app/ui/change_pw/change_pw_view.dart' as _i6;
-import 'package:gallery_app/ui/home/home_view.dart' as _i3;
+import 'package:gallery_app/ui/home/gallery_view.dart' as _i3;
 import 'package:gallery_app/ui/image/image_view.dart' as _i7;
 import 'package:gallery_app/ui/profile/profile_view.dart' as _i5;
 import 'package:gallery_app/ui/startup/startup_view.dart' as _i2;
@@ -48,7 +48,7 @@ class StackedRouter extends _i1.RouterBase {
     ),
     _i1.RouteDef(
       Routes.homeView,
-      page: _i3.HomeView,
+      page: _i3.GalleryView,
     ),
     _i1.RouteDef(
       Routes.authView,
@@ -75,9 +75,9 @@ class StackedRouter extends _i1.RouterBase {
         settings: data,
       );
     },
-    _i3.HomeView: (data) {
+    _i3.GalleryView: (data) {
       return MaterialPageRoute<dynamic>(
-        builder: (context) => const _i3.HomeView(),
+        builder: (context) => const _i3.GalleryView(),
         settings: data,
       );
     },
