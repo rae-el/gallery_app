@@ -80,6 +80,17 @@ class HomePage extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       children: [
                         IconButton(
+                          onPressed: () {
+                            model.toggleDraggableReordering();
+                          },
+                          icon: model.draggableReordering
+                              ? Icon(Icons.grid_view)
+                              : Icon(Icons.move_down),
+                          iconSize: 20,
+                          splashRadius: 18,
+                          tooltip: 'Enable Draggable Reordering',
+                        ),
+                        IconButton(
                           onPressed: () async {
                             await model.reorderDecending();
                           },
@@ -95,19 +106,16 @@ class HomePage extends StatelessWidget {
                           icon: const Icon(Icons.arrow_upward),
                           iconSize: 20,
                           splashRadius: 18,
-                          tooltip: 'Oldest Images First',
+                          tooltip: 'Newest Images Last',
                         ),
-                        TextButton(
-                            onPressed: () {},
-                            child: const Text('Drag To Reorder Images')),
                         IconButton(
                           onPressed: () async {
                             await model.filterFavourites();
                           },
                           icon: model.galleryImagesShown!.length ==
                                   model.favouriteGalleryImagesShown.length
-                              ? const Icon(Icons.favorite)
-                              : const Icon(Icons.favorite_border),
+                              ? const Icon(Icons.favorite_border)
+                              : const Icon(Icons.favorite),
                           iconSize: 20,
                           splashRadius: 18,
                           tooltip: 'View Favourites',
@@ -131,6 +139,7 @@ class HomePage extends StatelessWidget {
                             minMainAxisCount: 3,
                             spacing: 3,
                             runSpacing: 3,
+                            enableReorder: model.draggableReordering,
                             padding: const EdgeInsets.all(1),
                             children: List.generate(
                                 model.galleryImagesShown!.length, (index) {

@@ -41,6 +41,7 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
 
   List<ThisImage>? _galleryImagesShown;
   List<ThisImage>? get galleryImagesShown => _galleryImagesShown;
+
   List<ThisImage> _favouriteGalleryImagesShown = [];
   List<ThisImage> get favouriteGalleryImagesShown =>
       _favouriteGalleryImagesShown;
@@ -53,7 +54,7 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
 
   String? id;
 
-  bool faveIcon = false;
+  bool draggableReordering = false;
 
   @override
   void initialise() async {
@@ -336,7 +337,6 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
   Future toggleFavourite({required ThisImage image}) async {
     id = image.id;
     print('toggle fave');
-    faveIcon = !faveIcon;
     for (var imageShown in _galleryImagesShown!) {
       if (imageShown.id == image.id) {
         imageShown.favourite = !imageShown.favourite;
@@ -357,6 +357,11 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
         mainButtonTitle: 'OK',
       );
     }
+  }
+
+  toggleDraggableReordering() {
+    draggableReordering = !draggableReordering;
+    notifyListeners();
   }
 
   Future requestFavouriteToggle({required ThisImage image}) async {
