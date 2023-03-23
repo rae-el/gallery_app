@@ -72,143 +72,139 @@ class HomePage extends StatelessWidget {
               ),
             )
           : Scaffold(
-              body: Column(
-                children: [
-                  SizedBox(
-                    height: 35,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        IconButton(
-                          onPressed: () async {
-                            await model.reorderAcendingDecending();
-                          },
-                          icon: const Icon(Icons.swap_vert),
-                          iconSize: 20,
-                          splashRadius: 18,
-                          tooltip: 'Order By Date',
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            model.toggleDraggableReordering();
-                          },
-                          icon: model.draggableReordering
-                              ? const Icon(Icons.grid_view)
-                              : const Icon(Icons.move_down),
-                          iconSize: 20,
-                          splashRadius: 18,
-                          tooltip: 'Enable Draggable Reordering',
-                        ),
-                        IconButton(
-                          onPressed: () async {
-                            await model.filterFavourites();
-                          },
-                          icon: model.galleryImagesShown!.length ==
-                                  model.favouriteGalleryImagesShown.length
-                              ? const Icon(Icons.favorite_border)
-                              : const Icon(Icons.favorite),
-                          iconSize: 20,
-                          splashRadius: 18,
-                          tooltip: 'View Favourites',
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: backgroundColour,
-                    ),
-                    //fill space of entire screen
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height - 196,
-                    child: model.galleryImages == null
-                        ? const Center(
-                            child: Text('Start by adding some images!'),
-                          )
-                        : ReorderableWrap(
-                            maxMainAxisCount: 3,
-                            minMainAxisCount: 3,
-                            spacing: 3,
-                            runSpacing: 3,
-                            enableReorder: model.draggableReordering,
-                            padding: const EdgeInsets.all(1),
-                            children: List.generate(
-                                model.galleryImagesShown!.length, (index) {
-                              //_items = model.galleryImages!;
-                              return SizedBox(
-                                width: 135,
-                                height: 135,
-                                child: GestureDetector(
-                                  key: Key('$index'),
-                                  onTap: () {
-                                    print(
-                                        model.galleryImagesShown![index].path);
-                                    model.navigateToImageView(
-                                      image: model.galleryImagesShown![index],
-                                    );
-                                  },
-                                  onDoubleTap: () {
-                                    print('doubled tapped');
-                                    model.toggleFavourite(
-                                        image:
-                                            model.galleryImagesShown![index]);
-                                  },
-                                  //add double tap favourite function
-                                  child: Hero(
-                                    tag: model.galleryImagesShown![index],
-                                    child: Stack(
-                                      fit: StackFit.passthrough,
-                                      children: [
-                                        Image.file(
-                                          File(model
-                                              .galleryImagesShown![index].path),
-                                          width: 100,
-                                          height: 100,
-                                          fit: BoxFit.cover,
-                                        ),
-                                        model.galleryImagesShown![index]
-                                                .favourite
-                                            ? const PositionedDirectional(
-                                                end: 0,
-                                                bottom: 0,
-                                                child: Icon(
-                                                  Icons.favorite,
-                                                  size: 20,
-                                                ),
-                                              )
-                                            : const PositionedDirectional(
-                                                end: 0,
-                                                bottom: 0,
-                                                child: Icon(
-                                                  Icons.favorite_outline,
-                                                  size: 20,
-                                                ),
-                                              ),
-                                      ],
+              body: Container(
+                decoration: const BoxDecoration(
+                  color: backgroundColour,
+                ),
+                //fill space of entire screen
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: model.galleryImages == null
+                    ? const Center(
+                        child: Text('Start by adding some images!'),
+                      )
+                    : ReorderableWrap(
+                        maxMainAxisCount: 3,
+                        minMainAxisCount: 3,
+                        spacing: 3,
+                        runSpacing: 3,
+                        enableReorder: model.draggableReordering,
+                        padding: const EdgeInsets.all(1),
+                        children: List.generate(
+                            model.galleryImagesShown!.length, (index) {
+                          //_items = model.galleryImages!;
+                          return SizedBox(
+                            width: 135,
+                            height: 135,
+                            child: GestureDetector(
+                              key: Key('$index'),
+                              onTap: () {
+                                print(model.galleryImagesShown![index].path);
+                                model.navigateToImageView(
+                                  image: model.galleryImagesShown![index],
+                                );
+                              },
+                              onDoubleTap: () {
+                                print('doubled tapped');
+                                model.toggleFavourite(
+                                    image: model.galleryImagesShown![index]);
+                              },
+                              //add double tap favourite function
+                              child: Hero(
+                                tag: model.galleryImagesShown![index],
+                                child: Stack(
+                                  fit: StackFit.passthrough,
+                                  children: [
+                                    Image.file(
+                                      File(model
+                                          .galleryImagesShown![index].path),
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.cover,
                                     ),
-                                  ),
+                                    model.galleryImagesShown![index].favourite
+                                        ? const PositionedDirectional(
+                                            end: 0,
+                                            bottom: 0,
+                                            child: Icon(
+                                              Icons.favorite,
+                                              size: 20,
+                                            ),
+                                          )
+                                        : const PositionedDirectional(
+                                            end: 0,
+                                            bottom: 0,
+                                            child: Icon(
+                                              Icons.favorite_outline,
+                                              size: 20,
+                                            ),
+                                          ),
+                                  ],
                                 ),
-                              );
-                            }),
-                            onReorder: (int oldIndex, int newIndex) {
-                              model.onReorder(
-                                  oldIndex: oldIndex, newIndex: newIndex);
-                            },
-                          ),
-                  ),
-                ],
+                              ),
+                            ),
+                          );
+                        }),
+                        onReorder: (int oldIndex, int newIndex) {
+                          model.onReorder(
+                              oldIndex: oldIndex, newIndex: newIndex);
+                        },
+                      ),
               ),
               //should this be a persisent footer button instead?
               bottomNavigationBar: SizedBox(
                 height: 50,
-                child: IconButton(
-                  onPressed: () async {
-                    await model.openPickerDialog(context);
-                  },
-                  icon: const Icon(Icons.add),
-                  iconSize: 25,
-                  splashRadius: 25,
-                  tooltip: 'Add new image',
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    IconButton(
+                      onPressed: () async {
+                        await model.reorderAcendingDecending();
+                      },
+                      icon: const Icon(Icons.swap_vert),
+                      iconSize: 20,
+                      splashRadius: 18,
+                      tooltip: 'Order By Date',
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        model.toggleDraggableReordering();
+                      },
+                      icon: model.draggableReordering
+                          ? const Icon(Icons.grid_view)
+                          : const Icon(Icons.move_down),
+                      iconSize: 20,
+                      splashRadius: 18,
+                      tooltip: 'Enable Draggable Reordering',
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 4.8,
+                    ),
+                    IconButton(
+                      onPressed: () async {
+                        await model.openPickerDialog(context);
+                      },
+                      icon: const Icon(Icons.add_circle_outline),
+                      iconSize: 35,
+                      splashRadius: 25,
+                      tooltip: 'Add New',
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 3.2,
+                    ),
+                    IconButton(
+                      onPressed: () async {
+                        await model.filterFavourites();
+                      },
+                      icon: model.galleryImagesShown!.length ==
+                              model.favouriteGalleryImagesShown.length
+                          ? const Icon(Icons.favorite_border)
+                          : const Icon(Icons.favorite),
+                      iconSize: 20,
+                      splashRadius: 18,
+                      tooltip: 'View Favourites',
+                    ),
+                  ],
                 ),
               ),
             ),

@@ -39,35 +39,35 @@ void unregisterService() {
   locator.unregister<UserService>();
 }
 
-AuthenticationService getAndRegisterAuthenticationService() {
+MockAuthenticationService getAndRegisterAuthenticationService() {
   _removeRegistrationIfExists<AuthenticationService>();
   final service = MockAuthenticationService();
   locator.registerSingleton<AuthenticationService>(service);
   return service;
 }
 
-NavigationService getAndRegisterNavigationService() {
+MockNavigationService getAndRegisterNavigationService() {
   _removeRegistrationIfExists<NavigationService>();
   final service = MockNavigationService();
   locator.registerSingleton<NavigationService>(service);
   return service;
 }
 
-GalleryService getAndRegisterGalleryService() {
+MockGalleryService getAndRegisterGalleryService() {
   _removeRegistrationIfExists<GalleryService>();
   final service = MockGalleryService();
   locator.registerSingleton<GalleryService>(service);
   return service;
 }
 
-ImageService getAndRegisterImageService() {
+MockImageService getAndRegisterImageService() {
   _removeRegistrationIfExists<ImageService>();
   final service = MockImageService();
   locator.registerSingleton<ImageService>(service);
   return service;
 }
 
-UserService getAndRegisterUserService() {
+MockUserService getAndRegisterUserService() {
   _removeRegistrationIfExists<UserService>();
   final service = MockUserService();
   locator.registerSingleton<UserService>(service);
