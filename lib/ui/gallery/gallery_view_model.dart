@@ -41,6 +41,9 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
 
   List<ThisImage>? _galleryImagesShown;
   List<ThisImage>? get galleryImagesShown => _galleryImagesShown;
+  List<ThisImage> _favouriteGalleryImagesShown = [];
+  List<ThisImage> get favouriteGalleryImagesShown =>
+      _favouriteGalleryImagesShown;
 
   List<String> _galleryImagePaths = [];
   List<String> get galleryImagePaths => _galleryImagePaths;
@@ -290,11 +293,13 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
     for (var image in _galleryImagesShown!) {
       if (image.favourite == true) {
         _favouriteImages.add(image);
+        _favouriteGalleryImagesShown.add(image);
       }
     }
 
     if (_galleryImagesShown!.length == _favouriteImages.length) {
       _galleryImagesShown = _galleryImages!;
+      _favouriteGalleryImagesShown = [];
     } else {
       _galleryImagesShown = _favouriteImages;
     }

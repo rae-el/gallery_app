@@ -86,7 +86,7 @@ class HomePage extends StatelessWidget {
                           icon: const Icon(Icons.arrow_downward),
                           iconSize: 20,
                           splashRadius: 18,
-                          tooltip: 'Order by decending date',
+                          tooltip: 'Newest Images First',
                         ),
                         IconButton(
                           onPressed: () async {
@@ -95,19 +95,22 @@ class HomePage extends StatelessWidget {
                           icon: const Icon(Icons.arrow_upward),
                           iconSize: 20,
                           splashRadius: 18,
-                          tooltip: 'Order by acending date',
+                          tooltip: 'Oldest Images First',
                         ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.height / 3.3,
-                        ),
+                        TextButton(
+                            onPressed: () {},
+                            child: const Text('Drag To Reorder Images')),
                         IconButton(
                           onPressed: () async {
                             await model.filterFavourites();
                           },
-                          icon: const Icon(Icons.favorite),
+                          icon: model.galleryImagesShown!.length ==
+                                  model.favouriteGalleryImagesShown.length
+                              ? const Icon(Icons.favorite)
+                              : const Icon(Icons.favorite_border),
                           iconSize: 20,
                           splashRadius: 18,
-                          tooltip: 'Filter favourites',
+                          tooltip: 'View Favourites',
                         ),
                       ],
                     ),
