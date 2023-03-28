@@ -4,10 +4,14 @@ import 'package:stacked_services/stacked_services.dart';
 
 import '../../app/app.locator.dart';
 import '../../app/app.router.dart';
+import '../../app/messages.dart';
+import '../../enums/basic_dialog_status.dart';
+import '../../enums/dialog_type.dart';
 
 class AuthViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
   final _authenticationService = locator<AuthenticationService>();
+  final _dialogService = locator<DialogService>();
 
   final String _logoLocation = 'assets/gallery_logo.png';
   String get logoLocation => _logoLocation;
@@ -19,8 +23,18 @@ class AuthViewModel extends BaseViewModel {
     required String email,
     required String password,
   }) async {
-    if (await _authenticationService.signIn(email, password)) {
+    var signInResponse =
+        await _authenticationService.signIn(email: email, password: password);
+    if (signInResponse == null) {
       _navigationService.navigateTo(Routes.galleryView);
+    } else {
+      await _dialogService.showCustomDialog(
+        variant: DialogType.basic,
+        data: BasicDialogStatus.error,
+        title: errorTitle,
+        description: signInResponse,
+        mainButtonTitle: 'OK',
+      );
     }
   }
 
@@ -28,14 +42,13 @@ class AuthViewModel extends BaseViewModel {
     required String email,
     required String password,
   }) async {
-    var signUpResponse = await _authenticationService.signUp(email, password);
-    if (signUpResponse == '') {
+    //error handle here first?
+    var createNewUserResponse = await _authenticationService.createNewUser(
+        email: email, password: password);
+    if (createNewUserResponse == null) {
       signIn(email: email, password: password);
-    } else if (signUpResponse == 'ERROR') {
-      notifyListeners();
-      return;
     } else {
-      _formErrorMessage = signUpResponse;
+      _formErrorMessage = createNewUserResponse;
       notifyListeners();
       return;
     }
@@ -44,13 +57,24 @@ class AuthViewModel extends BaseViewModel {
   Future forgotPassword({required String email}) async {
     if (email != '') {
       var forgotPasswordResponse =
-          await _authenticationService.forgotPassword(email);
-      if (forgotPasswordResponse is String) {
-        _formErrorMessage = forgotPasswordResponse;
-        notifyListeners();
+          await _authenticationService.forgotPassword(email: email);
+      if (forgotPasswordResponse ==
+          'Please check your email to finish resetting your password') {
+        await _dialogService.showCustomDialog(
+          variant: DialogType.basic,
+          data: BasicDialogStatus.success,
+          title: successTitle,
+          description: forgotPasswordResponse,
+          mainButtonTitle: 'OK',
+        );
       } else {
-        notifyListeners();
-        return forgotPasswordResponse;
+        await _dialogService.showCustomDialog(
+          variant: DialogType.basic,
+          data: BasicDialogStatus.error,
+          title: errorTitle,
+          description: forgotPasswordResponse,
+          mainButtonTitle: 'OK',
+        );
       }
     } else {
       _formErrorMessage = 'Please input your email';
@@ -58,8 +82,6 @@ class AuthViewModel extends BaseViewModel {
     }
     //add error catching
   }
-
-  validateForm({required String? formEmail, required String? formPassword}) {}
 
   //Form validation
   String? validateFormEmail(String? formEmail) {

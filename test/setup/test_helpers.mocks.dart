@@ -94,97 +94,63 @@ class MockAuthenticationService extends _i1.Mock
         returnValueForMissingStub: '',
       ) as String);
   @override
-  _i4.Future<bool> signIn(
-    String? email,
-    String? password,
-  ) =>
+  _i4.Future<dynamic> signIn({
+    required String? email,
+    required String? password,
+  }) =>
       (super.noSuchMethod(
         Invocation.method(
           #signIn,
-          [
-            email,
-            password,
-          ],
+          [],
+          {
+            #email: email,
+            #password: password,
+          },
         ),
-        returnValue: _i4.Future<bool>.value(false),
-        returnValueForMissingStub: _i4.Future<bool>.value(false),
-      ) as _i4.Future<bool>);
+        returnValue: _i4.Future<dynamic>.value(),
+        returnValueForMissingStub: _i4.Future<dynamic>.value(),
+      ) as _i4.Future<dynamic>);
   @override
-  _i4.Future<bool> signOut() => (super.noSuchMethod(
+  _i4.Future<dynamic> signOut() => (super.noSuchMethod(
         Invocation.method(
           #signOut,
           [],
         ),
-        returnValue: _i4.Future<bool>.value(false),
-        returnValueForMissingStub: _i4.Future<bool>.value(false),
-      ) as _i4.Future<bool>);
-  @override
-  _i4.Future<dynamic> showSignInError(String? description) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #showSignInError,
-          [description],
-        ),
         returnValue: _i4.Future<dynamic>.value(),
         returnValueForMissingStub: _i4.Future<dynamic>.value(),
       ) as _i4.Future<dynamic>);
   @override
-  _i4.Future<dynamic> showSignUpError(String? description) =>
+  _i4.Future<dynamic> createNewUser({
+    required String? email,
+    required String? password,
+  }) =>
       (super.noSuchMethod(
         Invocation.method(
-          #showSignUpError,
-          [description],
-        ),
-        returnValue: _i4.Future<dynamic>.value(),
-        returnValueForMissingStub: _i4.Future<dynamic>.value(),
-      ) as _i4.Future<dynamic>);
-  @override
-  _i4.Future<dynamic> showSignOutError() => (super.noSuchMethod(
-        Invocation.method(
-          #showSignOutError,
+          #createNewUser,
           [],
+          {
+            #email: email,
+            #password: password,
+          },
         ),
         returnValue: _i4.Future<dynamic>.value(),
         returnValueForMissingStub: _i4.Future<dynamic>.value(),
       ) as _i4.Future<dynamic>);
   @override
-  _i4.Future<dynamic> signUp(
-    String? email,
-    String? password,
-  ) =>
+  _i4.Future<dynamic> forgotPassword({required String? email}) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #signUp,
-          [
-            email,
-            password,
-          ],
-        ),
-        returnValue: _i4.Future<dynamic>.value(),
-        returnValueForMissingStub: _i4.Future<dynamic>.value(),
-      ) as _i4.Future<dynamic>);
-  @override
-  _i4.Future<dynamic> forgotPassword(String? email) => (super.noSuchMethod(
         Invocation.method(
           #forgotPassword,
-          [email],
+          [],
+          {#email: email},
         ),
         returnValue: _i4.Future<dynamic>.value(),
         returnValueForMissingStub: _i4.Future<dynamic>.value(),
       ) as _i4.Future<dynamic>);
   @override
-  _i4.Future<bool> isUserLoggedIn() => (super.noSuchMethod(
+  _i4.Future<dynamic> isUserLoggedIn() => (super.noSuchMethod(
         Invocation.method(
           #isUserLoggedIn,
-          [],
-        ),
-        returnValue: _i4.Future<bool>.value(false),
-        returnValueForMissingStub: _i4.Future<bool>.value(false),
-      ) as _i4.Future<bool>);
-  @override
-  _i4.Future<dynamic> getUserAuthData() => (super.noSuchMethod(
-        Invocation.method(
-          #getUserAuthData,
           [],
         ),
         returnValue: _i4.Future<dynamic>.value(),
@@ -748,9 +714,9 @@ class MockUserService extends _i1.Mock implements _i11.UserService {
         returnValueForMissingStub: null,
       );
   @override
-  _i4.Future<bool> createNewUser(dynamic newUserDetails) => (super.noSuchMethod(
+  _i4.Future<bool> addNewUser(dynamic newUserDetails) => (super.noSuchMethod(
         Invocation.method(
-          #createNewUser,
+          #addNewUser,
           [newUserDetails],
         ),
         returnValue: _i4.Future<bool>.value(false),

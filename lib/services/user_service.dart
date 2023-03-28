@@ -12,7 +12,7 @@ class UserService {
       FirebaseFirestore.instance.collection('galleries');
   String? returnMessage;
 
-  Future<bool> createNewUser(newUserDetails) async {
+  Future<bool> addNewUser(newUserDetails) async {
     try {
       await usersCollection
           .doc(newUserDetails.uid)
