@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,6 @@ import '../../enums/dialog_type.dart';
 import '../../models/gallery.dart';
 import '../../models/this_image.dart';
 import '../../models/this_user.dart';
-import '../../services/auth_service.dart';
 import '../../services/gallery_service.dart';
 import '../../services/image_service.dart';
 import '../../services/user_service.dart';
@@ -70,15 +68,12 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
 
   Future navigateToImageView({required ThisImage image}) async {
     print('navigate to image view');
-    if (image != null) {
-      var i = image.toJson();
-      print('navigate to view of $i');
-      _navigationService.navigateTo(Routes.imageView,
-          arguments: ImageViewArguments(image: image));
-      //navigationService.navigateToImageView(image: image);
-    } else {
-      _navigationService.navigateTo(Routes.galleryView);
-    }
+
+    var i = image.toJson();
+    print('navigate to view of $i');
+    _navigationService.navigateTo(Routes.imageView,
+        arguments: ImageViewArguments(image: image));
+    //navigationService.navigateToImageView(image: image);
   }
 
   Future<bool> askForGalleryData() async {
@@ -309,19 +304,19 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
   }
 
   Future filterFavourites() async {
-    List<ThisImage> _favouriteImages = [];
+    List<ThisImage> favouriteImages = [];
     for (var image in _galleryImagesShown!) {
       if (image.favourite == true) {
-        _favouriteImages.add(image);
+        favouriteImages.add(image);
         _favouriteGalleryImagesShown.add(image);
       }
     }
 
-    if (_galleryImagesShown!.length == _favouriteImages.length) {
+    if (_galleryImagesShown!.length == favouriteImages.length) {
       _galleryImagesShown = _galleryImages!;
       _favouriteGalleryImagesShown = [];
     } else {
-      _galleryImagesShown = _favouriteImages;
+      _galleryImagesShown = favouriteImages;
     }
 
     notifyListeners();

@@ -1,14 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:gallery_app/models/this_user.dart';
 
 import '../app/app.locator.dart';
-import '../models/gallery.dart';
 import 'auth_service.dart';
 
 class UserService {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  //deals with user collection
   final usersCollection = FirebaseFirestore.instance.collection('users');
   final galleriesCollection =
       FirebaseFirestore.instance.collection('galleries');

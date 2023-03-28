@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gallery_app/app/app.locator.dart';
 import 'package:gallery_app/app/app.router.dart';
 import 'package:stacked/stacked.dart';
@@ -18,7 +17,8 @@ class StartupViewModel extends BaseViewModel implements Initialisable {
 
   @override
   void initialise() async {
-    runBusyFuture(getCurrentUser());
+    print('initialize');
+    runBusyFuture(isCurrentUserLoggedIn());
     // This will be called when init state cycle runs
     //this works but so quick that you don't see it, consider adding a delay
   }
@@ -32,8 +32,12 @@ class StartupViewModel extends BaseViewModel implements Initialisable {
     }
   }
 
-  Future getCurrentUser() async {
-    _userLoggedIn = await _authenticationService.isUserLoggedIn();
-    navigate(loggedIn: _userLoggedIn);
+  Future isCurrentUserLoggedIn() async {
+    print('is there a logged in user, set variable');
+    _userLoggedIn = _authenticationService.isUserLoggedIn();
+    Future.delayed(const Duration(seconds: 3), () {
+      print('next run navigation');
+      navigate(loggedIn: _userLoggedIn);
+    });
   }
 }

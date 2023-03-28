@@ -1,11 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:gallery_app/app/colors.dart';
-import 'package:gallery_app/models/this_user.dart';
 import 'package:gallery_app/ui/profile/profile_view_model.dart';
 import 'package:stacked/stacked.dart';
-import 'package:stacked_services/stacked_services.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});

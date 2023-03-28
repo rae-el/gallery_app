@@ -1,24 +1,19 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
-import 'package:gallery_app/models/this_user.dart';
 import 'package:gallery_app/services/user_service.dart';
-import 'package:stacked_services/stacked_services.dart';
 
 import '../app/app.locator.dart';
-import '../app/messages.dart';
-import '../enums/basic_dialog_status.dart';
-import '../enums/dialog_type.dart';
 
 class AuthenticationService {
+  //deals with firebase auth
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final db = FirebaseFirestore.instance;
-  final usersCollection = FirebaseFirestore.instance.collection('users');
+
+  final userService = locator<UserService>();
 
   String _returnMessage = '';
   String get returnMessage => _returnMessage;
 
-  final userService = locator<UserService>();
+  User? _user;
+  User? get user => _user;
 
   Future signIn({required String email, required String password}) async {
     try {
@@ -68,9 +63,7 @@ class AuthenticationService {
         email: email,
         password: password,
       );
-      if (newUser != null) {
-        await userService.addNewUser(newUser);
-      }
+      await userService.addNewUser(newUser);
     } on FirebaseException catch (e) {
       switch (e.code) {
         case 'weak-password':
@@ -111,47 +104,48 @@ class AuthenticationService {
     }
   }
 
-  Future<bool> isUserLoggedIn() async {
-    try {
-      User? user = _firebaseAuth.currentUser;
-      if (user != null) {
-        return true;
-      } else {
-        _returnMessage = 'No user';
-        print('null user');
-        return false;
-      }
-    } on FirebaseException catch (e) {
-      print(e); // change this to a message
-      //_returnMessage = e.toString();
+  bool isUserLoggedIn() {
+    _user = currentUser();
+    if (user == null) {
+      _returnMessage = 'No user';
+      print('null user');
       return false;
+    } else {
+      return true;
     }
   }
 
   User? currentUser() {
     print('getting current user');
     //add error handeling
-    var user = _firebaseAuth.currentUser;
-    return user;
+    try {
+      _user = _firebaseAuth.currentUser;
+      return _user;
+    } catch (e) {
+      print(e); // change this to a message
+      //_returnMessage = e.toString();
+      return null;
+    }
   }
 
   Future changePassword({required String newPassword}) async {
     try {
-      var user = _firebaseAuth.currentUser;
-      await user?.updatePassword(newPassword).then((value) {
+      _user = currentUser();
+      await _user?.updatePassword(newPassword).then((value) {
         print('successful password update');
         return;
       }).catchError((e) {
+        print(e);
         switch (e) {
           case 'weak-password':
             _returnMessage = 'The password provided is too weak.';
-            return _returnMessage;
+            break;
           case 'requires-recent-login':
             _returnMessage = 'Please sign out before trying again';
-            return _returnMessage;
+            break;
           default:
             _returnMessage = 'Problem changing your password, please try again';
-            return _returnMessage;
+            break;
         }
       });
     } catch (e) {

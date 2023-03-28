@@ -142,14 +142,14 @@ class MockAuthenticationService extends _i1.Mock
         returnValueForMissingStub: _i4.Future<dynamic>.value(),
       ) as _i4.Future<dynamic>);
   @override
-  _i4.Future<bool> isUserLoggedIn() => (super.noSuchMethod(
+  bool isUserLoggedIn() => (super.noSuchMethod(
         Invocation.method(
           #isUserLoggedIn,
           [],
         ),
-        returnValue: _i4.Future<bool>.value(false),
-        returnValueForMissingStub: _i4.Future<bool>.value(false),
-      ) as _i4.Future<bool>);
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
   @override
   _i4.Future<dynamic> changePassword({required String? newPassword}) =>
       (super.noSuchMethod(
