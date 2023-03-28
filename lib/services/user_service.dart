@@ -3,13 +3,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:gallery_app/models/this_user.dart';
 
+import '../app/app.locator.dart';
 import '../models/gallery.dart';
+import 'auth_service.dart';
 
 class UserService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final usersCollection = FirebaseFirestore.instance.collection('users');
   final galleriesCollection =
       FirebaseFirestore.instance.collection('galleries');
+  final authService = locator<AuthenticationService>();
   String? returnMessage;
 
   Future<bool> addNewUser(newUserDetails) async {
@@ -32,18 +35,9 @@ class UserService {
     }
   }
 
-  String? currentUser() {
-    print('getting current user');
-    //add error handeling
-    var user = _firebaseAuth.currentUser;
-    var uid = user?.uid;
-    print('current user id: $uid');
-    return uid;
-  }
-
   Future<ThisUser?> getUserData() async {
     try {
-      var userID = currentUser() as String;
+      var userID = authService.currentUser() as String;
 
       QuerySnapshot querySnapshot = await usersCollection.get();
       print(querySnapshot);

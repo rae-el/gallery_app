@@ -111,20 +111,28 @@ class AuthenticationService {
     }
   }
 
-  Future isUserLoggedIn() async {
+  Future<bool> isUserLoggedIn() async {
     try {
       User? user = _firebaseAuth.currentUser;
       if (user != null) {
-        return user;
+        return true;
       } else {
         _returnMessage = 'No user';
-        return _returnMessage;
+        print('null user');
+        return false;
       }
     } on FirebaseException catch (e) {
       print(e); // change this to a message
-      _returnMessage = e.toString();
-      return _returnMessage;
+      //_returnMessage = e.toString();
+      return false;
     }
+  }
+
+  User? currentUser() {
+    print('getting current user');
+    //add error handeling
+    var user = _firebaseAuth.currentUser;
+    return user;
   }
 
   Future changePassword({required String newPassword}) async {
