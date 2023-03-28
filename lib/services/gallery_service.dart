@@ -23,7 +23,7 @@ class GalleryService {
     try {
       List<Gallery> galleries = [];
       //should this current user be more of a state or global variable
-      _userID = userService.currentUser() as String;
+      _userID = userService.currentUserId();
       print('Getting user $_userID gallery');
       try {
         var querySnapshot = await galleriesCollection
