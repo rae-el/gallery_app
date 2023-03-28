@@ -46,9 +46,6 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
   List<String> _galleryImagePaths = [];
   List<String> get galleryImagePaths => _galleryImagePaths;
 
-  List<ThisImage> _preferredOrder = [];
-  List<ThisImage> get preferredOrder => _preferredOrder;
-
   String? id;
 
   bool draggableReordering = false;
@@ -75,12 +72,12 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
   }
 
   Future getGallery() async {
-    await setUserName();
     _userGallery = await _galleryService.getUserGallery();
     if (_userGallery != null) {
       _galleryId = _userGallery!.id ?? "";
       if (_galleryId != "") {
         getGalleryImages(galleryID: _galleryId);
+        await setUserName();
       }
     }
   }
@@ -106,14 +103,11 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
       print('gallery images empty');
       return true;
     } else {
-      _galleryImages = getGalleryImages;
       print('adding gallery image paths to list');
-      //reset to empty list
-      _galleryImagesShown = [];
       //only add if path exists
-      for (var galleryImage in _galleryImages) {
+      for (var galleryImage in getGalleryImages) {
+        _galleryImages.add(galleryImage);
         _galleryImagePaths.add(galleryImage.path);
-
         _galleryImagesShown.add(galleryImage);
       }
 
@@ -214,10 +208,14 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
           favourite: false,
           date: Timestamp.now(),
           preferredIndex: 0);
-      bool addedImage =
+      var addedImage =
           await _galleryService.addImageToGallery(image, _galleryId);
-      if (addedImage) {
-        if (_galleryImages.isEmpty) {
+      if (addedImage == false) {
+        showAddingImageError();
+        return false;
+      } else {
+        image.id = addedImage as String;
+        if (_galleryImagesShown.isEmpty) {
           getGalleryImages(galleryID: _galleryId);
         } else {
           _galleryImagesShown.insert(0, image);
@@ -225,9 +223,6 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
         }
 
         return true;
-      } else {
-        showAddingImageError();
-        return false;
       }
     } catch (e) {
       print(e);

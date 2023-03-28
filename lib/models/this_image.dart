@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ThisImage {
-  final String? id;
+  String? id;
   final String path;
   bool favourite;
   final Timestamp date;
@@ -17,7 +17,6 @@ class ThisImage {
 
   toJson() {
     return {
-      "id": id,
       "path": path,
       "favourite": favourite,
       "date": date,

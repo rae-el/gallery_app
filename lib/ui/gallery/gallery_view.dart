@@ -60,7 +60,7 @@ class HomePage extends StatelessWidget {
       //this is where I put the view structure
       viewModelBuilder: () => GalleryViewModel(),
       //line below triggers a double initialistion
-      onModelReady: (viewModel) => viewModel.initialise(),
+      //onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, model, child) => model.isBusy
           ? Center(
               child: SizedBox(
@@ -78,7 +78,7 @@ class HomePage extends StatelessWidget {
                 //fill space of entire screen
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
-                child: model.galleryImages.isEmpty
+                child: model.galleryImagesShown.isEmpty
                     ? const Center(
                         child: Text('Start by adding some images!'),
                       )

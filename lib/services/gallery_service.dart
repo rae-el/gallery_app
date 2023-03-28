@@ -137,19 +137,23 @@ class GalleryService {
     }
   }
 
-  Future<bool> addImageToGallery(ThisImage image, String galleryID) async {
+  Future addImageToGallery(ThisImage image, String galleryID) async {
     //validate path
     if (await File(image.path).exists()) {
       //convert image to json
       var jsonImg = image.toJson();
       print('try adding image $jsonImg to gallery');
+      var addedImage = await galleriesCollection
+          .doc(galleryID)
+          .collection('images')
+          .add(jsonImg);
       await galleriesCollection
           .doc(galleryID)
           .collection('images')
-          .add(jsonImg)
-          .then((value) =>
-              print('added document reference to images collection $value'));
-      return true;
+          .doc(addedImage.id)
+          .update({'id': addedImage.id});
+
+      return addedImage.id;
     } else {
       print('path invalid could not add image');
       return false;
