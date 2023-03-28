@@ -78,7 +78,7 @@ class HomePage extends StatelessWidget {
                 //fill space of entire screen
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
-                child: model.galleryImages == null
+                child: model.galleryImages.isEmpty
                     ? const Center(
                         child: Text('Start by adding some images!'),
                       )
@@ -89,8 +89,8 @@ class HomePage extends StatelessWidget {
                         runSpacing: 3,
                         enableReorder: model.draggableReordering,
                         padding: const EdgeInsets.all(1),
-                        children: List.generate(
-                            model.galleryImagesShown!.length, (index) {
+                        children: List.generate(model.galleryImagesShown.length,
+                            (index) {
                           //_items = model.galleryImages!;
                           return SizedBox(
                             width: 135,
@@ -98,30 +98,30 @@ class HomePage extends StatelessWidget {
                             child: GestureDetector(
                               key: Key('$index'),
                               onTap: () {
-                                print(model.galleryImagesShown![index].path);
+                                print(model.galleryImagesShown[index].path);
                                 model.navigateToImageView(
-                                  image: model.galleryImagesShown![index],
+                                  image: model.galleryImagesShown[index],
                                 );
                               },
                               onDoubleTap: () {
                                 print('doubled tapped');
                                 model.toggleFavourite(
-                                    image: model.galleryImagesShown![index]);
+                                    image: model.galleryImagesShown[index]);
                               },
                               //add double tap favourite function
                               child: Hero(
-                                tag: model.galleryImagesShown![index],
+                                tag: model.galleryImagesShown[index],
                                 child: Stack(
                                   fit: StackFit.passthrough,
                                   children: [
                                     Image.file(
-                                      File(model
-                                          .galleryImagesShown![index].path),
+                                      File(
+                                          model.galleryImagesShown[index].path),
                                       width: 100,
                                       height: 100,
                                       fit: BoxFit.cover,
                                     ),
-                                    model.galleryImagesShown![index].favourite
+                                    model.galleryImagesShown[index].favourite
                                         ? const PositionedDirectional(
                                             end: 0,
                                             bottom: 0,
@@ -195,7 +195,7 @@ class HomePage extends StatelessWidget {
                       onPressed: () async {
                         await model.filterFavourites();
                       },
-                      icon: model.galleryImagesShown!.length ==
+                      icon: model.galleryImagesShown.length ==
                               model.favouriteGalleryImagesShown.length
                           ? const Icon(Icons.favorite_border)
                           : const Icon(Icons.favorite),

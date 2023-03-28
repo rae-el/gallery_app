@@ -8,6 +8,8 @@ class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final db = FirebaseFirestore.instance;
   final usersCollection = FirebaseFirestore.instance.collection('users');
+  final galleriesCollection =
+      FirebaseFirestore.instance.collection('galleries');
 
   final userService = locator<UserService>();
 
@@ -61,11 +63,14 @@ class AuthenticationService {
       {required String email, required String password}) async {
     try {
       //create user
+      print('create new user');
       var newUser = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      await userService.addNewUser(newUser);
+      print('created $newUser');
+      signIn(email: email, password: password);
+      await addNewUser();
     } on FirebaseException catch (e) {
       switch (e.code) {
         case 'weak-password':
@@ -81,6 +86,35 @@ class AuthenticationService {
           _returnMessage = 'Could not create new user';
           return _returnMessage;
       }
+    }
+  }
+
+  Future addNewUser() async {
+    var newUserDetails = currentUser();
+    if (newUserDetails != null) {
+      print('add new user to collection');
+      try {
+        await usersCollection
+            .doc(newUserDetails.uid)
+            .set({'id': newUserDetails.uid, 'email': newUserDetails.email});
+        print('Successfully added new user');
+        createGalleryForNewUser(uid: newUserDetails.uid);
+      } catch (e) {
+        print(e);
+      }
+      _returnMessage = 'Unable to add new user';
+      return false;
+    }
+  }
+
+  Future createGalleryForNewUser({required String uid}) async {
+    try {
+      await galleriesCollection.add({'user_id': uid});
+      print('successfully added new gallery');
+    } catch (e) {
+      print(e);
+      _returnMessage = 'Unable to add new user';
+      return false;
     }
   }
 
@@ -128,7 +162,6 @@ class AuthenticationService {
       return false;
     }
   }
-
 
   Future changePassword({required String newPassword}) async {
     try {

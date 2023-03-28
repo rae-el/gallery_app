@@ -82,7 +82,7 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
   }
 
   Future signOut() async {
-    if (await _authService.signOut()) {
+    if (await _authService.signOut() == null) {
       _navigationService.navigateTo(Routes.authView);
     } else {
       _navigationService.navigateTo(Routes.galleryView);

@@ -33,11 +33,11 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
   String _username = "";
   String get username => _username;
 
-  List<ThisImage>? _galleryImages;
-  List<ThisImage>? get galleryImages => _galleryImages;
+  List<ThisImage> _galleryImages = [];
+  List<ThisImage> get galleryImages => _galleryImages;
 
-  List<ThisImage>? _galleryImagesShown;
-  List<ThisImage>? get galleryImagesShown => _galleryImagesShown;
+  List<ThisImage> _galleryImagesShown = [];
+  List<ThisImage> get galleryImagesShown => _galleryImagesShown;
 
   List<ThisImage> _favouriteGalleryImagesShown = [];
   List<ThisImage> get favouriteGalleryImagesShown =>
@@ -46,8 +46,8 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
   List<String> _galleryImagePaths = [];
   List<String> get galleryImagePaths => _galleryImagePaths;
 
-  List<ThisImage>? _preferredOrder;
-  List<ThisImage>? get preferredOrder => _preferredOrder;
+  List<ThisImage> _preferredOrder = [];
+  List<ThisImage> get preferredOrder => _preferredOrder;
 
   String? id;
 
@@ -89,22 +89,24 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
         _galleryId = _userGallery!.id ?? "";
         print('gallery id: $_galleryId');
 
-        _galleryImages = null;
-        _galleryImagesShown = null;
+        _galleryImages = [];
+        _galleryImagesShown = [];
         _galleryImagePaths = [];
-        _galleryImages = await _galleryService.getGalleryImages(_galleryId);
-        if (_galleryImages == null || _galleryImages!.isEmpty) {
+        var getGalleryImages =
+            await _galleryService.getGalleryImages(_galleryId);
+        if (getGalleryImages == null) {
           print('gallery images empty');
           return true;
         } else {
+          _galleryImages = getGalleryImages;
           print('adding gallery image paths to list');
           //reset to empty list
           _galleryImagesShown = [];
           //only add if path exists
-          for (var galleryImage in _galleryImages!) {
+          for (var galleryImage in _galleryImages) {
             _galleryImagePaths.add(galleryImage.path);
 
-            _galleryImagesShown!.add(galleryImage);
+            _galleryImagesShown.add(galleryImage);
           }
 
           return true;
@@ -215,10 +217,10 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
       bool addedImage =
           await _galleryService.addImageToGallery(image, _galleryId);
       if (addedImage) {
-        if (_galleryImages == null || _galleryImages!.isEmpty) {
+        if (_galleryImages == null || _galleryImages.isEmpty) {
           askForGalleryData();
         } else {
-          _galleryImagesShown!.insert(0, image);
+          _galleryImagesShown.insert(0, image);
           notifyListeners();
         }
 
@@ -237,13 +239,13 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
   onReorder({required int oldIndex, required int newIndex}) {
     int index = 0;
 
-    final ThisImage item = _galleryImagesShown!.removeAt(oldIndex);
-    _galleryImagesShown!.insert(newIndex, item);
+    final ThisImage item = _galleryImagesShown.removeAt(oldIndex);
+    _galleryImagesShown.insert(newIndex, item);
 
     notifyListeners();
 
-    if (_galleryImagesShown!.length > 1) {
-      for (var image in _galleryImagesShown!) {
+    if (_galleryImagesShown.length > 1) {
+      for (var image in _galleryImagesShown) {
         image.preferredIndex = index;
         index++;
       }
@@ -253,16 +255,16 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
   Future reorderAcendingDecending() async {
     int index = 0;
     if (!decendingOrder) {
-      _galleryImagesShown!.sort((a, b) => b.date.compareTo(a.date));
+      _galleryImagesShown.sort((a, b) => b.date.compareTo(a.date));
     } else {
-      _galleryImagesShown!.sort((a, b) => a.date.compareTo(b.date));
+      _galleryImagesShown.sort((a, b) => a.date.compareTo(b.date));
     }
 
     decendingOrder = !decendingOrder;
 
     notifyListeners();
-    if (_galleryImagesShown!.length > 1) {
-      for (var image in _galleryImagesShown!) {
+    if (_galleryImagesShown.length > 1) {
+      for (var image in _galleryImagesShown) {
         image.preferredIndex = index;
         index++;
       }
@@ -271,11 +273,11 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
 
   Future reorderAcending() async {
     int index = 0;
-    _galleryImagesShown!.sort((a, b) => a.date.compareTo(b.date));
+    _galleryImagesShown.sort((a, b) => a.date.compareTo(b.date));
 
     notifyListeners();
-    if (_galleryImagesShown!.length > 1) {
-      for (var image in _galleryImagesShown!) {
+    if (_galleryImagesShown.length > 1) {
+      for (var image in _galleryImagesShown) {
         image.preferredIndex = index;
         index++;
       }
@@ -284,11 +286,11 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
 
   Future reorderDecending() async {
     int index = 0;
-    _galleryImagesShown!.sort((a, b) => b.date.compareTo(a.date));
+    _galleryImagesShown.sort((a, b) => b.date.compareTo(a.date));
 
     notifyListeners();
-    if (_galleryImagesShown!.length > 1) {
-      for (var image in _galleryImagesShown!) {
+    if (_galleryImagesShown.length > 1) {
+      for (var image in _galleryImagesShown) {
         image.preferredIndex = index;
         index++;
       }
@@ -297,15 +299,15 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
 
   Future filterFavourites() async {
     List<ThisImage> favouriteImages = [];
-    for (var image in _galleryImagesShown!) {
+    for (var image in _galleryImagesShown) {
       if (image.favourite == true) {
         favouriteImages.add(image);
         _favouriteGalleryImagesShown.add(image);
       }
     }
 
-    if (_galleryImagesShown!.length == favouriteImages.length) {
-      _galleryImagesShown = _galleryImages!;
+    if (_galleryImagesShown.length == favouriteImages.length) {
+      _galleryImagesShown = _galleryImages;
       _favouriteGalleryImagesShown = [];
     } else {
       _galleryImagesShown = favouriteImages;
@@ -316,9 +318,9 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
   }
 
   Future saveOrder() async {
-    if (_galleryImages!.length == _galleryImagesShown!.length) {
+    if (_galleryImages.length == _galleryImagesShown.length) {
       var reorderResult =
-          await _galleryService.reorderGallery(_galleryImagesShown!);
+          await _galleryService.reorderGallery(_galleryImagesShown);
       if (reorderResult) {
         await _dialogService.showCustomDialog(
           variant: DialogType.basic,
@@ -343,7 +345,7 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
   Future toggleFavourite({required ThisImage image}) async {
     id = image.id;
     print('toggle fave');
-    for (var imageShown in _galleryImagesShown!) {
+    for (var imageShown in _galleryImagesShown) {
       if (imageShown.id == image.id) {
         imageShown.favourite = !imageShown.favourite;
       }

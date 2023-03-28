@@ -52,14 +52,17 @@ class UserService {
   Future<ThisUser?> getUserData() async {
     try {
       var userID = currentUserId();
+      if (userID.length > 1) {
+        QuerySnapshot querySnapshot = await usersCollection.get();
+        print(querySnapshot);
 
-      QuerySnapshot querySnapshot = await usersCollection.get();
-      print(querySnapshot);
-
-      var userQuerySnapshot = await usersCollection.doc(userID).get();
-      var userDocument = ThisUser.fromSnapshot(userQuerySnapshot);
-      print('user document $userDocument');
-      return userDocument;
+        var userQuerySnapshot = await usersCollection.doc(userID).get();
+        var userDocument = ThisUser.fromSnapshot(userQuerySnapshot);
+        print('user document $userDocument');
+        return userDocument;
+      } else {
+        return null;
+      }
     } catch (e) {
       print(e);
       return null;
