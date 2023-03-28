@@ -26,7 +26,7 @@ class AuthViewModel extends BaseViewModel {
     var signInResponse =
         await _authenticationService.signIn(email: email, password: password);
     if (signInResponse == null) {
-      _navigationService.navigateTo(Routes.galleryView);
+      _navigationService.replaceWith(Routes.galleryView);
     } else {
       await _dialogService.showCustomDialog(
         variant: DialogType.basic,

@@ -16,6 +16,7 @@ import 'test_helpers.mocks.dart';
   MockSpec<GalleryService>(),
   MockSpec<ImageService>(),
   MockSpec<UserService>(),
+  MockSpec<DialogService>(),
 ])
 void _removeRegistrationIfExists<T extends Object>() {
   if (locator.isRegistered<T>()) {
@@ -29,6 +30,7 @@ void registerServices() {
   getAndRegisterGalleryService();
   getAndRegisterImageService();
   getAndRegisterUserService();
+  getAndRegisterDialogService();
 }
 
 void unregisterServices() {
@@ -37,6 +39,7 @@ void unregisterServices() {
   locator.unregister<GalleryService>();
   locator.unregister<ImageService>();
   locator.unregister<UserService>();
+  locator.unregister<DialogService>();
 }
 
 MockAuthenticationService getAndRegisterAuthenticationService() {
@@ -71,5 +74,12 @@ MockUserService getAndRegisterUserService() {
   _removeRegistrationIfExists<UserService>();
   final service = MockUserService();
   locator.registerSingleton<UserService>(service);
+  return service;
+}
+
+MockDialogService getAndRegisterDialogService() {
+  _removeRegistrationIfExists<DialogService>();
+  final service = MockDialogService();
+  locator.registerSingleton<DialogService>(service);
   return service;
 }
