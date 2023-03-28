@@ -5,7 +5,7 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/foundation.dart' as _i8;
+import 'package:flutter/material.dart' as _i8;
 import 'package:flutter/material.dart';
 import 'package:gallery_app/models/this_image.dart' as _i9;
 import 'package:gallery_app/ui/auth/auth_view.dart' as _i4;

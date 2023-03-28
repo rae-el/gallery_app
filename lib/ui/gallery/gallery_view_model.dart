@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,7 +14,6 @@ import '../../enums/dialog_type.dart';
 import '../../models/gallery.dart';
 import '../../models/this_image.dart';
 import '../../models/this_user.dart';
-import '../../services/auth_service.dart';
 import '../../services/gallery_service.dart';
 import '../../services/image_service.dart';
 import '../../services/user_service.dart';
@@ -70,15 +67,11 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
 
   Future navigateToImageView({required ThisImage image}) async {
     print('navigate to image view');
-    if (image != null) {
-      var i = image.toJson();
-      print('navigate to view of $i');
-      _navigationService.navigateTo(Routes.imageView,
-          arguments: ImageViewArguments(image: image));
-      //navigationService.navigateToImageView(image: image);
-    } else {
-      _navigationService.navigateTo(Routes.galleryView);
-    }
+    var i = image.toJson();
+    print('navigate to view of $i');
+    _navigationService.navigateTo(Routes.imageView,
+        arguments: ImageViewArguments(image: image));
+    //navigationService.navigateToImageView(image: image);
   }
 
   Future<bool> askForGalleryData() async {
@@ -96,31 +89,25 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
         _galleryId = _userGallery!.id ?? "";
         print('gallery id: $_galleryId');
 
-        if (_galleryId != null) {
-          _galleryImages = null;
-          _galleryImagesShown = null;
-          _galleryImagePaths = [];
-          _galleryImages = await _galleryService.getGalleryImages(_galleryId);
-          if (_galleryImages == null || _galleryImages!.isEmpty) {
-            print('gallery images empty');
-            return true;
-          } else {
-            print('adding gallery image paths to list');
-            //reset to empty list
-            _galleryImagesShown = [];
-            //only add if path exists
-            for (var galleryImage in _galleryImages!) {
-              _galleryImagePaths.add(galleryImage.path);
-
-              _galleryImagesShown!.add(galleryImage);
-            }
-
-            return true;
-          }
+        _galleryImages = null;
+        _galleryImagesShown = null;
+        _galleryImagePaths = [];
+        _galleryImages = await _galleryService.getGalleryImages(_galleryId);
+        if (_galleryImages == null || _galleryImages!.isEmpty) {
+          print('gallery images empty');
+          return true;
         } else {
-          print('gallery id nul');
-          _navigationService.clearStackAndShow(Routes.authView);
-          return false;
+          print('adding gallery image paths to list');
+          //reset to empty list
+          _galleryImagesShown = [];
+          //only add if path exists
+          for (var galleryImage in _galleryImages!) {
+            _galleryImagePaths.add(galleryImage.path);
+
+            _galleryImagesShown!.add(galleryImage);
+          }
+
+          return true;
         }
       } else {
         _navigationService.clearStackAndShow(Routes.authView);
@@ -224,7 +211,7 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
           path: path,
           favourite: false,
           date: Timestamp.now(),
-          preferred_index: 0);
+          preferredIndex: 0);
       bool addedImage =
           await _galleryService.addImageToGallery(image, _galleryId);
       if (addedImage) {
@@ -257,7 +244,7 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
 
     if (_galleryImagesShown!.length > 1) {
       for (var image in _galleryImagesShown!) {
-        image.preferred_index = index;
+        image.preferredIndex = index;
         index++;
       }
     }
@@ -276,7 +263,7 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
     notifyListeners();
     if (_galleryImagesShown!.length > 1) {
       for (var image in _galleryImagesShown!) {
-        image.preferred_index = index;
+        image.preferredIndex = index;
         index++;
       }
     }
@@ -289,7 +276,7 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
     notifyListeners();
     if (_galleryImagesShown!.length > 1) {
       for (var image in _galleryImagesShown!) {
-        image.preferred_index = index;
+        image.preferredIndex = index;
         index++;
       }
     }
@@ -302,26 +289,26 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
     notifyListeners();
     if (_galleryImagesShown!.length > 1) {
       for (var image in _galleryImagesShown!) {
-        image.preferred_index = index;
+        image.preferredIndex = index;
         index++;
       }
     }
   }
 
   Future filterFavourites() async {
-    List<ThisImage> _favouriteImages = [];
+    List<ThisImage> favouriteImages = [];
     for (var image in _galleryImagesShown!) {
       if (image.favourite == true) {
-        _favouriteImages.add(image);
+        favouriteImages.add(image);
         _favouriteGalleryImagesShown.add(image);
       }
     }
 
-    if (_galleryImagesShown!.length == _favouriteImages.length) {
+    if (_galleryImagesShown!.length == favouriteImages.length) {
       _galleryImagesShown = _galleryImages!;
       _favouriteGalleryImagesShown = [];
     } else {
-      _galleryImagesShown = _favouriteImages;
+      _galleryImagesShown = favouriteImages;
     }
 
     notifyListeners();

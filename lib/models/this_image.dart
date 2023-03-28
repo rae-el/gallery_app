@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ThisImage {
@@ -7,14 +5,14 @@ class ThisImage {
   final String path;
   bool favourite;
   final Timestamp date;
-  int? preferred_index;
+  int? preferredIndex;
 
   ThisImage({
     this.id,
     required this.path,
     required this.favourite,
     required this.date,
-    required this.preferred_index,
+    required this.preferredIndex,
   });
 
   toJson() {
@@ -23,7 +21,7 @@ class ThisImage {
       "path": path,
       "favourite": favourite,
       "date": date,
-      "preferred_index": preferred_index,
+      "preferred_index": preferredIndex,
     };
   }
 
@@ -31,7 +29,7 @@ class ThisImage {
         path: json['path'],
         favourite: json['favourite'],
         date: json['date'],
-        preferred_index: json['preferred_index'],
+        preferredIndex: json['preferred_index'],
       );
 
   factory ThisImage.fromSnapshot(
@@ -43,7 +41,7 @@ class ThisImage {
       path: data["path"],
       favourite: data["favourite"],
       date: data["date"],
-      preferred_index: data["preferred_index"],
+      preferredIndex: data["preferred_index"],
     );
   }
 }

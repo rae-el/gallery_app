@@ -31,7 +31,7 @@ void registerServices() {
   getAndRegisterUserService();
 }
 
-void unregisterService() {
+void unregisterServices() {
   locator.unregister<AuthenticationService>();
   locator.unregister<NavigationService>();
   locator.unregister<GalleryService>();

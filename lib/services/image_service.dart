@@ -1,22 +1,13 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:gallery_app/models/gallery.dart';
 import 'package:gallery_app/models/this_image.dart';
 import 'package:gallery_app/services/gallery_service.dart';
-import 'package:gallery_app/services/user_service.dart';
-import 'package:stacked_services/stacked_services.dart';
 
 import '../app/app.locator.dart';
-import '../app/messages.dart';
-import '../enums/basic_dialog_status.dart';
-import '../enums/dialog_type.dart';
 
 class ImageService {
   final galleriesCollection =
       FirebaseFirestore.instance.collection('galleries');
   final galleryService = locator<GalleryService>();
-  final _dialogService = locator<DialogService>();
 
   String returnMessage = '';
 
@@ -42,7 +33,7 @@ class ImageService {
     if (imageId != null) {
       String? currentGallery = await galleryService.getGalleryID();
       if (currentGallery != null) {
-        var imagesQuerySnapshot = await galleriesCollection
+        await galleriesCollection
             .doc(currentGallery)
             .collection("images")
             .doc(imageId)

@@ -1,4 +1,3 @@
-import 'package:gallery_app/ui/change_pw/change_pw_view.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -47,7 +46,7 @@ class ChangePwViewModel extends BaseViewModel {
     required String newPassword,
   }) async {
     print('password change request');
-    if (newPassword == null || newPassword.isEmpty) {
+    if (newPassword.isEmpty) {
       updateFormErrorMessage('Whoops! A password is required');
       return;
     }
@@ -64,7 +63,7 @@ class ChangePwViewModel extends BaseViewModel {
         var changePwResponse = await _authenticationService.changePassword(
             newPassword: newPassword);
         switch (changePwResponse) {
-          case '':
+          case true:
             _navigationService.back();
             final dialogResult = await _dialogService.showCustomDialog(
               variant: DialogType.basic,
@@ -74,17 +73,8 @@ class ChangePwViewModel extends BaseViewModel {
               mainButtonTitle: 'OK',
             );
             return dialogResult;
-          case 'ERROR':
-            final dialogResult = await _dialogService.showCustomDialog(
-              variant: DialogType.basic,
-              data: BasicDialogStatus.error,
-              title: errorTitle,
-              description: 'Could not change password',
-              mainButtonTitle: 'OK',
-            );
-            return dialogResult;
           default:
-            _formErrorMessage = changePwResponse;
+            _formErrorMessage = _authenticationService.returnMessage;
             return;
         }
       } catch (e) {

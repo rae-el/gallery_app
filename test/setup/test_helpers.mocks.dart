@@ -88,12 +88,6 @@ class MockAuthenticationService extends _i1.Mock
         returnValueForMissingStub: '',
       ) as String);
   @override
-  String get errorMessage => (super.noSuchMethod(
-        Invocation.getter(#errorMessage),
-        returnValue: '',
-        returnValueForMissingStub: '',
-      ) as String);
-  @override
   _i4.Future<dynamic> signIn({
     required String? email,
     required String? password,
@@ -148,14 +142,14 @@ class MockAuthenticationService extends _i1.Mock
         returnValueForMissingStub: _i4.Future<dynamic>.value(),
       ) as _i4.Future<dynamic>);
   @override
-  _i4.Future<dynamic> isUserLoggedIn() => (super.noSuchMethod(
+  _i4.Future<bool> isUserLoggedIn() => (super.noSuchMethod(
         Invocation.method(
           #isUserLoggedIn,
           [],
         ),
-        returnValue: _i4.Future<dynamic>.value(),
-        returnValueForMissingStub: _i4.Future<dynamic>.value(),
-      ) as _i4.Future<dynamic>);
+        returnValue: _i4.Future<bool>.value(false),
+        returnValueForMissingStub: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
   @override
   _i4.Future<dynamic> changePassword({required String? newPassword}) =>
       (super.noSuchMethod(
@@ -714,6 +708,12 @@ class MockUserService extends _i1.Mock implements _i11.UserService {
         returnValueForMissingStub: null,
       );
   @override
+  String get uid => (super.noSuchMethod(
+        Invocation.getter(#uid),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String);
+  @override
   _i4.Future<bool> addNewUser(dynamic newUserDetails) => (super.noSuchMethod(
         Invocation.method(
           #addNewUser,
@@ -722,6 +722,15 @@ class MockUserService extends _i1.Mock implements _i11.UserService {
         returnValue: _i4.Future<bool>.value(false),
         returnValueForMissingStub: _i4.Future<bool>.value(false),
       ) as _i4.Future<bool>);
+  @override
+  String currentUserId() => (super.noSuchMethod(
+        Invocation.method(
+          #currentUserId,
+          [],
+        ),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String);
   @override
   _i4.Future<_i12.ThisUser?> getUserData() => (super.noSuchMethod(
         Invocation.method(

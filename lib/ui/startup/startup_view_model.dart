@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gallery_app/app/app.locator.dart';
 import 'package:gallery_app/app/app.router.dart';
 import 'package:stacked/stacked.dart';
@@ -26,9 +25,9 @@ class StartupViewModel extends BaseViewModel implements Initialisable {
 
   Future navigate({required bool loggedIn}) async {
     if (loggedIn) {
-      _navigationService.navigateTo(Routes.galleryView);
+      _navigationService.replaceWith(Routes.galleryView);
     } else {
-      _navigationService.navigateTo(Routes.authView);
+      _navigationService.replaceWith(Routes.authView);
     }
   }
 

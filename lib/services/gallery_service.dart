@@ -91,31 +91,25 @@ class GalleryService {
   Future<List<ThisImage>?> getGalleryImages(String galleryId) async {
     List<ThisImage> galleryImages = [];
     try {
-      if (galleryId != null) {
-        var imagesQuerySnapshot = await galleriesCollection
-            .doc(galleryId)
-            .collection('images')
-            .orderBy('preferred_index')
-            .get();
-        //convert images query snapshot to a list of images?
-        for (var docSnapshot in imagesQuerySnapshot.docs) {
-          ThisImage imageDocSnapshot = ThisImage.fromSnapshot(docSnapshot);
-          String path = imageDocSnapshot.path;
-          //print(imageDocSnapshot.id);
-          //why is this all the sudden throwing exception and not handleing it
-          if (await File(path).exists()) {
-            galleryImages.add(imageDocSnapshot);
-          } else {
-            print('did not add $imageDocSnapshot');
-          }
+      var imagesQuerySnapshot = await galleriesCollection
+          .doc(galleryId)
+          .collection('images')
+          .orderBy('preferred_index')
+          .get();
+      //convert images query snapshot to a list of images?
+      for (var docSnapshot in imagesQuerySnapshot.docs) {
+        ThisImage imageDocSnapshot = ThisImage.fromSnapshot(docSnapshot);
+        String path = imageDocSnapshot.path;
+        //print(imageDocSnapshot.id);
+        //why is this all the sudden throwing exception and not handleing it
+        if (await File(path).exists()) {
+          galleryImages.add(imageDocSnapshot);
+        } else {
+          print('did not add $imageDocSnapshot');
         }
-        //validate gallery Images
-        return galleryImages;
-      } else {
-        print('gallery id null');
-        //do some error handeling
-        return null;
       }
+      //validate gallery Images
+      return galleryImages;
     } catch (e) {
       print(e); // change this to a message
       returnMessage = e.toString();
@@ -130,14 +124,10 @@ class GalleryService {
     try {
       var docRef = await galleriesCollection.add({'user_id': userID});
       print('create new gallery');
-      if (docRef != null) {
-        var docSnap = await galleriesCollection.doc(docRef.id).get();
-        var newGallery = Gallery.fromSnapshot(docSnap);
-        print('add new gallery to list');
-        return newGallery;
-      }
-      print('doc ref null');
-      return null;
+      var docSnap = await galleriesCollection.doc(docRef.id).get();
+      var newGallery = Gallery.fromSnapshot(docSnap);
+      print('add new gallery to list');
+      return newGallery;
     } catch (e) {
       print(e);
       print('failed to create new gallery');
@@ -151,19 +141,13 @@ class GalleryService {
       //convert image to json
       var jsonImg = image.toJson();
       print('try adding image $jsonImg to gallery');
-      if (galleryID != null) {
-        //gallery exisits
-        await galleriesCollection
-            .doc(galleryID)
-            .collection('images')
-            .add(jsonImg)
-            .then((value) =>
-                print('added document reference to images collection $value'));
-        return true;
-      } else {
-        print('failed adding image to gallery');
-        return false;
-      }
+      await galleriesCollection
+          .doc(galleryID)
+          .collection('images')
+          .add(jsonImg)
+          .then((value) =>
+              print('added document reference to images collection $value'));
+      return true;
     } else {
       print('path invalid could not add image');
       return false;

@@ -134,25 +134,25 @@ class AuthenticationService {
       _user = currentUser();
       await _user?.updatePassword(newPassword).then((value) {
         print('successful password update');
-        return;
+        return true;
       }).catchError((e) {
         print(e);
         switch (e) {
           case 'weak-password':
             _returnMessage = 'The password provided is too weak.';
-            return _returnMessage;
+            return false;
           case 'requires-recent-login':
             _returnMessage = 'Please sign out before trying again';
-            return _returnMessage;
+            return false;
           default:
             _returnMessage = 'Problem changing your password, please try again';
-            return _returnMessage;
+            return false;
         }
       });
     } catch (e) {
       print(e);
       _returnMessage = 'Problem changing your password, please try again';
-      return _returnMessage;
+      return false;
     }
   }
 }
