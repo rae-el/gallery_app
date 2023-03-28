@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gallery_app/models/gallery.dart';
 import 'package:gallery_app/models/this_image.dart';
+import 'package:gallery_app/services/auth_service.dart';
 import 'package:gallery_app/services/user_service.dart';
 
 import '../app/app.locator.dart';
@@ -11,6 +12,7 @@ class GalleryService {
   final galleriesCollection =
       FirebaseFirestore.instance.collection('galleries');
   final userService = locator<UserService>();
+  final authService = locator<AuthenticationService>();
 
   String? returnMessage;
 

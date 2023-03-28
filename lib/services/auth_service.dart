@@ -129,6 +129,7 @@ class AuthenticationService {
     }
   }
 
+
   Future changePassword({required String newPassword}) async {
     try {
       _user = currentUser();
