@@ -23,19 +23,16 @@ class AuthViewModel extends BaseViewModel {
   String get formErrorMessage => _formErrorMessage;
 
   requestSignIn(String? email, String? password) {
-    String? emailValidationResponse;
-    String? passwordValidationResponse;
-    if (email == null) {
-      emailValidationResponse = 'Email is required';
-    }
-    if (password == null) {
+    String passwordValidationResponse = '';
+    String? emailValidationResponse = validateFormEmail(email);
+    if (password == null || password.isEmpty) {
       passwordValidationResponse = 'Password is required';
     }
-    if (emailValidationResponse == null && passwordValidationResponse == null) {
+    if (emailValidationResponse == null && passwordValidationResponse.isEmpty) {
       signIn(email: email as String, password: password as String);
     } else {
       _formErrorMessage =
-          '$emailValidationResponse. $passwordValidationResponse';
+          '$emailValidationResponse $passwordValidationResponse';
       notifyListeners();
     }
   }
@@ -92,7 +89,7 @@ class AuthViewModel extends BaseViewModel {
 
   requestForgotPassword(String? email) {
     if (email == null) {
-      _formErrorMessage = 'Please input your email';
+      _formErrorMessage = 'Please input your email. ';
       notifyListeners();
     } else {
       var emailValidationResponse = validateFormEmail(email);
@@ -128,7 +125,7 @@ class AuthViewModel extends BaseViewModel {
         );
       }
     } else {
-      _formErrorMessage = 'Please input your email';
+      _formErrorMessage = 'Please input your email. ';
       notifyListeners();
     }
     //add error catching

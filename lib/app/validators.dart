@@ -1,18 +1,18 @@
 String? validateFormEmail(String? formEmail) {
   if (formEmail == null || formEmail.isEmpty) {
-    return 'Whoops! An email address is required';
+    return 'An email address is required. ';
   }
-  String regexPattern = r'\w+@\w\.\w+';
+  String regexPattern = r'.+@.+\..+';
   RegExp regex = RegExp(regexPattern);
   if (!regex.hasMatch(formEmail)) {
-    return "Whoops! That's not an email format";
+    return "That's not an email format. ";
   }
   return null;
 }
 
 String? validateFormPassword(String? formPassword) {
   if (formPassword == null || formPassword.isEmpty) {
-    return 'Whoops! A password is required';
+    return 'A password is required. ';
   }
   String regexPattern =
       r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
