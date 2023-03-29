@@ -11,7 +11,7 @@ import '../ui/startup/startup_view.dart';
 import '../ui/auth/auth_view.dart';
 import '../ui/profile/profile_view.dart';
 
-@StackedApp(routes: [
+@StackedApp(logger: StackedLogger(), routes: [
   MaterialRoute(page: StartupView, initial: true),
   MaterialRoute(page: GalleryView),
   MaterialRoute(page: AuthView),

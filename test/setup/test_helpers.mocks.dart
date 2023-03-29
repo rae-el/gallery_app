@@ -83,6 +83,20 @@ class MockAuthenticationService extends _i1.Mock
         ),
       ) as _i2.CollectionReference<Map<String, dynamic>>);
   @override
+  _i2.CollectionReference<Map<String, dynamic>> get galleriesCollection =>
+      (super.noSuchMethod(
+        Invocation.getter(#galleriesCollection),
+        returnValue: _FakeCollectionReference_1<Map<String, dynamic>>(
+          this,
+          Invocation.getter(#galleriesCollection),
+        ),
+        returnValueForMissingStub:
+            _FakeCollectionReference_1<Map<String, dynamic>>(
+          this,
+          Invocation.getter(#galleriesCollection),
+        ),
+      ) as _i2.CollectionReference<Map<String, dynamic>>);
+  @override
   String get returnMessage => (super.noSuchMethod(
         Invocation.getter(#returnMessage),
         returnValue: '',
@@ -127,6 +141,26 @@ class MockAuthenticationService extends _i1.Mock
             #email: email,
             #password: password,
           },
+        ),
+        returnValue: _i4.Future<dynamic>.value(),
+        returnValueForMissingStub: _i4.Future<dynamic>.value(),
+      ) as _i4.Future<dynamic>);
+  @override
+  _i4.Future<dynamic> addNewUser() => (super.noSuchMethod(
+        Invocation.method(
+          #addNewUser,
+          [],
+        ),
+        returnValue: _i4.Future<dynamic>.value(),
+        returnValueForMissingStub: _i4.Future<dynamic>.value(),
+      ) as _i4.Future<dynamic>);
+  @override
+  _i4.Future<dynamic> createGalleryForNewUser({required String? uid}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #createGalleryForNewUser,
+          [],
+          {#uid: uid},
         ),
         returnValue: _i4.Future<dynamic>.value(),
         returnValueForMissingStub: _i4.Future<dynamic>.value(),
@@ -562,7 +596,7 @@ class MockGalleryService extends _i1.Mock implements _i7.GalleryService {
         returnValueForMissingStub: _i4.Future<_i8.Gallery?>.value(),
       ) as _i4.Future<_i8.Gallery?>);
   @override
-  _i4.Future<bool> addImageToGallery(
+  _i4.Future<dynamic> addImageToGallery(
     _i9.ThisImage? image,
     String? galleryID,
   ) =>
@@ -574,9 +608,9 @@ class MockGalleryService extends _i1.Mock implements _i7.GalleryService {
             galleryID,
           ],
         ),
-        returnValue: _i4.Future<bool>.value(false),
-        returnValueForMissingStub: _i4.Future<bool>.value(false),
-      ) as _i4.Future<bool>);
+        returnValue: _i4.Future<dynamic>.value(),
+        returnValueForMissingStub: _i4.Future<dynamic>.value(),
+      ) as _i4.Future<dynamic>);
   @override
   _i4.Future<bool> reorderGallery(
           List<_i9.ThisImage>? reorderedGalleryImages) =>
