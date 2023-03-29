@@ -3,8 +3,10 @@ import 'package:gallery_app/models/this_image.dart';
 import 'package:gallery_app/services/gallery_service.dart';
 
 import '../app/app.locator.dart';
+import '../app/app.logger.dart';
 
 class ImageService {
+  final log = getLogger('ImageService');
   final galleriesCollection =
       FirebaseFirestore.instance.collection('galleries');
   final galleryService = locator<GalleryService>();
@@ -49,7 +51,7 @@ class ImageService {
   }
 
   Future requestDeleteImage({required String imageId}) async {
-    print('reached delete service');
+    log.i('reached delete service');
     String? currentGallery = await galleryService.getGalleryID();
     await galleriesCollection
         .doc(currentGallery)

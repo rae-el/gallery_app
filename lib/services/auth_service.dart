@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gallery_app/app/app.logger.dart';
 import 'package:gallery_app/services/user_service.dart';
 
 import '../app/app.locator.dart';
 
 class AuthenticationService {
+  final log = getLogger('AuthenticationService');
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final db = FirebaseFirestore.instance;
   final usersCollection = FirebaseFirestore.instance.collection('users');
@@ -26,7 +28,7 @@ class AuthenticationService {
         password: password,
       );
     } on FirebaseException catch (e) {
-      print(e);
+      log.e(e);
       switch (e.code) {
         case 'invalid-email':
           _returnMessage = 'The email you provided is invalid';
@@ -63,12 +65,12 @@ class AuthenticationService {
       {required String email, required String password}) async {
     try {
       //create user
-      print('create new user');
+      log.i('create new user');
       var newUser = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      print('created $newUser');
+      log.i('created $newUser');
       signIn(email: email, password: password);
       await addNewUser();
     } on FirebaseException catch (e) {
@@ -92,15 +94,15 @@ class AuthenticationService {
   Future addNewUser() async {
     var newUserDetails = currentUser();
     if (newUserDetails != null) {
-      print('add new user to collection');
+      log.i('add new user to collection');
       try {
         await usersCollection
             .doc(newUserDetails.uid)
             .set({'id': newUserDetails.uid, 'email': newUserDetails.email});
-        print('Successfully added new user');
+        log.i('Successfully added new user');
         createGalleryForNewUser(uid: newUserDetails.uid);
       } catch (e) {
-        print(e);
+        log.e(e);
       }
       _returnMessage = 'Unable to add new user';
       return false;
@@ -110,9 +112,9 @@ class AuthenticationService {
   Future createGalleryForNewUser({required String uid}) async {
     try {
       await galleriesCollection.add({'user_id': uid});
-      print('successfully added new gallery');
+      log.i('successfully added new gallery');
     } catch (e) {
-      print(e);
+      log.e(e);
       _returnMessage = 'Unable to add new user';
       return false;
     }
@@ -141,7 +143,7 @@ class AuthenticationService {
   }
 
   User? currentUser() {
-    print('getting current user');
+    log.i('getting current user');
     //add error handeling
     _user = _firebaseAuth.currentUser;
     return _user;
@@ -157,7 +159,7 @@ class AuthenticationService {
         return false;
       }
     } on FirebaseException catch (e) {
-      print(e); // change this to a message
+      log.e(e); // change this to a message
       _returnMessage = e.toString();
       return false;
     }
@@ -167,10 +169,10 @@ class AuthenticationService {
     try {
       _user = currentUser();
       await _user?.updatePassword(newPassword).then((value) {
-        print('successful password update');
+        log.i('successful password update');
         return true;
       }).catchError((e) {
-        print(e);
+        log.e(e);
         switch (e) {
           case 'weak-password':
             _returnMessage = 'The password provided is too weak.';
@@ -184,7 +186,7 @@ class AuthenticationService {
         }
       });
     } catch (e) {
-      print(e);
+      log.e(e);
       _returnMessage = 'Problem changing your password, please try again';
       return false;
     }

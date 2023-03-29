@@ -7,8 +7,10 @@ import 'package:gallery_app/services/auth_service.dart';
 import 'package:gallery_app/services/user_service.dart';
 
 import '../app/app.locator.dart';
+import '../app/app.logger.dart';
 
 class GalleryService {
+  final log = getLogger('GalleryService');
   final galleriesCollection =
       FirebaseFirestore.instance.collection('galleries');
   final userService = locator<UserService>();
@@ -21,71 +23,71 @@ class GalleryService {
   String _userID = "";
 
   Future<Gallery?> getUserGallery() async {
-    print('in get user gallery');
+    log.i('in get user gallery');
     try {
       List<Gallery> galleries = [];
       //should this current user be more of a state or global variable
       _userID = userService.currentUserId();
-      print('Getting user $_userID gallery');
+      log.i('Getting user $_userID gallery');
       try {
         var querySnapshot = await galleriesCollection
             .where('user_id', isEqualTo: _userID)
             .get();
-        print('gallery query snapshot $querySnapshot');
+        log.i('gallery query snapshot $querySnapshot');
         for (var docSnapshot in querySnapshot.docs) {
-          print('docsnapshot: $docSnapshot');
+          log.i('docsnapshot: $docSnapshot');
           galleries.add(Gallery.fromSnapshot(docSnapshot));
         }
         //get first gallery (should only be 1)
         //final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
         //final userData = allData[0] as Map;
         int numOfGalleries = galleries.length;
-        print('There are $numOfGalleries that match this user ID');
+        log.i('There are $numOfGalleries that match this user ID');
         if (numOfGalleries == 0) {
           //if 0 create gallery
-          print('no galleries that meet query, ');
+          log.i('no galleries that meet query, ');
           //var newUserGallery = createNewGallery(userID);
           //do some error handeling
           return null;
         }
         if (numOfGalleries == 1) {
           Gallery userGallery = galleries[0];
-          print('got data for $userGallery');
+          log.i('got data for $userGallery');
           return userGallery;
         } else {
-          print('number of galleries too high, return null');
+          log.i('number of galleries too high, return null');
           return null;
         }
       } catch (e) {
-        print(e);
-        print('failed in querying galleries collection');
+        log.e(e);
+        log.i('failed in querying galleries collection');
         return null;
       }
     } catch (e) {
-      print(e); // change this to a message
+      log.e(e); // change this to a message
       returnMessage = e.toString();
-      print(returnMessage);
+      log.i(returnMessage);
       return null;
     }
   }
 
   Future<String?> getGalleryID() async {
-    print('in get gallery id');
+    log.i('in get gallery id');
     try {
       Gallery? userGallery = await getUserGallery();
       if (userGallery != null) {
         _galleryID = userGallery.id ?? "";
-        print('gallery id: $_galleryID');
+        log.i('gallery id: $_galleryID');
         return _galleryID;
       } else {
         //do some error handeling
-        print('user gallery null, failed to retreive gallery id');
+        log.i('user gallery null, failed to retreive gallery id');
         return null;
       }
     } catch (e) {
-      print(e); // change this to a message
+      log.e(e); // change this to a message
       returnMessage = e.toString();
-      print(returnMessage);
+      log.i(returnMessage);
       return null;
     }
   }
@@ -107,13 +109,13 @@ class GalleryService {
         if (await File(path).exists()) {
           galleryImages.add(imageDocSnapshot);
         } else {
-          print('did not add $imageDocSnapshot');
+          log.i('did not add $imageDocSnapshot');
         }
       }
       //validate gallery Images
       return galleryImages;
     } catch (e) {
-      print(e); // change this to a message
+      log.e(e); // change this to a message
       returnMessage = e.toString();
 
       return null;
@@ -121,18 +123,18 @@ class GalleryService {
   }
 
   Future<Gallery?> createNewGallery(String userID) async {
-    print('in create new gallery');
+    log.i('in create new gallery');
     //create new gallery with userid
     try {
       var docRef = await galleriesCollection.add({'user_id': userID});
-      print('create new gallery');
+      log.i('create new gallery');
       var docSnap = await galleriesCollection.doc(docRef.id).get();
       var newGallery = Gallery.fromSnapshot(docSnap);
-      print('add new gallery to list');
+      log.i('add new gallery to list');
       return newGallery;
     } catch (e) {
-      print(e);
-      print('failed to create new gallery');
+      log.e(e);
+      log.i('failed to create new gallery');
       return null;
     }
   }
@@ -142,7 +144,7 @@ class GalleryService {
     if (await File(image.path).exists()) {
       //convert image to json
       var jsonImg = image.toJson();
-      print('try adding image $jsonImg to gallery');
+      log.i('try adding image $jsonImg to gallery');
       var addedImage = await galleriesCollection
           .doc(galleryID)
           .collection('images')
@@ -155,16 +157,16 @@ class GalleryService {
 
       return addedImage.id;
     } else {
-      print('path invalid could not add image');
+      log.i('path invalid could not add image');
       return false;
     }
   }
 
   Future<bool> reorderGallery(List<ThisImage>? reorderedGalleryImages) async {
-    print('in gallery service reorder');
+    log.i('in gallery service reorder');
     _galleryID = await getGalleryID();
-    print('Gallery id $_galleryID');
-    print(reorderedGalleryImages);
+    log.i('Gallery id $_galleryID');
+    log.i(reorderedGalleryImages);
     if (_galleryID != null && reorderedGalleryImages!.length > 1) {
       //gallery exisits
       await galleriesCollection
@@ -185,14 +187,14 @@ class GalleryService {
               .doc(image.id)
               .set(jsonImg);
         } catch (e) {
-          print(e);
+          log.e(e);
           return false;
         }
       }
 
       return true;
     } else {
-      print('failed reordering gallery');
+      log.i('failed reordering gallery');
       return false;
     }
   }

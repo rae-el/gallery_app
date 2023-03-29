@@ -88,9 +88,6 @@ class _BasicDialogContent extends StatelessWidget {
 }
 
 Color _getStatusColor(dynamic data) {
-  print('get colour');
-  // switch not working??? returning default
-  print(data);
   switch (data) {
     case BasicDialogStatus.error:
       return errorColour;

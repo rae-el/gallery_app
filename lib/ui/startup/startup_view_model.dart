@@ -1,4 +1,5 @@
 import 'package:gallery_app/app/app.locator.dart';
+import 'package:gallery_app/app/app.logger.dart';
 import 'package:gallery_app/app/app.router.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -6,6 +7,7 @@ import 'package:stacked_services/stacked_services.dart';
 import '../../services/auth_service.dart';
 
 class StartupViewModel extends BaseViewModel implements Initialisable {
+  final log = getLogger('StarupViewModel');
   final _authenticationService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
 
@@ -32,10 +34,10 @@ class StartupViewModel extends BaseViewModel implements Initialisable {
   }
 
   Future isCurrentUserLoggedIn() async {
-    print('is there a logged in user, set variable');
+    log.i('is there a logged in user, set variable');
     _loggedIn = await _authenticationService.isUserLoggedIn();
     Future.delayed(const Duration(seconds: 3), () {
-      print('next run navigation');
+      log.i('next run navigation');
       navigate(loggedIn: _loggedIn);
     });
   }

@@ -3,12 +3,14 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../app/app.locator.dart';
+import '../../app/app.logger.dart';
 import '../../app/app.router.dart';
 import '../../app/messages.dart';
 import '../../enums/basic_dialog_status.dart';
 import '../../enums/dialog_type.dart';
 
 class AuthViewModel extends BaseViewModel {
+  final log = getLogger('AuthViewModel');
   final _navigationService = locator<NavigationService>();
   final _authenticationService = locator<AuthenticationService>();
   final _dialogService = locator<DialogService>();
@@ -26,8 +28,10 @@ class AuthViewModel extends BaseViewModel {
     var signInResponse =
         await _authenticationService.signIn(email: email, password: password);
     if (signInResponse == null) {
+      log.i('signInResponse a success null');
       _navigationService.replaceWith(Routes.galleryView);
     } else {
+      log.i('signInResponse a error');
       await _dialogService.showCustomDialog(
         variant: DialogType.basic,
         data: BasicDialogStatus.error,
@@ -46,8 +50,10 @@ class AuthViewModel extends BaseViewModel {
     var createNewUserResponse = await _authenticationService.createNewUser(
         email: email, password: password);
     if (createNewUserResponse == null) {
+      log.i('signUpResponse a success null');
       signIn(email: email, password: password);
     } else {
+      log.i('signUpResponse a error');
       _formErrorMessage = createNewUserResponse;
       notifyListeners();
       return;

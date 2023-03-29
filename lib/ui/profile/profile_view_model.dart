@@ -6,6 +6,7 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../app/app.locator.dart';
+import '../../app/app.logger.dart';
 import '../../app/app.router.dart';
 import '../../app/messages.dart';
 import '../../enums/basic_dialog_status.dart';
@@ -14,6 +15,7 @@ import '../../services/auth_service.dart';
 import '../../services/user_service.dart';
 
 class ProfileViewModel extends BaseViewModel implements Initialisable {
+  final log = getLogger('ProfileViewModel');
   //get in a weird loop when go into change pw then cancel then try and click back
   final _userService = locator<UserService>();
   final _authService = locator<AuthenticationService>();
@@ -48,9 +50,9 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
   Future<bool> askForUserData() async {
     //this will automatically happen
     //setBusy(true);
-    print('asking for user data');
+    log.i('asking for user data');
     ThisUser? userData = await _userService.getUserData();
-    print('got data for $userData');
+    log.i('got data for $userData');
 
     if (userData != null) {
       _uid = userData.id ?? "";
@@ -132,7 +134,7 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
         return dialogResult;
       }
     } on PlatformException catch (e) {
-      print(e);
+      log.e(e);
       final dialogResult = await _dialogService.showCustomDialog(
         variant: DialogType.basic,
         data: BasicDialogStatus.error,
@@ -181,7 +183,7 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
       description: descriptionField.text.trim(),
       avatar: userImagePath,
     );
-    print('save profile of $thisUser');
+    log.i('save profile of $thisUser');
     bool savedUser = await _userService.updateUser(thisUser);
     if (savedUser) {
       final dialogResult = await _dialogService.showCustomDialog(

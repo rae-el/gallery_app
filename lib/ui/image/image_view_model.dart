@@ -1,4 +1,5 @@
 import 'package:gallery_app/app/app.locator.dart';
+import 'package:gallery_app/app/app.logger.dart';
 import 'package:gallery_app/app/app.router.dart';
 import 'package:gallery_app/enums/basic_dialog_status.dart';
 import 'package:gallery_app/enums/dialog_type.dart';
@@ -11,6 +12,7 @@ import '../../models/this_image.dart';
 import '../../services/gallery_service.dart';
 
 class ImageViewModel extends BaseViewModel implements Initialisable {
+  final log = getLogger('ImageViewModel');
   final _navigationService = locator<NavigationService>();
   final _dialogService = locator<DialogService>();
   final _imageService = locator<ImageService>();
@@ -58,7 +60,7 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
 
   Future toggleFavourite() async {
     id = image!.id;
-    print('toggle fave');
+    log.i('toggle fave');
     faveIcon = !faveIcon;
     notifyListeners();
     bool favourite = !image!.favourite;
@@ -76,7 +78,7 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
         );
       }
     } else {
-      print('id null');
+      log.i('id null');
       await _dialogService.showCustomDialog(
         variant: DialogType.basic,
         data: BasicDialogStatus.error,
@@ -99,7 +101,7 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
     );
     if (dialogResult != null) {
       if (dialogResult.confirmed) {
-        print('confirmed delete');
+        log.i('confirmed delete');
         if (id != null) {
           var deleteResponse =
               await _imageService.requestDeleteImage(imageId: id as String);
@@ -116,7 +118,7 @@ class ImageViewModel extends BaseViewModel implements Initialisable {
           }
         }
       } else {
-        print('cancelled delete');
+        log.i('cancelled delete');
       }
     }
   }

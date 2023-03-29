@@ -17,7 +17,7 @@ class ImageView extends StatelessWidget {
     return ViewModelBuilder<ImageViewModel>.reactive(
       //this is where I put the view structure
       viewModelBuilder: () => ImageViewModel(image),
-      onModelReady: (viewModel) => viewModel.initialise(),
+      onViewModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, model, child) => model.isBusy
           ? Center(
               child: SizedBox(
@@ -30,7 +30,7 @@ class ImageView extends StatelessWidget {
           : Scaffold(
               appBar: AppBar(
                 //should make the title the image title if exists?
-                
+
                 title: const Text(''),
                 centerTitle: true,
                 actions: const [],
@@ -110,12 +110,10 @@ class ImageState extends State<ImageWidget> {
           _baseScaleFactor = _scaleFactor;
         },
         onScaleUpdate: (details) {
-          print('scale update');
           if (details.scale == 1.0) {
             return;
           } else {
             setState(() {
-              print('scale');
               _scaleFactor = _baseScaleFactor * details.scale;
             });
           }

@@ -7,6 +7,7 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../app/app.locator.dart';
+import '../../app/app.logger.dart';
 import '../../app/app.router.dart';
 import '../../app/messages.dart';
 import '../../enums/basic_dialog_status.dart';
@@ -19,6 +20,7 @@ import '../../services/image_service.dart';
 import '../../services/user_service.dart';
 
 class GalleryViewModel extends BaseViewModel implements Initialisable {
+  final log = getLogger('GalleryViewModel');
   final _navigationService = locator<NavigationService>();
   final _galleryService = locator<GalleryService>();
   final _dialogService = locator<DialogService>();
@@ -63,9 +65,9 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
   }
 
   Future navigateToImageView({required ThisImage image}) async {
-    print('navigate to image view');
+    log.i('navigate to image view');
     var i = image.toJson();
-    print('navigate to view of $i');
+    log.i('navigate to view of $i');
     _navigationService.navigateTo(Routes.imageView,
         arguments: ImageViewArguments(image: image));
     //navigationService.navigateToImageView(image: image);
@@ -84,11 +86,11 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
 
   Future setUserName() async {
     ThisUser? userData = await _userService.getUserData();
-    print('got data for $userData');
+    log.i('got data for $userData');
 
     if (userData != null) {
       _username = userData.username ?? "";
-      print('got username $_username');
+      log.i('got username $_username');
     }
   }
 
@@ -100,10 +102,10 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
     _galleryImagePaths = [];
     var getGalleryImages = await _galleryService.getGalleryImages(_galleryId);
     if (getGalleryImages == null) {
-      print('gallery images empty');
+      log.i('gallery images empty');
       return true;
     } else {
-      print('adding gallery image paths to list');
+      log.i('adding gallery image paths to list');
       //only add if path exists
       for (var galleryImage in getGalleryImages) {
         _galleryImages.add(galleryImage);
@@ -148,7 +150,7 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
     if (source == "camera") {
       image = await picker.pickImage(source: ImageSource.camera);
     } else {
-      print('source not set');
+      log.i('source not set');
       return;
     }
     try {
@@ -159,7 +161,7 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
         String? newImagePath = image.path;
         bool addNewImage = await addImage(newImagePath);
         if (addNewImage) {
-          print('successfully added image and resent query');
+          log.i('successfully added image and resent query');
           notifyListeners();
           return;
         } else {
@@ -168,7 +170,7 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
         }
       }
     } on PlatformException catch (e) {
-      print(e);
+      log.i(e);
       showAddingImageError();
       return;
     }
@@ -201,7 +203,7 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
   }
 
   Future<bool> addImage(String path) async {
-    print('add image to gallery $_galleryId');
+    log.i('add image to gallery $_galleryId');
     try {
       ThisImage image = ThisImage(
           path: path,
@@ -225,7 +227,7 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
         return true;
       }
     } catch (e) {
-      print(e);
+      log.e(e);
       showAddingImageError();
       return false;
     }
@@ -340,7 +342,7 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
 
   Future toggleFavourite({required ThisImage image}) async {
     id = image.id;
-    print('toggle fave');
+    log.i('toggle fave');
     for (var imageShown in _galleryImagesShown) {
       if (imageShown.id == image.id) {
         imageShown.favourite = !imageShown.favourite;
@@ -352,7 +354,7 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
     bool favourite = !image.favourite;
     if (id != null) {
     } else {
-      print('id null');
+      log.i('id null');
       await _dialogService.showCustomDialog(
         variant: DialogType.basic,
         data: BasicDialogStatus.error,

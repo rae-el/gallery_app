@@ -98,13 +98,11 @@ class HomePage extends StatelessWidget {
                             child: GestureDetector(
                               key: Key('$index'),
                               onTap: () {
-                                print(model.galleryImagesShown[index].path);
                                 model.navigateToImageView(
                                   image: model.galleryImagesShown[index],
                                 );
                               },
                               onDoubleTap: () {
-                                print('doubled tapped');
                                 model.toggleFavourite(
                                     image: model.galleryImagesShown[index]);
                               },
