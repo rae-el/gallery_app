@@ -18,8 +18,6 @@ Done
 - Delete pictures
 - Zoom in and out
 - Sort pictures
-
-To Do
 - Local ordering
 
 
