@@ -6,9 +6,7 @@ A Flutter built Gallery App
 
 An app with authentication where you can upload, view, and favourite photos.
 
-### Required features
-
-Done
+#### Features
 
 - Signing in
 - Signing up
@@ -19,6 +17,11 @@ Done
 - Zoom in and out
 - Sort pictures
 - Local ordering
+
+#### Unimplemented features desired
+
+- Utilize Stacked Forms
+- Implement nested views
 
 
 #### Models
