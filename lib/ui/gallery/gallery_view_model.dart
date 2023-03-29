@@ -312,6 +312,7 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
     return;
   }
 
+//dont currently run this method
   Future saveOrder() async {
     if (_galleryImages.length == _galleryImagesShown.length) {
       var reorderResult =

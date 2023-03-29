@@ -16,10 +16,10 @@ void main() {
     final navigationService = getAndRegisterNavigationService();
     final dialogService = getAndRegisterDialogService();
     var model = AuthViewModel();
+    String email = '';
+    String password = '';
 
     group('signIn', () {
-      String email = '';
-      String password = '';
       test('if no input for username and password do not navigate to gallery',
           () async {
         model.signIn(email: email, password: password);
@@ -27,8 +27,15 @@ void main() {
       });
       test('if unknown username and password do not navigate to gallery',
           () async {
-        String email = 'unknown@email.com';
-        String password = 'UNKNWN';
+        email = 'unknown@email.com';
+        password = 'UNKNWN';
+        model.signIn(email: email, password: password);
+        verifyNever(navigationService.replaceWith(Routes.galleryView));
+      });
+    });
+    group('signUp', () {
+      test('if no input for username and password do not navigate to gallery',
+          () async {
         model.signIn(email: email, password: password);
         verifyNever(navigationService.replaceWith(Routes.galleryView));
       });
