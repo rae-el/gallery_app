@@ -955,6 +955,12 @@ class MockDialogService extends _i1.Mock implements _i5.DialogService {
 /// See the documentation for Mockito's code generation for more information.
 class MockValidationService extends _i1.Mock implements _i14.ValidationService {
   @override
+  String get emailValidationMsg => (super.noSuchMethod(
+        Invocation.getter(#emailValidationMsg),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String);
+  @override
   set emailValidationMsg(String? _emailValidationMsg) => super.noSuchMethod(
         Invocation.setter(
           #emailValidationMsg,
@@ -962,6 +968,12 @@ class MockValidationService extends _i1.Mock implements _i14.ValidationService {
         ),
         returnValueForMissingStub: null,
       );
+  @override
+  String get passwordValidationMsg => (super.noSuchMethod(
+        Invocation.getter(#passwordValidationMsg),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String);
   @override
   set passwordValidationMsg(String? _passwordValidationMsg) =>
       super.noSuchMethod(

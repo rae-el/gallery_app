@@ -35,9 +35,8 @@ void main() {
         email = null;
         password = 'fewjvpwrim';
         var model = getModel();
-        getAndRegisterValidationService(hasValidationMsg: true);
         model.requestSignIn(email, password);
-        verifyNever(navigationService.replaceWith(Routes.galleryView));
+        verifyNever(model.signIn(email: '', password: ''));
       });*/
       test('if no input for password do not navigate to gallery', () async {
         email = 'unknown@email.com';

@@ -1,6 +1,6 @@
 class ValidationService {
-  String? emailValidationMsg;
-  String? passwordValidationMsg;
+  String emailValidationMsg = '';
+  String passwordValidationMsg = '';
   bool hasValidationMsg = false;
 
   String? validateFormEmail(String? formEmail) {
