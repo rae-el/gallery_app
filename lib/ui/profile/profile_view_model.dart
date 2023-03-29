@@ -14,6 +14,7 @@ import '../../services/auth_service.dart';
 import '../../services/user_service.dart';
 
 class ProfileViewModel extends BaseViewModel implements Initialisable {
+  //get in a weird loop when go into change pw then cancel then try and click back
   final _userService = locator<UserService>();
   final _authService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
