@@ -15,6 +15,7 @@ import 'package:gallery_app/services/auth_service.dart' as _i3;
 import 'package:gallery_app/services/gallery_service.dart' as _i7;
 import 'package:gallery_app/services/image_service.dart' as _i10;
 import 'package:gallery_app/services/user_service.dart' as _i11;
+import 'package:gallery_app/services/validation_service.dart' as _i14;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:stacked_services/stacked_services.dart' as _i5;
 
@@ -96,6 +97,20 @@ class MockAuthenticationService extends _i1.Mock
           Invocation.getter(#galleriesCollection),
         ),
       ) as _i2.CollectionReference<Map<String, dynamic>>);
+  @override
+  bool get signedIn => (super.noSuchMethod(
+        Invocation.getter(#signedIn),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+  @override
+  set signedIn(bool? _signedIn) => super.noSuchMethod(
+        Invocation.setter(
+          #signedIn,
+          _signedIn,
+        ),
+        returnValueForMissingStub: null,
+      );
   @override
   String get returnMessage => (super.noSuchMethod(
         Invocation.getter(#returnMessage),
@@ -930,6 +945,43 @@ class MockDialogService extends _i1.Mock implements _i5.DialogService {
         Invocation.method(
           #completeDialog,
           [response],
+        ),
+        returnValueForMissingStub: null,
+      );
+}
+
+/// A class which mocks [ValidationService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockValidationService extends _i1.Mock implements _i14.ValidationService {
+  @override
+  set emailValidationMsg(String? _emailValidationMsg) => super.noSuchMethod(
+        Invocation.setter(
+          #emailValidationMsg,
+          _emailValidationMsg,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  set passwordValidationMsg(String? _passwordValidationMsg) =>
+      super.noSuchMethod(
+        Invocation.setter(
+          #passwordValidationMsg,
+          _passwordValidationMsg,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  bool get hasValidationMsg => (super.noSuchMethod(
+        Invocation.getter(#hasValidationMsg),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+  @override
+  set hasValidationMsg(bool? _hasValidationMsg) => super.noSuchMethod(
+        Invocation.setter(
+          #hasValidationMsg,
+          _hasValidationMsg,
         ),
         returnValueForMissingStub: null,
       );

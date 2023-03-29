@@ -21,12 +21,15 @@ class AuthenticationService {
   User? _user;
   User? get user => _user;
 
+  bool signedIn = false;
+
   Future signIn({required String email, required String password}) async {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+      signedIn = true;
     } on FirebaseException catch (e) {
       log.e(e);
       switch (e.code) {
@@ -48,6 +51,7 @@ class AuthenticationService {
       }
     } catch (e) {
       _returnMessage = 'Could not sign you in, please try again';
+      signedIn = false;
       return _returnMessage;
     }
   }
@@ -55,6 +59,7 @@ class AuthenticationService {
   Future signOut() async {
     try {
       await _firebaseAuth.signOut();
+      signedIn = false;
     } catch (e) {
       _returnMessage = e.toString();
       return _returnMessage;
@@ -72,8 +77,10 @@ class AuthenticationService {
       );
       log.i('created $newUser');
       signIn(email: email, password: password);
+      signedIn = true;
       await addNewUser();
     } on FirebaseException catch (e) {
+      signedIn = false;
       switch (e.code) {
         case 'weak-password':
           _returnMessage = 'The password provided is too weak.';
@@ -105,6 +112,7 @@ class AuthenticationService {
         log.e(e);
       }
       _returnMessage = 'Unable to add new user';
+      signedIn = false;
       return false;
     }
   }
@@ -116,6 +124,7 @@ class AuthenticationService {
     } catch (e) {
       log.e(e);
       _returnMessage = 'Unable to add new user';
+      signedIn = false;
       return false;
     }
   }
@@ -153,13 +162,16 @@ class AuthenticationService {
     try {
       _user = currentUser();
       if (user != null) {
+        signedIn = true;
         return true;
       } else {
         _returnMessage = 'No user';
+        signedIn = false;
         return false;
       }
     } on FirebaseException catch (e) {
       log.e(e); // change this to a message
+      signedIn = false;
       _returnMessage = e.toString();
       return false;
     }

@@ -14,6 +14,7 @@ import '../services/auth_service.dart';
 import '../services/gallery_service.dart';
 import '../services/image_service.dart';
 import '../services/user_service.dart';
+import '../services/validation_service.dart';
 
 final locator = StackedLocator.instance;
 
@@ -32,4 +33,5 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => GalleryService());
   locator.registerLazySingleton(() => DialogService());
   locator.registerLazySingleton(() => ImageService());
+  locator.registerLazySingleton(() => ValidationService());
 }

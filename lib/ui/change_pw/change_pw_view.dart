@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:gallery_app/app/colors.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../app/app.locator.dart';
 import '../../app/fonts.dart';
-import '../../app/validators.dart';
+import '../../services/validation_service.dart';
 import 'change_pw_view_model.dart';
 
 class ChangePwView extends StatefulWidget {
@@ -14,6 +15,7 @@ class ChangePwView extends StatefulWidget {
 }
 
 class PwState extends State<ChangePwView> {
+  final _validationService = locator<ValidationService>();
   TextEditingController _newPasswordField = TextEditingController();
   TextEditingController _duplicatePasswordField = TextEditingController();
   GlobalKey<FormState> _key = GlobalKey<FormState>();
@@ -43,7 +45,7 @@ class PwState extends State<ChangePwView> {
                 const SizedBox(height: 30),
                 TextFormField(
                   controller: _newPasswordField,
-                  validator: validateFormPassword,
+                  validator: _validationService.validateFormPassword,
                   obscureText: true, //hide password characters
                   decoration: const InputDecoration(
                     labelText: "New Password",
@@ -52,7 +54,7 @@ class PwState extends State<ChangePwView> {
                 ),
                 TextFormField(
                   controller: _duplicatePasswordField,
-                  validator: validateFormPassword,
+                  validator: _validationService.validateFormPassword,
                   obscureText: true, //hide password characters
                   decoration: const InputDecoration(
                     labelText: "Retype New Password",

@@ -3,8 +3,9 @@ import 'package:gallery_app/ui/auth/auth_view_model.dart';
 import 'package:gallery_app/app/colors.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../app/app.locator.dart';
 import '../../app/fonts.dart';
-import '../../app/validators.dart';
+import '../../services/validation_service.dart';
 
 class AuthView extends StatefulWidget {
   const AuthView({super.key});
@@ -14,6 +15,8 @@ class AuthView extends StatefulWidget {
 }
 
 class AuthenticationState extends State<AuthView> {
+  final _validationService = locator<ValidationService>();
+
   TextEditingController _emailField = TextEditingController();
   TextEditingController _passwordField = TextEditingController();
   GlobalKey<FormState> _key = GlobalKey<FormState>();
@@ -47,7 +50,7 @@ class AuthenticationState extends State<AuthView> {
                 ),
                 TextFormField(
                   controller: _emailField,
-                  validator: validateFormEmail,
+                  validator: _validationService.validateFormEmail,
                   decoration: const InputDecoration(
                     hintText: "example@email.com",
                     labelText: "Email",
@@ -56,7 +59,7 @@ class AuthenticationState extends State<AuthView> {
                 ),
                 TextFormField(
                   controller: _passwordField,
-                  validator: validateFormPassword,
+                  validator: _validationService.validateFormPassword,
                   obscureText: true, //hide password characters
                   decoration: const InputDecoration(
                     labelText: "Password",

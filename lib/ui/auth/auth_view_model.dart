@@ -1,4 +1,4 @@
-import 'package:gallery_app/app/validators.dart';
+import 'package:gallery_app/services/validation_service.dart';
 import 'package:gallery_app/services/auth_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -15,6 +15,7 @@ class AuthViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
   final _authenticationService = locator<AuthenticationService>();
   final _dialogService = locator<DialogService>();
+  final _validationService = locator<ValidationService>();
 
   final String _logoLocation = 'assets/gallery_logo.png';
   String get logoLocation => _logoLocation;
@@ -24,7 +25,8 @@ class AuthViewModel extends BaseViewModel {
 
   requestSignIn(String? email, String? password) {
     String passwordValidationResponse = '';
-    String? emailValidationResponse = validateFormEmail(email);
+    String? emailValidationResponse =
+        _validationService.validateFormEmail(email);
     if (password == null || password.isEmpty) {
       passwordValidationResponse = 'Password is required';
     }
@@ -55,17 +57,20 @@ class AuthViewModel extends BaseViewModel {
         description: signInResponse,
         mainButtonTitle: 'OK',
       );
+      _formErrorMessage = '';
+      notifyListeners();
     }
   }
 
   requestSignUp(String? email, String? password) {
-    var emailValidationResponse = validateFormEmail(email);
-    var passwordValidationResponse = validateFormPassword(password);
+    var emailValidationResponse = _validationService.validateFormEmail(email);
+    var passwordValidationResponse =
+        _validationService.validateFormPassword(password);
     if (emailValidationResponse == null && passwordValidationResponse == null) {
       signUp(email: email as String, password: password as String);
     } else {
       _formErrorMessage =
-          '$emailValidationResponse. $passwordValidationResponse';
+          '$emailValidationResponse $passwordValidationResponse';
       notifyListeners();
     }
   }
@@ -74,7 +79,6 @@ class AuthViewModel extends BaseViewModel {
     required String email,
     required String password,
   }) async {
-    //error handle here first?
     var createNewUserResponse = await _authenticationService.createNewUser(
         email: email, password: password);
     if (createNewUserResponse == null) {
@@ -92,9 +96,11 @@ class AuthViewModel extends BaseViewModel {
       _formErrorMessage = 'Please input your email. ';
       notifyListeners();
     } else {
-      var emailValidationResponse = validateFormEmail(email);
+      var emailValidationResponse = _validationService.validateFormEmail(email);
       if (emailValidationResponse == null) {
         forgotPassword(email: email);
+        _formErrorMessage = '';
+        notifyListeners();
       } else {
         _formErrorMessage = emailValidationResponse;
         notifyListeners();
@@ -115,6 +121,8 @@ class AuthViewModel extends BaseViewModel {
           description: forgotPasswordResponse,
           mainButtonTitle: 'OK',
         );
+        _formErrorMessage = '';
+        notifyListeners();
       } else {
         await _dialogService.showCustomDialog(
           variant: DialogType.basic,
@@ -123,6 +131,8 @@ class AuthViewModel extends BaseViewModel {
           description: forgotPasswordResponse,
           mainButtonTitle: 'OK',
         );
+        _formErrorMessage = '';
+        notifyListeners();
       }
     } else {
       _formErrorMessage = 'Please input your email. ';

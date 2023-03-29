@@ -1,4 +1,4 @@
-import 'package:gallery_app/app/validators.dart';
+import 'package:gallery_app/services/validation_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -15,6 +15,7 @@ class ChangePwViewModel extends BaseViewModel {
   final _authenticationService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
   final _dialogService = locator<DialogService>();
+  final _validationService = locator<ValidationService>();
 
   String _formErrorMessage = '';
   String get formErrorMessage => _formErrorMessage;
@@ -31,7 +32,8 @@ class ChangePwViewModel extends BaseViewModel {
   Future requestChangePassword({
     required String? newPassword,
   }) async {
-    var validationMessage = validateFormPassword(newPassword);
+    var validationMessage =
+        _validationService.validateFormPassword(newPassword);
     if (validationMessage != null) {
       updateFormErrorMessage(validationMessage);
       notifyListeners();
