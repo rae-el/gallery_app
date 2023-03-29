@@ -1,3 +1,4 @@
+import 'package:gallery_app/app/validators.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -18,23 +19,6 @@ class ChangePwViewModel extends BaseViewModel {
   String _formErrorMessage = '';
   String get formErrorMessage => _formErrorMessage;
 
-  String? validateFormPassword(String? formPassword) {
-    if (formPassword == null || formPassword.isEmpty) {
-      _formErrorMessage = 'Whoops! A password is required';
-      return 'Whoops! A password is required';
-    }
-    String regexPattern =
-        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
-    RegExp regex = RegExp(regexPattern);
-    if (!regex.hasMatch(formPassword)) {
-      _formErrorMessage = '''Password needs to be at least 8 characters,
-      include an uppercase letter, lowercase letter, number and symbol.''';
-      return '''Password needs to be at least 8 characters,
-      include an uppercase letter, lowercase letter, number and symbol.''';
-    }
-    return '';
-  }
-
   updateFormErrorMessage(String newErrorMsg) {
     _formErrorMessage = newErrorMsg;
     notifyListeners();
@@ -45,25 +29,17 @@ class ChangePwViewModel extends BaseViewModel {
   }
 
   Future requestChangePassword({
-    required String newPassword,
+    required String? newPassword,
   }) async {
-    print('password change request');
-    if (newPassword.isEmpty) {
-      updateFormErrorMessage('Whoops! A password is required');
-      return;
-    }
-    String regexPattern =
-        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
-    RegExp regex = RegExp(regexPattern);
-    if (!regex.hasMatch(newPassword)) {
-      updateFormErrorMessage(
-          '''Password needs to be at least 8 characters, include an uppercase letter, lowercase letter, number and symbol.''');
-      return;
+    var validationMessage = validateFormPassword(newPassword);
+    if (validationMessage != null) {
+      updateFormErrorMessage(validationMessage);
+      notifyListeners();
     } else {
-      print('password passed validation');
+      log.i('password passed validation');
       try {
         var changePwResponse = await _authenticationService.changePassword(
-            newPassword: newPassword);
+            newPassword: newPassword as String);
         switch (changePwResponse) {
           case true:
             _navigationService.back();
@@ -80,6 +56,7 @@ class ChangePwViewModel extends BaseViewModel {
             return;
         }
       } catch (e) {
+        log.e(e);
         final dialogResult = await _dialogService.showCustomDialog(
           variant: DialogType.basic,
           data: BasicDialogStatus.error,

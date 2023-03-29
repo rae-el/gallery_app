@@ -7,7 +7,7 @@ String? validateFormEmail(String? formEmail) {
   if (!regex.hasMatch(formEmail)) {
     return "Whoops! That's not an email format";
   }
-  return '';
+  return null;
 }
 
 String? validateFormPassword(String? formPassword) {
@@ -21,5 +21,5 @@ String? validateFormPassword(String? formPassword) {
     return '''Password needs to be at least 8 characters,
       include an uppercase letter, lowercase letter, number and symbol.''';
   }
-  return '';
+  return null;
 }

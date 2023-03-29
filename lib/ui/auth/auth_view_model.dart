@@ -1,3 +1,4 @@
+import 'package:gallery_app/app/validators.dart';
 import 'package:gallery_app/services/auth_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -21,6 +22,24 @@ class AuthViewModel extends BaseViewModel {
   String _formErrorMessage = '';
   String get formErrorMessage => _formErrorMessage;
 
+  requestSignIn(String? email, String? password) {
+    String? emailValidationResponse;
+    String? passwordValidationResponse;
+    if (email == null) {
+      emailValidationResponse = 'Email is required';
+    }
+    if (password == null) {
+      passwordValidationResponse = 'Password is required';
+    }
+    if (emailValidationResponse == null && passwordValidationResponse == null) {
+      signIn(email: email as String, password: password as String);
+    } else {
+      _formErrorMessage =
+          '$emailValidationResponse. $passwordValidationResponse';
+      notifyListeners();
+    }
+  }
+
   Future signIn({
     required String email,
     required String password,
@@ -42,6 +61,18 @@ class AuthViewModel extends BaseViewModel {
     }
   }
 
+  requestSignUp(String? email, String? password) {
+    var emailValidationResponse = validateFormEmail(email);
+    var passwordValidationResponse = validateFormPassword(password);
+    if (emailValidationResponse == null && passwordValidationResponse == null) {
+      signUp(email: email as String, password: password as String);
+    } else {
+      _formErrorMessage =
+          '$emailValidationResponse. $passwordValidationResponse';
+      notifyListeners();
+    }
+  }
+
   Future signUp({
     required String email,
     required String password,
@@ -56,7 +87,21 @@ class AuthViewModel extends BaseViewModel {
       log.i('signUpResponse a error');
       _formErrorMessage = createNewUserResponse;
       notifyListeners();
-      return;
+    }
+  }
+
+  requestForgotPassword(String? email) {
+    if (email == null) {
+      _formErrorMessage = 'Please input your email';
+      notifyListeners();
+    } else {
+      var emailValidationResponse = validateFormEmail(email);
+      if (emailValidationResponse == null) {
+        forgotPassword(email: email);
+      } else {
+        _formErrorMessage = emailValidationResponse;
+        notifyListeners();
+      }
     }
   }
 
@@ -87,32 +132,5 @@ class AuthViewModel extends BaseViewModel {
       notifyListeners();
     }
     //add error catching
-  }
-
-  //Form validation
-  String? validateFormEmail(String? formEmail) {
-    if (formEmail == null || formEmail.isEmpty) {
-      return 'Whoops! An email address is required';
-    }
-    String regexPattern = r'\w+@\w\.\w+';
-    RegExp regex = RegExp(regexPattern);
-    if (!regex.hasMatch(formEmail)) {
-      return "Whoops! That's not an email format";
-    }
-    return '';
-  }
-
-  String? validateFormPassword(String? formPassword) {
-    if (formPassword == null || formPassword.isEmpty) {
-      return 'Whoops! A password is required';
-    }
-    String regexPattern =
-        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
-    RegExp regex = RegExp(regexPattern);
-    if (!regex.hasMatch(formPassword)) {
-      return '''Password needs to be at least 8 characters,
-      include an uppercase letter, lowercase letter, number and symbol.''';
-    }
-    return '';
   }
 }

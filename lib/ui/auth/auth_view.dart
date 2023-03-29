@@ -4,6 +4,7 @@ import 'package:gallery_app/app/colors.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../app/fonts.dart';
+import '../../app/validators.dart';
 
 class AuthView extends StatefulWidget {
   const AuthView({super.key});
@@ -46,7 +47,7 @@ class AuthenticationState extends State<AuthView> {
                 ),
                 TextFormField(
                   controller: _emailField,
-                  validator: model.validateFormEmail,
+                  validator: validateFormEmail,
                   decoration: const InputDecoration(
                     hintText: "example@email.com",
                     labelText: "Email",
@@ -55,7 +56,7 @@ class AuthenticationState extends State<AuthView> {
                 ),
                 TextFormField(
                   controller: _passwordField,
-                  validator: model.validateFormPassword,
+                  validator: validateFormPassword,
                   obscureText: true, //hide password characters
                   decoration: const InputDecoration(
                     labelText: "Password",
@@ -68,7 +69,7 @@ class AuthenticationState extends State<AuthView> {
                 ),
                 MaterialButton(
                   onPressed: () async {
-                    await model.forgotPassword(email: _emailField.text);
+                    await model.requestForgotPassword(_emailField.text);
                   },
                   child: const Text(
                     "Forgot Password",
@@ -84,9 +85,8 @@ class AuthenticationState extends State<AuthView> {
                   ),
                   child: MaterialButton(
                     onPressed: () async {
-                      await model.signIn(
-                          email: _emailField.text,
-                          password: _passwordField.text);
+                      await model.requestSignIn(
+                          _emailField.text, _passwordField.text);
                     },
                     child: const Text(
                       "Login",
@@ -102,9 +102,8 @@ class AuthenticationState extends State<AuthView> {
                   ),
                   child: MaterialButton(
                     onPressed: () async {
-                      await model.signUp(
-                          email: _emailField.text,
-                          password: _passwordField.text);
+                      await model.requestSignUp(
+                          _emailField.text, _passwordField.text);
                     },
                     child: const Text(
                       "Sign Up",

@@ -3,6 +3,7 @@ import 'package:gallery_app/app/colors.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../app/fonts.dart';
+import '../../app/validators.dart';
 import 'change_pw_view_model.dart';
 
 class ChangePwView extends StatefulWidget {
@@ -42,7 +43,7 @@ class PwState extends State<ChangePwView> {
                 const SizedBox(height: 30),
                 TextFormField(
                   controller: _newPasswordField,
-                  validator: model.validateFormPassword,
+                  validator: validateFormPassword,
                   obscureText: true, //hide password characters
                   decoration: const InputDecoration(
                     labelText: "New Password",
@@ -51,7 +52,7 @@ class PwState extends State<ChangePwView> {
                 ),
                 TextFormField(
                   controller: _duplicatePasswordField,
-                  validator: model.validateFormPassword,
+                  validator: validateFormPassword,
                   obscureText: true, //hide password characters
                   decoration: const InputDecoration(
                     labelText: "Retype New Password",
