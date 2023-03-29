@@ -17,8 +17,11 @@ class AuthViewModel extends BaseViewModel {
   final _dialogService = locator<DialogService>();
   final _validationService = locator<ValidationService>();
 
-  final String _logoLocation = 'assets/gallery_logo.png';
+  final String _logoLocation = 'assets/monstera_logo.png';
   String get logoLocation => _logoLocation;
+
+  final String _backgroundLocation = 'assets/leaves_plant_green.jpg';
+  String get backgroundLocation => _backgroundLocation;
 
   String _formErrorMessage = '';
   String get formErrorMessage => _formErrorMessage;

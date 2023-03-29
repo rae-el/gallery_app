@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-const backgroundColour = Color.fromARGB(255, 35, 35, 32);
-const secondaryBackgroundColour = Color.fromARGB(255, 78, 78, 78);
-const textColour = Color.fromRGBO(254, 254, 254, 1);
-const primaryColour = Color.fromARGB(255, 103, 152, 249);
-const secondaryColour = Color.fromARGB(255, 99, 183, 248);
-const errorColour = Color.fromARGB(255, 255, 53, 73);
-const warningColour = Color.fromARGB(255, 255, 154, 53);
-const successColour = Color.fromARGB(255, 103, 247, 74);
+const backgroundColour = Color.fromARGB(255, 11, 10, 9);
+const secondaryBackgroundColour = Color.fromARGB(100, 75, 94, 74);
+const textColour = Color.fromRGBO(255, 254, 254, 1);
+const primaryColour = Color.fromARGB(255, 191, 197, 170);
+const secondaryColour = Color.fromARGB(255, 155, 94, 159);
+const errorColour = Color.fromARGB(255, 255, 145, 156);
+const warningColour = Color.fromARGB(255, 255, 198, 142);
+const successColour = Color.fromARGB(255, 186, 255, 172);

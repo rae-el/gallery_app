@@ -11,7 +11,7 @@ class StartupViewModel extends BaseViewModel implements Initialisable {
   final _authenticationService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
 
-  final String _logoLocation = 'assets/gallery_logo.png';
+  final String _logoLocation = 'assets/monstera_logo.png';
   String get logoLocation => _logoLocation;
 
   bool _loggedIn = false;

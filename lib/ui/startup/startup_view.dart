@@ -15,17 +15,25 @@ class StartupView extends StatelessWidget {
       //onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, model, child) => Scaffold(
         body: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+          child: Stack(
             children: <Widget>[
-              SizedBox(
-                width: 300,
-                height: 100,
-                child: Image.asset(model.logoLocation),
+              Center(
+                child: SizedBox(
+                  width: 300,
+                  height: 100,
+                  child: Image.asset(model.logoLocation),
+                ),
               ),
-              const CircularProgressIndicator(
-                  strokeWidth: 3,
-                  valueColor: AlwaysStoppedAnimation(primaryColour)),
+              const Center(
+                child: SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 1,
+                    valueColor: AlwaysStoppedAnimation(primaryColour),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

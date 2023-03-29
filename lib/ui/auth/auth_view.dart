@@ -33,20 +33,23 @@ class AuthenticationState extends State<AuthView> {
           child: Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
-            decoration: const BoxDecoration(
-              color: backgroundColour,
+            decoration: BoxDecoration(
+              //color: backgroundColour,
+              image: DecorationImage(
+                  image: AssetImage(model.backgroundLocation),
+                  fit: BoxFit.cover),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  'Login To Gallery',
+                  'Your Gallery',
                   style: maxTitleFont,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 225,
                   height: 75,
-                  child: Image.asset(model.logoLocation),
+                  //child: Image.asset(model.logoLocation),
                 ),
                 TextFormField(
                   controller: _emailField,
@@ -76,7 +79,7 @@ class AuthenticationState extends State<AuthView> {
                   },
                   child: const Text(
                     "Forgot Password",
-                    style: TextStyle(fontSize: 14),
+                    style: TextStyle(fontSize: 14, color: primaryColour),
                   ),
                 ),
                 Container(
@@ -91,6 +94,7 @@ class AuthenticationState extends State<AuthView> {
                       await model.requestSignIn(
                           _emailField.text, _passwordField.text);
                     },
+                    color: secondaryBackgroundColour,
                     child: const Text(
                       "Login",
                       style: TextStyle(color: textColour),
@@ -110,6 +114,7 @@ class AuthenticationState extends State<AuthView> {
                     },
                     child: const Text(
                       "Sign Up",
+                      style: TextStyle(color: primaryColour),
                     ),
                   ),
                 ),
