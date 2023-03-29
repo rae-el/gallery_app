@@ -54,6 +54,9 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
 
   bool decendingOrder = false;
 
+    final String _logoLocation = 'assets/monstera_logo.png';
+  String get logoLocation => _logoLocation;
+
   @override
   void initialise() async {
     runBusyFuture(getGallery());

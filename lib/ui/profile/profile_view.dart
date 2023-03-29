@@ -65,11 +65,26 @@ class ProfileState extends State<ProfilePage> {
       //onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, model, child) => model.isBusy
           ? Center(
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width / 4,
-                child: const LinearProgressIndicator(
-                  color: secondaryBackgroundColour,
-                ),
+              child: Stack(
+                children: <Widget>[
+                  Center(
+                    child: SizedBox(
+                      width: 300,
+                      height: 100,
+                      child: Image.asset(model.logoLocation),
+                    ),
+                  ),
+                  const Center(
+                    child: SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 1,
+                        valueColor: AlwaysStoppedAnimation(primaryColour),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             )
           : Scaffold(
@@ -99,7 +114,6 @@ class ProfileState extends State<ProfilePage> {
                       ),
                       const SizedBox(height: 30),
                       ListTile(
-                        tileColor: backgroundColour,
                         leading: const Icon(Icons.edit),
                         title: TextFormField(
                           controller: model.nameField,
@@ -109,7 +123,6 @@ class ProfileState extends State<ProfilePage> {
                         ),
                       ),
                       ListTile(
-                        tileColor: backgroundColour,
                         leading: const Icon(Icons.edit),
                         title: TextFormField(
                           controller: model.descriptionField,
@@ -119,7 +132,6 @@ class ProfileState extends State<ProfilePage> {
                         ),
                       ),
                       ListTile(
-                        tileColor: backgroundColour,
                         leading: const Icon(Icons.mail),
                         title: Text(model.userEmail),
                       ),

@@ -40,6 +40,9 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
   String _userImagePath = "";
   String get userImagePath => _userImagePath;
 
+    final String _logoLocation = 'assets/monstera_logo.png';
+  String get logoLocation => _logoLocation;
+
   @override
   void initialise() async {
     runBusyFuture(askForUserData());

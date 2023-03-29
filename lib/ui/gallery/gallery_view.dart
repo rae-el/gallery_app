@@ -63,11 +63,26 @@ class HomePage extends StatelessWidget {
       //onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, model, child) => model.isBusy
           ? Center(
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width / 4,
-                child: const LinearProgressIndicator(
-                  color: secondaryBackgroundColour,
-                ),
+              child: Stack(
+                children: <Widget>[
+                  Center(
+                    child: SizedBox(
+                      width: 300,
+                      height: 100,
+                      child: Image.asset(model.logoLocation),
+                    ),
+                  ),
+                  const Center(
+                    child: SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 1,
+                        valueColor: AlwaysStoppedAnimation(primaryColour),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             )
           : Scaffold(
