@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:gallery_app/app/fonts.dart';
 import 'package:gallery_app/ui/gallery/gallery_view_model.dart';
 import 'package:gallery_app/app/colors.dart';
 import 'package:stacked/stacked.dart';
@@ -35,9 +36,14 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
       viewModelBuilder: () => GalleryViewModel(),
       builder: (context, model, child) => AppBar(
         //should make the title the username?
-        title: Text(model.username),
+        title: Text(
+          model.username,
+          style: appBarFont,
+        ),
         centerTitle: true,
         automaticallyImplyLeading: false,
+        shadowColor: secondaryBackgroundColour,
+
         actions: [
           IconButton(
             icon: CircleAvatar(
@@ -99,10 +105,13 @@ class HomePage extends StatelessWidget {
               ),
             )
           : Scaffold(
+              extendBody: true,
               body: Container(
                 decoration: const BoxDecoration(
-                  color: backgroundColour,
-                ),
+                    gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [secondaryBackgroundColour, backgroundColour])),
                 //fill space of entire screen
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
@@ -146,36 +155,40 @@ class HomePage extends StatelessWidget {
                                       //add double tap favourite function
                                       child: Hero(
                                         tag: model.galleryImagesShown[index],
-                                        child: Stack(
-                                          fit: StackFit.passthrough,
-                                          children: [
-                                            Image.file(
-                                              File(model
-                                                  .galleryImagesShown[index]
-                                                  .path),
-                                              width: 100,
-                                              height: 100,
-                                              fit: BoxFit.cover,
-                                            ),
-                                            model.galleryImagesShown[index]
-                                                    .favourite
-                                                ? const PositionedDirectional(
-                                                    end: 0,
-                                                    bottom: 0,
-                                                    child: Icon(
-                                                      Icons.favorite,
-                                                      size: 20,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: Stack(
+                                            fit: StackFit.passthrough,
+                                            children: [
+                                              Image.file(
+                                                File(model
+                                                    .galleryImagesShown[index]
+                                                    .path),
+                                                width: 100,
+                                                height: 100,
+                                                fit: BoxFit.cover,
+                                              ),
+                                              model.galleryImagesShown[index]
+                                                      .favourite
+                                                  ? const PositionedDirectional(
+                                                      end: 0,
+                                                      bottom: 0,
+                                                      child: Icon(
+                                                        Icons.favorite,
+                                                        size: 20,
+                                                      ),
+                                                    )
+                                                  : const PositionedDirectional(
+                                                      end: 0,
+                                                      bottom: 0,
+                                                      child: Icon(
+                                                        Icons.favorite_outline,
+                                                        size: 20,
+                                                      ),
                                                     ),
-                                                  )
-                                                : const PositionedDirectional(
-                                                    end: 0,
-                                                    bottom: 0,
-                                                    child: Icon(
-                                                      Icons.favorite_outline,
-                                                      size: 20,
-                                                    ),
-                                                  ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -193,7 +206,7 @@ class HomePage extends StatelessWidget {
               ),
               //should this be a persisent footer button instead?
               bottomNavigationBar: DecoratedBox(
-                decoration: const BoxDecoration(color: backgroundColour),
+                decoration: const BoxDecoration(color: transparentColour),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 50.0, right: 50.0),
                   child: ClipPath(

@@ -11,4 +11,9 @@ const titleFont = TextStyle(
     fontSize: 27,
     color: primaryColour,
     fontFamily: 'ShadowsIntoLight');
+const appBarFont = TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 27,
+    color: textColour,
+    fontFamily: 'ShadowsIntoLight');
 const formErrorFont = TextStyle(fontSize: 14, color: errorColour);

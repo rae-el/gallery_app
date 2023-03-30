@@ -4,6 +4,8 @@ import 'package:gallery_app/app/colors.dart';
 import 'package:gallery_app/ui/profile/profile_view_model.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../app/fonts.dart';
+
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
 
@@ -30,7 +32,10 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       //onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
-          title: const Text('Profile'),
+          title: const Text(
+            'Edit Profile',
+            style: appBarFont,
+          ),
           centerTitle: true,
           //how do you change the leading splash radius
           leadingWidth: 30,
