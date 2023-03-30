@@ -214,7 +214,7 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
       context: context,
       builder: (BuildContext context) {
         return SimpleDialog(
-          title: const Text('Select an Image'),
+          title: const Text('Select Image Source'),
           children: <Widget>[
             SimpleDialogOption(
               onPressed: () async {

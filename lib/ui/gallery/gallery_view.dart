@@ -90,14 +90,27 @@ class HomePage extends StatelessWidget {
               //fill space of entire screen
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              child: const Center(
-                child: SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 1,
-                    valueColor: AlwaysStoppedAnimation(primaryColour),
-                  ),
+              child: Center(
+                child: Stack(
+                  children: <Widget>[
+                    Center(
+                      child: SizedBox(
+                        width: 300,
+                        height: 100,
+                        child: Image.asset(model.logoLocation),
+                      ),
+                    ),
+                    const Center(
+                      child: SizedBox(
+                        width: 100,
+                        height: 100,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 1,
+                          valueColor: AlwaysStoppedAnimation(primaryColour),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             )
