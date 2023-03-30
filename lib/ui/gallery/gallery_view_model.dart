@@ -35,6 +35,9 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
   String _username = "";
   String get username => _username;
 
+  String _userIcon = "";
+  String get userIcon => _userIcon;
+
   List<ThisImage> _galleryImages = [];
   List<ThisImage> get galleryImages => _galleryImages;
 
@@ -54,7 +57,7 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
 
   bool decendingOrder = false;
 
-    final String _logoLocation = 'assets/monstera_logo.png';
+  final String _logoLocation = 'assets/monstera_logo.png';
   String get logoLocation => _logoLocation;
 
   @override
@@ -83,6 +86,7 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
       if (_galleryId != "") {
         getGalleryImages(galleryID: _galleryId);
         await setUserName();
+        await setUserIcon();
       }
     }
   }
@@ -94,6 +98,14 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
     if (userData != null) {
       _username = userData.username ?? "";
       log.i('got username $_username');
+    }
+  }
+
+  Future setUserIcon() async {
+    ThisUser? userData = await _userService.getUserData();
+
+    if (userData != null) {
+      _userIcon = userData.avatar ?? "";
     }
   }
 

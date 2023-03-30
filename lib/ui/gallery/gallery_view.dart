@@ -40,7 +40,19 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
-            icon: const Icon(Icons.person),
+            icon: CircleAvatar(
+              radius: 50,
+              child: model.userIcon == ""
+                  ? const Icon(Icons.person)
+                  : ClipOval(
+                      child: Image.file(
+                        File(model.userIcon),
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+            ),
             onPressed: model.navigateToProfile,
             iconSize: 25,
             splashRadius: 25,
@@ -180,59 +192,79 @@ class HomePage extends StatelessWidget {
                       ),
               ),
               //should this be a persisent footer button instead?
-              bottomNavigationBar: SizedBox(
-                height: 50,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    IconButton(
-                      onPressed: () async {
-                        await model.reorderAcendingDecending();
-                      },
-                      icon: const Icon(Icons.swap_vert),
-                      iconSize: 20,
-                      splashRadius: 18,
-                      tooltip: 'Order By Date',
+              bottomNavigationBar: DecoratedBox(
+                decoration: const BoxDecoration(color: backgroundColour),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 50.0, right: 50.0),
+                  child: ClipPath(
+                    clipper: const ShapeBorderClipper(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(40),
+                                topLeft: Radius.circular(40)))),
+                    child: SizedBox(
+                      height: 50,
+                      child: DecoratedBox(
+                        decoration: const BoxDecoration(
+                            color: secondaryBackgroundColour),
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            IconButton(
+                              onPressed: () async {
+                                await model.reorderAcendingDecending();
+                              },
+                              icon: const Icon(Icons.swap_vert),
+                              iconSize: 20,
+                              splashRadius: 18,
+                              tooltip: 'Order By Date',
+                              color: primaryColour,
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                model.toggleDraggableReordering();
+                              },
+                              icon: model.draggableReordering
+                                  ? const Icon(Icons.grid_view)
+                                  : const Icon(Icons.move_down),
+                              iconSize: 20,
+                              splashRadius: 18,
+                              tooltip: 'Enable Draggable Reordering',
+                              color: primaryColour,
+                            ),
+                            const SizedBox(
+                              width: 30,
+                            ),
+                            IconButton(
+                              onPressed: () async {
+                                await model.openPickerDialog(context);
+                              },
+                              icon: const Icon(Icons.add_circle),
+                              iconSize: 40,
+                              splashRadius: 25,
+                              tooltip: 'Add New',
+                            ),
+                            const SizedBox(
+                              width: 65,
+                            ),
+                            IconButton(
+                              onPressed: () async {
+                                await model.filterFavourites();
+                              },
+                              icon: model.galleryImagesShown.length ==
+                                      model.favouriteGalleryImagesShown.length
+                                  ? const Icon(Icons.favorite_border)
+                                  : const Icon(Icons.favorite),
+                              iconSize: 20,
+                              splashRadius: 18,
+                              tooltip: 'View Favourites',
+                              color: primaryColour,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    IconButton(
-                      onPressed: () {
-                        model.toggleDraggableReordering();
-                      },
-                      icon: model.draggableReordering
-                          ? const Icon(Icons.grid_view)
-                          : const Icon(Icons.move_down),
-                      iconSize: 20,
-                      splashRadius: 18,
-                      tooltip: 'Enable Draggable Reordering',
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 4.9,
-                    ),
-                    IconButton(
-                      onPressed: () async {
-                        await model.openPickerDialog(context);
-                      },
-                      icon: const Icon(Icons.add_circle_outline),
-                      iconSize: 35,
-                      splashRadius: 25,
-                      tooltip: 'Add New',
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 3.2,
-                    ),
-                    IconButton(
-                      onPressed: () async {
-                        await model.filterFavourites();
-                      },
-                      icon: model.galleryImagesShown.length ==
-                              model.favouriteGalleryImagesShown.length
-                          ? const Icon(Icons.favorite_border)
-                          : const Icon(Icons.favorite),
-                      iconSize: 20,
-                      splashRadius: 18,
-                      tooltip: 'View Favourites',
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
