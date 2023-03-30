@@ -127,13 +127,13 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
       for (var galleryImage in getGalleryImages) {
         if (galleryImage.path.isNotEmpty) {
           try {
-            var truePath = await File(galleryImage.path).exists();
-            if (truePath) {
+            var truePath = await Directory(galleryImage.path).exists();
+            if (truePath == true) {
               try {
-                if (testImage(galleryImage)) {
+                if (testImage(galleryImage) == true) {
                   addGalleryImagesToGallery(galleryImage);
                 }
-              } on PathNotFoundException {
+              } catch (e) {
                 log.i('path not found exception for $galleryImage');
               }
             }
