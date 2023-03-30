@@ -5,6 +5,7 @@ import 'package:gallery_app/ui/gallery/gallery_view_model.dart';
 import 'package:gallery_app/app/colors.dart';
 import 'package:stacked/stacked.dart';
 import 'package:reorderables/reorderables.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class GalleryView extends StatelessWidget {
   const GalleryView({super.key});
@@ -97,70 +98,85 @@ class HomePage extends StatelessWidget {
                     ? const Center(
                         child: Text('Start by adding some images!'),
                       )
-                    : ReorderableWrap(
-                        maxMainAxisCount: 3,
-                        minMainAxisCount: 3,
-                        spacing: 3,
-                        runSpacing: 3,
-                        enableReorder: model.draggableReordering,
-                        padding: const EdgeInsets.all(1),
-                        children: List.generate(model.galleryImagesShown.length,
-                            (index) {
-                          //_items = model.galleryImages!;
-                          return SizedBox(
-                            width: 135,
-                            height: 135,
-                            child: GestureDetector(
-                              key: Key('$index'),
-                              onTap: () {
-                                model.navigateToImageView(
-                                  image: model.galleryImagesShown[index],
-                                );
-                              },
-                              onDoubleTap: () {
-                                model.toggleFavourite(
-                                    image: model.galleryImagesShown[index]);
-                              },
-                              //add double tap favourite function
-                              child: Hero(
-                                tag: model.galleryImagesShown[index],
-                                child: Stack(
-                                  fit: StackFit.passthrough,
-                                  children: [
-                                    Image.file(
-                                      File(
-                                          model.galleryImagesShown[index].path),
-                                      width: 100,
-                                      height: 100,
-                                      fit: BoxFit.cover,
+                    : AnimationLimiter(
+                        child: ReorderableWrap(
+                          maxMainAxisCount: 3,
+                          minMainAxisCount: 3,
+                          spacing: 3,
+                          runSpacing: 3,
+                          enableReorder: model.draggableReordering,
+                          padding: const EdgeInsets.all(1),
+                          children: List.generate(
+                              model.galleryImagesShown.length, (index) {
+                            //_items = model.galleryImages!;
+                            return AnimationConfiguration.staggeredList(
+                              position: index,
+                              duration: const Duration(milliseconds: 377),
+                              child: SlideAnimation(
+                                verticalOffset: 20,
+                                child: FadeInAnimation(
+                                  child: SizedBox(
+                                    width: 135,
+                                    height: 135,
+                                    child: GestureDetector(
+                                      key: Key('$index'),
+                                      onTap: () {
+                                        model.navigateToImageView(
+                                          image:
+                                              model.galleryImagesShown[index],
+                                        );
+                                      },
+                                      onDoubleTap: () {
+                                        model.toggleFavourite(
+                                            image: model
+                                                .galleryImagesShown[index]);
+                                      },
+                                      //add double tap favourite function
+                                      child: Hero(
+                                        tag: model.galleryImagesShown[index],
+                                        child: Stack(
+                                          fit: StackFit.passthrough,
+                                          children: [
+                                            Image.file(
+                                              File(model
+                                                  .galleryImagesShown[index]
+                                                  .path),
+                                              width: 100,
+                                              height: 100,
+                                              fit: BoxFit.cover,
+                                            ),
+                                            model.galleryImagesShown[index]
+                                                    .favourite
+                                                ? const PositionedDirectional(
+                                                    end: 0,
+                                                    bottom: 0,
+                                                    child: Icon(
+                                                      Icons.favorite,
+                                                      size: 20,
+                                                    ),
+                                                  )
+                                                : const PositionedDirectional(
+                                                    end: 0,
+                                                    bottom: 0,
+                                                    child: Icon(
+                                                      Icons.favorite_outline,
+                                                      size: 20,
+                                                    ),
+                                                  ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                    model.galleryImagesShown[index].favourite
-                                        ? const PositionedDirectional(
-                                            end: 0,
-                                            bottom: 0,
-                                            child: Icon(
-                                              Icons.favorite,
-                                              size: 20,
-                                            ),
-                                          )
-                                        : const PositionedDirectional(
-                                            end: 0,
-                                            bottom: 0,
-                                            child: Icon(
-                                              Icons.favorite_outline,
-                                              size: 20,
-                                            ),
-                                          ),
-                                  ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        }),
-                        onReorder: (int oldIndex, int newIndex) {
-                          model.onReorder(
-                              oldIndex: oldIndex, newIndex: newIndex);
-                        },
+                            );
+                          }),
+                          onReorder: (int oldIndex, int newIndex) {
+                            model.onReorder(
+                                oldIndex: oldIndex, newIndex: newIndex);
+                          },
+                        ),
                       ),
               ),
               //should this be a persisent footer button instead?
