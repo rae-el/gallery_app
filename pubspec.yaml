@@ -90,6 +90,15 @@ flutter:
     - family: ShadowsIntoLight
       fonts:
         - asset: assets/fonts/ShadowsIntoLight-Regular.ttf
+    - family: Handlee
+      fonts:
+        - asset: assets/fonts/Handlee-Regular.ttf
+    - family: Calligraffitti
+      fonts:
+        - asset: assets/fonts/Calligraffitti-Regular.ttf
+    - family: OoohBaby
+      fonts:
+        - asset: assets/fonts/OoohBaby-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

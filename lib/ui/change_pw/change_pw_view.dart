@@ -27,13 +27,17 @@ class PwState extends State<ChangePwView> {
       viewModelBuilder: () => ChangePwViewModel(),
       //onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, model, child) => Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Form(
           key: _key,
           child: Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             decoration: const BoxDecoration(
-              color: backgroundColour,
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [secondaryBackgroundColour, backgroundColour]),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -73,10 +77,10 @@ class PwState extends State<ChangePwView> {
                 ),
                 const SizedBox(height: 30),
                 Container(
-                  width: MediaQuery.of(context).size.width / 1.4,
-                  height: 45,
+                  width: MediaQuery.of(context).size.width / 1.74,
+                  height: MediaQuery.of(context).size.height / 20,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15.0),
+                    borderRadius: BorderRadius.circular(25.0),
                     color: primaryColour,
                   ),
                   child: MaterialButton(
@@ -95,16 +99,26 @@ class PwState extends State<ChangePwView> {
                     },
                     child: const Text(
                       "Update",
-                      style: TextStyle(color: textColour),
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
-                MaterialButton(
-                  onPressed: () async {
-                    await model.cancelRequest();
-                  },
-                  child: const Text(
-                    "Cancel",
+                const SizedBox(height: 10),
+                Container(
+                  width: MediaQuery.of(context).size.width / 1.8,
+                  height: MediaQuery.of(context).size.height / 20,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25.0),
+                    border: Border.all(color: primaryColour),
+                  ),
+                  child: MaterialButton(
+                    onPressed: () async {
+                      await await model.cancelRequest();
+                    },
+                    child: const Text(
+                      "Cancel",
+                      style: TextStyle(color: primaryColour),
+                    ),
                   ),
                 ),
               ],

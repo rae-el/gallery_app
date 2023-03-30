@@ -3,17 +3,17 @@ import 'package:gallery_app/app/colors.dart';
 
 const maxTitleFont = TextStyle(
     fontWeight: FontWeight.bold,
-    fontSize: 37,
+    fontSize: 47,
     color: primaryColour,
-    fontFamily: 'ShadowsIntoLight');
+    fontFamily: 'OoohBaby');
 const titleFont = TextStyle(
     fontWeight: FontWeight.bold,
-    fontSize: 27,
+    fontSize: 30,
     color: primaryColour,
-    fontFamily: 'ShadowsIntoLight');
+    fontFamily: 'OoohBaby');
 const appBarFont = TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: 30,
     color: textColour,
-    fontFamily: 'ShadowsIntoLight');
+    fontFamily: 'OoohBaby');
 const formErrorFont = TextStyle(fontSize: 14, color: errorColour);
