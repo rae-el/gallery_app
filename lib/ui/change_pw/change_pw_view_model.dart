@@ -26,7 +26,7 @@ class ChangePwViewModel extends BaseViewModel {
   }
 
   Future cancelRequest() async {
-    await _navigationService.navigateTo(Routes.profileView);
+    await _navigationService.clearTillFirstAndShow(Routes.profileView);
   }
 
   Future requestChangePassword({
