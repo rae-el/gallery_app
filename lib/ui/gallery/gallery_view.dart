@@ -219,6 +219,7 @@ class HomePage extends StatelessWidget {
                               splashRadius: 18,
                               tooltip: 'Order By Date',
                               color: primaryColour,
+                              alignment: AlignmentDirectional.bottomStart,
                             ),
                             IconButton(
                               onPressed: () {
@@ -231,9 +232,7 @@ class HomePage extends StatelessWidget {
                               splashRadius: 18,
                               tooltip: 'Enable Draggable Reordering',
                               color: primaryColour,
-                            ),
-                            const SizedBox(
-                              width: 30,
+                              alignment: AlignmentDirectional.bottomStart,
                             ),
                             IconButton(
                               onPressed: () async {
@@ -244,9 +243,9 @@ class HomePage extends StatelessWidget {
                               splashRadius: 25,
                               tooltip: 'Add New',
                               color: textColour,
-                            ),
-                            const SizedBox(
-                              width: 65,
+                              alignment: AlignmentDirectional.topCenter,
+                              padding:
+                                  const EdgeInsets.only(left: 40.0, right: 70),
                             ),
                             IconButton(
                               onPressed: () async {
@@ -260,6 +259,7 @@ class HomePage extends StatelessWidget {
                               splashRadius: 18,
                               tooltip: 'View Favourites',
                               color: primaryColour,
+                              alignment: AlignmentDirectional.bottomEnd,
                             ),
                           ],
                         ),

@@ -143,17 +143,6 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
     }
   }
 
-  testImage(ThisImage galleryImage) {
-    try {
-      File(galleryImage.path);
-      return true;
-    } on PathNotFoundException {
-      return false;
-    } catch (e) {
-      return false;
-    }
-  }
-
   addGalleryImagesToGallery(ThisImage galleryImage) {
     log.i('validated path now add');
     _galleryImages.add(galleryImage);

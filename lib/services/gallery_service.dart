@@ -103,13 +103,21 @@ class GalleryService {
       //convert images query snapshot to a list of images?
       for (var docSnapshot in imagesQuerySnapshot.docs) {
         ThisImage imageDocSnapshot = ThisImage.fromSnapshot(docSnapshot);
-        String path = imageDocSnapshot.path;
+        String? path = imageDocSnapshot.path;
         //print(imageDocSnapshot.id);
         //why is this all the sudden throwing exception and not handleing it
-        if (await File(path).exists()) {
-          galleryImages.add(imageDocSnapshot);
-        } else {
-          log.i('did not add $imageDocSnapshot');
+        if (path.isNotEmpty) {
+          try {
+            if (await File(path).exists()) {
+              galleryImages.add(imageDocSnapshot);
+            } else {
+              log.i('did not add $imageDocSnapshot');
+            }
+          } on PathNotFoundException {
+            log.i('did not add $imageDocSnapshot');
+          } catch (e) {
+            log.i('did not add $imageDocSnapshot');
+          }
         }
       }
       //validate gallery Images

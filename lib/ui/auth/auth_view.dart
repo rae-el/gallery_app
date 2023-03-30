@@ -28,6 +28,7 @@ class AuthenticationState extends State<AuthView> {
       viewModelBuilder: () => AuthViewModel(),
       //onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, model, child) => Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Form(
           key: _key,
           child: Container(
@@ -41,6 +42,7 @@ class AuthenticationState extends State<AuthView> {
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text(
                   '''Welcome,''',
@@ -50,9 +52,9 @@ class AuthenticationState extends State<AuthView> {
                   '''to your gallery''',
                   style: titleFont,
                 ),
-                const SizedBox(
-                  width: 225,
-                  height: 75,
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height / 20,
                   //child: Image.asset(model.logoLocation),
                 ),
                 TextFormField(
@@ -79,11 +81,11 @@ class AuthenticationState extends State<AuthView> {
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  height: 10,
+                  height: MediaQuery.of(context).size.height / 200,
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width / 1.74,
-                  height: 45,
+                  height: MediaQuery.of(context).size.height / 20,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25.0),
                     color: primaryColour,
@@ -101,11 +103,11 @@ class AuthenticationState extends State<AuthView> {
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  height: 10,
+                  height: MediaQuery.of(context).size.height / 200,
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width / 1.8,
-                  height: 45,
+                  height: MediaQuery.of(context).size.height / 20,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25.0),
                     border: Border.all(color: primaryColour),

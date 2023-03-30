@@ -93,6 +93,7 @@ class ProfileState extends State<ProfilePage> {
               ),
             )
           : Scaffold(
+              resizeToAvoidBottomInset: false,
               body: Container(
                 decoration: const BoxDecoration(
                     gradient: LinearGradient(
