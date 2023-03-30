@@ -27,9 +27,11 @@ class StartupViewModel extends BaseViewModel implements Initialisable {
 
   Future navigate({required bool loggedIn}) async {
     if (loggedIn) {
-      _navigationService.replaceWith(Routes.galleryView);
+      _navigationService.replaceWith(Routes.galleryView,
+          transition: TransitionsBuilders.fadeIn);
     } else {
-      _navigationService.replaceWith(Routes.authView);
+      _navigationService.replaceWith(Routes.authView,
+          transition: TransitionsBuilders.fadeIn);
     }
   }
 

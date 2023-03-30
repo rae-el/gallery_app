@@ -67,7 +67,8 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
 
   Future navigateToProfile() async {
     //_galleryService.reorderGallery(galleryImages!);
-    _navigationService.navigateTo(Routes.profileView);
+    _navigationService.navigateTo(Routes.profileView,
+        transition: TransitionsBuilders.slideLeftWithFade);
   }
 
   Future navigateToImageView({required ThisImage image}) async {

@@ -50,7 +50,8 @@ class AuthViewModel extends BaseViewModel {
         await _authenticationService.signIn(email: email, password: password);
     if (signInResponse == null) {
       log.i('signInResponse a success null');
-      _navigationService.replaceWith(Routes.galleryView);
+      _navigationService.replaceWith(Routes.galleryView,
+          transition: TransitionsBuilders.fadeIn);
     } else {
       log.i('signInResponse a error');
       await _dialogService.showCustomDialog(
