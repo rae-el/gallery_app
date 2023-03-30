@@ -256,6 +256,7 @@ class HomePage extends StatelessWidget {
                               iconSize: 40,
                               splashRadius: 25,
                               tooltip: 'Add New',
+                              color: textColour,
                             ),
                             const SizedBox(
                               width: 65,

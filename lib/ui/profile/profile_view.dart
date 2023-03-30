@@ -93,66 +93,94 @@ class ProfileState extends State<ProfilePage> {
               ),
             )
           : Scaffold(
-              body: Center(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 30),
-                      CircleAvatar(
-                        radius: 50,
-                        child: model.userImagePath == ""
-                            ? const Icon(Icons.person)
-                            : ClipOval(
-                                child: Image.file(
-                                  File(model.userImagePath),
-                                  width: 100,
-                                  height: 100,
-                                  fit: BoxFit.cover,
+              body: Container(
+                decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [secondaryBackgroundColour, backgroundColour])),
+                //fill space of entire screen
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 30),
+                        CircleAvatar(
+                          radius: 50,
+                          child: model.userImagePath == ""
+                              ? const Icon(Icons.person)
+                              : ClipOval(
+                                  child: Image.file(
+                                    File(model.userImagePath),
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                              ),
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                          await model.openPickerDialog(context);
-                        },
-                        child: const Text('Change Image'),
-                      ),
-                      const SizedBox(height: 30),
-                      ListTile(
-                        leading: const Icon(Icons.edit),
-                        title: TextFormField(
-                          controller: model.nameField,
-                          decoration: const InputDecoration(
-                            labelText: 'Username',
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            await model.openPickerDialog(context);
+                          },
+                          child: const Text('Change Image'),
+                        ),
+                        const SizedBox(height: 30),
+                        ListTile(
+                          leading: const Icon(Icons.edit),
+                          title: TextFormField(
+                            controller: model.nameField,
+                            decoration: const InputDecoration(
+                              labelText: 'Username',
+                            ),
                           ),
                         ),
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.edit),
-                        title: TextFormField(
-                          controller: model.descriptionField,
-                          decoration: const InputDecoration(
-                            labelText: 'Description',
+                        ListTile(
+                          leading: const Icon(Icons.edit),
+                          title: TextFormField(
+                            controller: model.descriptionField,
+                            decoration: const InputDecoration(
+                              labelText: 'Description',
+                            ),
                           ),
                         ),
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.mail),
-                        title: Text(model.userEmail),
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                          await model.requestToChangePassword();
-                        },
-                        child: const Text('Change Password'),
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          await model.saveProfile();
-                        },
-                        child: const Text('Save'),
-                      ),
-                    ],
+                        ListTile(
+                          leading: const Icon(Icons.mail),
+                          title: Text(model.userEmail),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            await model.requestToChangePassword();
+                          },
+                          child: const Text(
+                            'Change Password',
+                            style:
+                                TextStyle(fontSize: 14, color: primaryColour),
+                          ),
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width / 3,
+                          height: 45,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(25.0),
+                            color: secondaryBackgroundColour,
+                          ),
+                          child: MaterialButton(
+                            onPressed: () async {
+                              await model.saveProfile();
+                            },
+                            splashColor: primaryColour,
+                            hoverColor: primaryColour,
+                            focusColor: primaryColour,
+                            child: const Text(
+                              'Save',
+                              style: TextStyle(color: textColour),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

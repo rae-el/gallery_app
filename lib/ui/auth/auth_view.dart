@@ -95,7 +95,7 @@ class AuthenticationState extends State<AuthView> {
                     },
                     child: const Text(
                       "Login",
-                      style: TextStyle(color: textColour),
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
