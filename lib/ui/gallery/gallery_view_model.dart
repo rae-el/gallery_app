@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -124,13 +125,46 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
       log.i('adding gallery image paths to list');
       //only add if path exists
       for (var galleryImage in getGalleryImages) {
-        _galleryImages.add(galleryImage);
-        _galleryImagePaths.add(galleryImage.path);
-        _galleryImagesShown.add(galleryImage);
+        if (galleryImage.path.isNotEmpty) {
+          try {
+            var truePath = await File(galleryImage.path).exists();
+            if (truePath) {
+              try {
+                if (testImage(galleryImage)) {
+                  addGalleryImagesToGallery(galleryImage);
+                }
+              } on PathNotFoundException {
+                log.i('path not found exception for $galleryImage');
+              }
+            }
+          } on PathNotFoundException {
+            //all these checks arnt resolving the throw error?
+            log.i('path not found exception for $galleryImage');
+          } catch (e) {
+            log.i('error for $galleryImage');
+          }
+        }
       }
 
       return true;
     }
+  }
+
+  testImage(var galleryImage) {
+    try {
+      File(galleryImage.path);
+      return true;
+    } on PathNotFoundException {
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  addGalleryImagesToGallery(var galleryImage) {
+    _galleryImages.add(galleryImage);
+    _galleryImagePaths.add(galleryImage.path);
+    _galleryImagesShown.add(galleryImage);
   }
 
   showRetrievingGalleryError() async {
