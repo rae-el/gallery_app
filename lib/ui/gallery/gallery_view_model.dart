@@ -49,9 +49,6 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
   List<ThisImage> get favouriteGalleryImagesShown =>
       _favouriteGalleryImagesShown;
 
-  List<String> _galleryImagePaths = [];
-  List<String> get galleryImagePaths => _galleryImagePaths;
-
   String? id;
 
   bool draggableReordering = false;
@@ -86,9 +83,9 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
     if (_userGallery != null) {
       _galleryId = _userGallery!.id ?? "";
       if (_galleryId != "") {
-        getGalleryImages(galleryID: _galleryId);
         await setUserName();
         await setUserIcon();
+        await getGalleryImages(galleryID: _galleryId);
       }
     }
   }
@@ -116,7 +113,6 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
   }) async {
     _galleryImages = [];
     _galleryImagesShown = [];
-    _galleryImagePaths = [];
     var getGalleryImages = await _galleryService.getGalleryImages(_galleryId);
     if (getGalleryImages == null) {
       log.i('gallery images empty');
@@ -124,18 +120,15 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
     } else {
       log.i('adding gallery image paths to list');
       //only add if path exists
-      for (var galleryImage in getGalleryImages) {
+      for (ThisImage galleryImage in getGalleryImages) {
+        log.i('try adding image');
         if (galleryImage.path.isNotEmpty) {
+          log.i('there is a path');
           try {
-            var truePath = await Directory(galleryImage.path).exists();
+            var truePath = await File(galleryImage.path).exists();
+            log.i(truePath);
             if (truePath == true) {
-              try {
-                if (testImage(galleryImage) == true) {
-                  addGalleryImagesToGallery(galleryImage);
-                }
-              } catch (e) {
-                log.i('path not found exception for $galleryImage');
-              }
+              addGalleryImagesToGallery(galleryImage);
             }
           } on PathNotFoundException {
             //all these checks arnt resolving the throw error?
@@ -150,7 +143,7 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
     }
   }
 
-  testImage(var galleryImage) {
+  testImage(ThisImage galleryImage) {
     try {
       File(galleryImage.path);
       return true;
@@ -161,9 +154,9 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
     }
   }
 
-  addGalleryImagesToGallery(var galleryImage) {
+  addGalleryImagesToGallery(ThisImage galleryImage) {
+    log.i('validated path now add');
     _galleryImages.add(galleryImage);
-    _galleryImagePaths.add(galleryImage.path);
     _galleryImagesShown.add(galleryImage);
   }
 
