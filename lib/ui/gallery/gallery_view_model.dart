@@ -220,13 +220,51 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
               onPressed: () async {
                 await openPicker(source: 'gallery');
               },
-              child: const Text('Gallery'),
+              child: SizedBox(
+                height: 20,
+                width: 80,
+                child: ListView(
+                  padding: const EdgeInsets.only(
+                    left: 5,
+                  ),
+                  scrollDirection: Axis.horizontal,
+                  children: const [
+                    Icon(Icons.perm_media),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      'Gallery',
+                      textAlign: TextAlign.right,
+                    ),
+                  ],
+                ),
+              ),
             ),
             SimpleDialogOption(
               onPressed: () async {
                 await openPicker(source: 'camera');
               },
-              child: const Text('Camera'),
+              child: SizedBox(
+                height: 20,
+                width: 50,
+                child: ListView(
+                  padding: const EdgeInsets.only(
+                    left: 5,
+                  ),
+                  scrollDirection: Axis.horizontal,
+                  children: const [
+                    Icon(Icons.photo_camera),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      'Camera',
+                      textAlign: TextAlign.justify,
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         );
