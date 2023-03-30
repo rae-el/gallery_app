@@ -154,7 +154,7 @@ class ProfileState extends State<ProfilePage> {
                           child: const Text(
                             'Change Password',
                             style:
-                                TextStyle(fontSize: 14, color: primaryColour),
+                                TextStyle(fontSize: 16, color: primaryColour),
                           ),
                         ),
                         Container(

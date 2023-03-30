@@ -173,7 +173,7 @@ class HomePage extends StatelessWidget {
                                                       bottom: 0,
                                                       child: Icon(
                                                         Icons.favorite,
-                                                        size: 20,
+                                                        size: 25,
                                                       ),
                                                     )
                                                   : const PositionedDirectional(
@@ -181,7 +181,7 @@ class HomePage extends StatelessWidget {
                                                       bottom: 0,
                                                       child: Icon(
                                                         Icons.favorite_outline,
-                                                        size: 20,
+                                                        size: 25,
                                                       ),
                                                     ),
                                             ],
@@ -225,7 +225,7 @@ class HomePage extends StatelessWidget {
                                 await model.reorderAcendingDecending();
                               },
                               icon: const Icon(Icons.swap_vert),
-                              iconSize: 20,
+                              iconSize: 25,
                               splashRadius: 18,
                               tooltip: 'Order By Date',
                               color: primaryColour,
@@ -238,7 +238,7 @@ class HomePage extends StatelessWidget {
                               icon: model.draggableReordering
                                   ? const Icon(Icons.grid_view)
                                   : const Icon(Icons.move_down),
-                              iconSize: 20,
+                              iconSize: 25,
                               splashRadius: 18,
                               tooltip: 'Enable Draggable Reordering',
                               color: primaryColour,
@@ -249,8 +249,8 @@ class HomePage extends StatelessWidget {
                                 await model.openPickerDialog(context);
                               },
                               icon: const Icon(Icons.add_circle),
-                              iconSize: 40,
-                              splashRadius: 25,
+                              iconSize: 45,
+                              splashRadius: 30,
                               tooltip: 'Add New',
                               color: textColour,
                               alignment: AlignmentDirectional.topCenter,
@@ -265,7 +265,7 @@ class HomePage extends StatelessWidget {
                                       model.favouriteGalleryImagesShown.length
                                   ? const Icon(Icons.favorite_border)
                                   : const Icon(Icons.favorite),
-                              iconSize: 20,
+                              iconSize: 25,
                               splashRadius: 18,
                               tooltip: 'View Favourites',
                               color: primaryColour,
