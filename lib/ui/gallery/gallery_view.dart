@@ -220,11 +220,13 @@ class HomePage extends StatelessWidget {
                 onPressed: () async {
                   await model.openPickerDialog(context);
                 },
-                backgroundColor: transparentColour,
+                backgroundColor: textColour,
+                splashColor: secondaryBackgroundColour,
+                focusColor: secondaryBackgroundColour,
                 child: const Icon(
-                  Icons.add_circle,
-                  size: 60,
-                  color: primaryColour,
+                  Icons.add,
+                  size: 40,
+                  color: backgroundColour,
                 ),
               ),
               //should this be a persisent footer button instead?

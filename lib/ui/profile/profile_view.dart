@@ -142,6 +142,7 @@ class ProfileState extends State<ProfilePage> {
                           leading: const Icon(Icons.edit),
                           title: TextFormField(
                             controller: model.nameField,
+                            textInputAction: TextInputAction.done,
                             decoration: const InputDecoration(
                               labelText: 'Username',
                             ),
@@ -151,6 +152,7 @@ class ProfileState extends State<ProfilePage> {
                           leading: const Icon(Icons.edit),
                           title: TextFormField(
                             controller: model.descriptionField,
+                            textInputAction: TextInputAction.done,
                             decoration: const InputDecoration(
                               labelText: 'Description',
                             ),

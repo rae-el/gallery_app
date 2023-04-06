@@ -50,6 +50,7 @@ class PwState extends State<ChangePwView> {
                 TextFormField(
                   controller: _newPasswordField,
                   validator: _validationService.validateFormPassword,
+                  textInputAction: TextInputAction.done,
                   obscureText: true, //hide password characters
                   decoration: const InputDecoration(
                     labelText: "New Password",
@@ -59,6 +60,7 @@ class PwState extends State<ChangePwView> {
                 TextFormField(
                   controller: _duplicatePasswordField,
                   validator: _validationService.validateFormPassword,
+                  textInputAction: TextInputAction.done,
                   obscureText: true, //hide password characters
                   decoration: const InputDecoration(
                     labelText: "Retype New Password",

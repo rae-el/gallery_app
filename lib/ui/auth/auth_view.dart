@@ -60,6 +60,7 @@ class AuthenticationState extends State<AuthView> {
                 TextFormField(
                   controller: _emailField,
                   validator: _validationService.validateFormEmail,
+                  textInputAction: TextInputAction.done,
                   decoration: const InputDecoration(
                     hintText: "example@email.com",
                     labelText: "Email",
@@ -69,6 +70,7 @@ class AuthenticationState extends State<AuthView> {
                 TextFormField(
                   controller: _passwordField,
                   validator: _validationService.validateFormPassword,
+                  textInputAction: TextInputAction.done,
                   obscureText: true, //hide password characters
                   decoration: const InputDecoration(
                     labelText: "Password",
