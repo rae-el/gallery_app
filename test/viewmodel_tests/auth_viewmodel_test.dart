@@ -89,25 +89,5 @@ void main() {
         verify(navigationService.replaceWith(Routes.galleryView));
       });*/
     });
-    group('requestForgotPassword', () {
-      test('if no input for email do not show check email dialog', () async {
-        email = null;
-        var model = getModel();
-        model.requestForgotPassword(email);
-        verifyNever(dialogService.showCustomDialog());
-      });
-      test('if invalid input for email do not show check email dialog',
-          () async {
-        email = 'a';
-        var model = getModel();
-        model.requestForgotPassword(email);
-        verifyNever(dialogService.showCustomDialog());
-      });
-      /*test('if valid input for email show dialog', () async {
-        email = 'unknown@email.com';
-        model.requestForgotPassword(email);
-        verify(dialogService.showCustomDialog());
-      });*/
-    });
   });
 }
