@@ -286,7 +286,7 @@ class HomePage extends StatelessWidget {
                           splashRadius: 18,
                           tooltip: 'View Favourites',
                           color: primaryColour,
-                          padding: const EdgeInsets.only(left: 150),
+                          padding: const EdgeInsets.only(left: 100),
                         ),
                       ],
                     ),
