@@ -1,31 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:gallery_app/ui/auth/auth_view_model.dart';
 import 'package:gallery_app/app/colors.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../app/app.locator.dart';
 import '../../app/fonts.dart';
 import '../../services/validation_service.dart';
+import 'forgot_pw_view_model.dart';
 
-class AuthView extends StatefulWidget {
-  const AuthView({super.key});
+class ForgotPwView extends StatefulWidget {
+  const ForgotPwView({super.key});
 
   @override
-  State<AuthView> createState() => AuthenticationState();
+  State<ForgotPwView> createState() => ForgotPwState();
 }
 
-class AuthenticationState extends State<AuthView> {
+class ForgotPwState extends State<ForgotPwView> {
   final _validationService = locator<ValidationService>();
-
   TextEditingController _emailField = TextEditingController();
-  TextEditingController _passwordField = TextEditingController();
   GlobalKey<FormState> _key = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<AuthViewModel>.reactive(
+    return ViewModelBuilder<ForgotPwViewModel>.reactive(
       //this is where I put the view structure
-      viewModelBuilder: () => AuthViewModel(),
+      viewModelBuilder: () => ForgotPwViewModel(),
       //onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, model, child) => Scaffold(
         resizeToAvoidBottomInset: false,
@@ -34,57 +32,45 @@ class AuthenticationState extends State<AuthView> {
           child: Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(
-              //color: backgroundColour,
-              image: DecorationImage(
-                  image: AssetImage(model.backgroundLocation),
-                  fit: BoxFit.cover),
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [secondaryBackgroundColour, backgroundColour]),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text(
-                  '''Welcome,''',
-                  style: maxTitleFont,
-                ),
-                const Text(
-                  '''to your gallery''',
+                  'Forgot Password',
                   style: titleFont,
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height / 20,
-                  //child: Image.asset(model.logoLocation),
+                const Text(
+                  '''send reset email''',
+                  style: subTitleFont,
                 ),
+                const SizedBox(height: 30),
                 TextFormField(
                   controller: _emailField,
-                  validator: _validationService.validateFormEmail,
-                  textInputAction: TextInputAction.done,
-                  decoration: const InputDecoration(
-                    hintText: "example@email.com",
-                    labelText: "Email",
-                    contentPadding: EdgeInsets.all(20),
-                  ),
-                ),
-                TextFormField(
-                  controller: _passwordField,
                   validator: _validationService.validateFormPassword,
                   textInputAction: TextInputAction.done,
                   obscureText: true, //hide password characters
                   decoration: const InputDecoration(
-                    labelText: "Password",
+                    labelText: "Email",
                     contentPadding: EdgeInsets.all(20),
                   ),
                 ),
-                Text(
-                  model.formErrorMessage,
-                  style: formErrorFont,
-                ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height / 200,
+                  width: MediaQuery.of(context).size.width / 1.2,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      model.formErrorMessage,
+                      style: formErrorFont,
+                    ),
+                  ),
                 ),
+                const SizedBox(height: 30),
                 Container(
                   width: MediaQuery.of(context).size.width / 1.74,
                   height: MediaQuery.of(context).size.height / 20,
@@ -94,19 +80,22 @@ class AuthenticationState extends State<AuthView> {
                   ),
                   child: MaterialButton(
                     onPressed: () async {
-                      await model.requestSignIn(
-                          _emailField.text, _passwordField.text);
+                      if (_emailField.text != '') {
+                        await model.requestForgotPassword(
+                          _emailField.text,
+                        );
+                      } else {
+                        model.updateFormErrorMessage(
+                            'You must enter your email');
+                      }
                     },
                     child: const Text(
-                      "Login",
+                      "Send",
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height / 200,
-                ),
+                const SizedBox(height: 10),
                 Container(
                   width: MediaQuery.of(context).size.width / 1.8,
                   height: MediaQuery.of(context).size.height / 20,
@@ -116,22 +105,12 @@ class AuthenticationState extends State<AuthView> {
                   ),
                   child: MaterialButton(
                     onPressed: () async {
-                      await model.requestSignUp(
-                          _emailField.text, _passwordField.text);
+                      await await model.cancelRequest();
                     },
                     child: const Text(
-                      "Sign Up",
+                      "Cancel",
                       style: TextStyle(color: primaryColour),
                     ),
-                  ),
-                ),
-                MaterialButton(
-                  onPressed: () async {
-                    await model.navigateToForgotPassword();
-                  },
-                  child: const Text(
-                    "Forgot Password?",
-                    style: TextStyle(fontSize: 14, color: primaryColour),
                   ),
                 ),
               ],

@@ -16,4 +16,9 @@ const appBarFont = TextStyle(
     fontSize: 30,
     color: textColour,
     fontFamily: 'OoohBaby');
+const subTitleFont = TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 26,
+    color: primaryColour,
+    fontFamily: 'OoohBaby');
 const formErrorFont = TextStyle(fontSize: 14, color: errorColour);

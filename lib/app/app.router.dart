@@ -5,17 +5,18 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i8;
+import 'package:flutter/material.dart' as _i9;
 import 'package:flutter/material.dart';
-import 'package:gallery_app/models/this_image.dart' as _i9;
+import 'package:gallery_app/models/this_image.dart' as _i10;
 import 'package:gallery_app/ui/auth/auth_view.dart' as _i4;
 import 'package:gallery_app/ui/change_pw/change_pw_view.dart' as _i6;
+import 'package:gallery_app/ui/forgot_pw/forgot_pw_view.dart' as _i8;
 import 'package:gallery_app/ui/gallery/gallery_view.dart' as _i3;
 import 'package:gallery_app/ui/image/image_view.dart' as _i7;
 import 'package:gallery_app/ui/profile/profile_view.dart' as _i5;
 import 'package:gallery_app/ui/startup/startup_view.dart' as _i2;
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i10;
+import 'package:stacked_services/stacked_services.dart' as _i11;
 
 class Routes {
   static const startupView = '/';
@@ -30,6 +31,8 @@ class Routes {
 
   static const imageView = '/image-view';
 
+  static const forgotPwView = '/forgot-pw-view';
+
   static const all = <String>{
     startupView,
     galleryView,
@@ -37,6 +40,7 @@ class Routes {
     profileView,
     changePwView,
     imageView,
+    forgotPwView,
   };
 }
 
@@ -66,39 +70,43 @@ class StackedRouter extends _i1.RouterBase {
       Routes.imageView,
       page: _i7.ImageView,
     ),
+    _i1.RouteDef(
+      Routes.forgotPwView,
+      page: _i8.ForgotPwView,
+    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.StartupView: (data) {
-      return _i8.MaterialPageRoute<dynamic>(
+      return _i9.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.StartupView(),
         settings: data,
         maintainState: false,
       );
     },
     _i3.GalleryView: (data) {
-      return _i8.MaterialPageRoute<dynamic>(
+      return _i9.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.GalleryView(),
         settings: data,
         maintainState: false,
       );
     },
     _i4.AuthView: (data) {
-      return _i8.MaterialPageRoute<dynamic>(
+      return _i9.MaterialPageRoute<dynamic>(
         builder: (context) => const _i4.AuthView(),
         settings: data,
         maintainState: false,
       );
     },
     _i5.ProfileView: (data) {
-      return _i8.MaterialPageRoute<dynamic>(
+      return _i9.MaterialPageRoute<dynamic>(
         builder: (context) => const _i5.ProfileView(),
         settings: data,
         maintainState: false,
       );
     },
     _i6.ChangePwView: (data) {
-      return _i8.MaterialPageRoute<dynamic>(
+      return _i9.MaterialPageRoute<dynamic>(
         builder: (context) => const _i6.ChangePwView(),
         settings: data,
         maintainState: false,
@@ -106,8 +114,15 @@ class StackedRouter extends _i1.RouterBase {
     },
     _i7.ImageView: (data) {
       final args = data.getArgs<ImageViewArguments>(nullOk: false);
-      return _i8.MaterialPageRoute<dynamic>(
+      return _i9.MaterialPageRoute<dynamic>(
         builder: (context) => _i7.ImageView(key: args.key, image: args.image),
+        settings: data,
+        maintainState: false,
+      );
+    },
+    _i8.ForgotPwView: (data) {
+      return _i9.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i8.ForgotPwView(),
         settings: data,
         maintainState: false,
       );
@@ -126,9 +141,9 @@ class ImageViewArguments {
     required this.image,
   });
 
-  final _i8.Key? key;
+  final _i9.Key? key;
 
-  final _i9.ThisImage image;
+  final _i10.ThisImage image;
 
   @override
   String toString() {
@@ -136,7 +151,7 @@ class ImageViewArguments {
   }
 }
 
-extension NavigatorStateExtension on _i10.NavigationService {
+extension NavigatorStateExtension on _i11.NavigationService {
   Future<dynamic> navigateToStartupView([
     int? routerId,
     bool preventDuplicates = true,
@@ -208,8 +223,8 @@ extension NavigatorStateExtension on _i10.NavigationService {
   }
 
   Future<dynamic> navigateToImageView({
-    _i8.Key? key,
-    required _i9.ThisImage image,
+    _i9.Key? key,
+    required _i10.ThisImage image,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -218,6 +233,20 @@ extension NavigatorStateExtension on _i10.NavigationService {
   }) async {
     return navigateTo<dynamic>(Routes.imageView,
         arguments: ImageViewArguments(key: key, image: image),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToForgotPwView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.forgotPwView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -295,8 +324,8 @@ extension NavigatorStateExtension on _i10.NavigationService {
   }
 
   Future<dynamic> replaceWithImageView({
-    _i8.Key? key,
-    required _i9.ThisImage image,
+    _i9.Key? key,
+    required _i10.ThisImage image,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -305,6 +334,20 @@ extension NavigatorStateExtension on _i10.NavigationService {
   }) async {
     return replaceWith<dynamic>(Routes.imageView,
         arguments: ImageViewArguments(key: key, image: image),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithForgotPwView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.forgotPwView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

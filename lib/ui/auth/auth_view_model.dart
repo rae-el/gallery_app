@@ -95,53 +95,10 @@ class AuthViewModel extends BaseViewModel {
     }
   }
 
-  requestForgotPassword(String? email) {
-    if (email == null) {
-      _formErrorMessage = 'Please input your email. ';
-      notifyListeners();
-    } else {
-      var emailValidationResponse = _validationService.validateFormEmail(email);
-      if (emailValidationResponse == null) {
-        forgotPassword(email: email);
-        _formErrorMessage = '';
-        notifyListeners();
-      } else {
-        _formErrorMessage = emailValidationResponse;
-        notifyListeners();
-      }
-    }
+  navigateToForgotPassword() {
+    _navigationService.replaceWith(Routes.forgotPwView,
+        transition: TransitionsBuilders.fadeIn);
   }
 
-  Future forgotPassword({required String email}) async {
-    if (email != '') {
-      var forgotPasswordResponse =
-          await _authenticationService.forgotPassword(email: email);
-      if (forgotPasswordResponse ==
-          'Please check your email to finish resetting your password') {
-        await _dialogService.showCustomDialog(
-          variant: DialogType.basic,
-          data: BasicDialogStatus.success,
-          title: successTitle,
-          description: forgotPasswordResponse,
-          mainButtonTitle: 'OK',
-        );
-        _formErrorMessage = '';
-        notifyListeners();
-      } else {
-        await _dialogService.showCustomDialog(
-          variant: DialogType.basic,
-          data: BasicDialogStatus.error,
-          title: errorTitle,
-          description: forgotPasswordResponse,
-          mainButtonTitle: 'OK',
-        );
-        _formErrorMessage = '';
-        notifyListeners();
-      }
-    } else {
-      _formErrorMessage = 'Please input your email. ';
-      notifyListeners();
-    }
-    //add error catching
-  }
+  
 }

@@ -11,6 +11,7 @@ import '../ui/image/image_view.dart';
 import '../ui/startup/startup_view.dart';
 import '../ui/auth/auth_view.dart';
 import '../ui/profile/profile_view.dart';
+import '../ui/forgot_pw/forgot_pw_view.dart';
 
 @StackedApp(logger: StackedLogger(), routes: [
   MaterialRoute(page: StartupView, initial: true),
@@ -20,6 +21,7 @@ import '../ui/profile/profile_view.dart';
   //how do I make this a subpage
   MaterialRoute(page: ChangePwView),
   MaterialRoute(page: ImageView),
+  MaterialRoute(page: ForgotPwView),
 ], dependencies: [
   LazySingleton(classType: AuthenticationService),
   LazySingleton(classType: NavigationService),
