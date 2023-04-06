@@ -116,6 +116,8 @@ class HomePage extends StatelessWidget {
             )
           : Scaffold(
               extendBody: true,
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerDocked,
               body: Container(
                 decoration: const BoxDecoration(
                     gradient: LinearGradient(
@@ -214,79 +216,79 @@ class HomePage extends StatelessWidget {
                         ),
                       ),
               ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () async {
+                  await model.openPickerDialog(context);
+                },
+                backgroundColor: transparentColour,
+                child: const Icon(
+                  Icons.add_circle,
+                  size: 60,
+                  color: primaryColour,
+                ),
+              ),
               //should this be a persisent footer button instead?
-              bottomNavigationBar: DecoratedBox(
-                decoration: const BoxDecoration(color: transparentColour),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 50.0, right: 50.0),
-                  child: ClipPath(
-                    clipper: const ShapeBorderClipper(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(40),
-                                topLeft: Radius.circular(40)))),
-                    child: SizedBox(
-                      height: 50,
-                      child: DecoratedBox(
-                        decoration: const BoxDecoration(
-                            color: secondaryBackgroundColour),
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: [
-                            IconButton(
-                              onPressed: () async {
-                                await model.reorderAcendingDecending();
-                              },
-                              icon: const Icon(Icons.swap_vert),
-                              iconSize: 25,
-                              splashRadius: 18,
-                              tooltip: 'Order By Date',
-                              color: primaryColour,
-                              alignment: AlignmentDirectional.bottomStart,
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                model.toggleDraggableReordering();
-                              },
-                              icon: model.draggableReordering
-                                  ? const Icon(Icons.grid_view)
-                                  : const Icon(Icons.move_down),
-                              iconSize: 25,
-                              splashRadius: 18,
-                              tooltip: 'Enable Draggable Reordering',
-                              color: primaryColour,
-                              alignment: AlignmentDirectional.bottomStart,
-                            ),
-                            IconButton(
-                              onPressed: () async {
-                                await model.openPickerDialog(context);
-                              },
-                              icon: const Icon(Icons.add_circle),
-                              iconSize: 45,
-                              splashRadius: 30,
-                              tooltip: 'Add New',
-                              color: textColour,
-                              alignment: AlignmentDirectional.topCenter,
-                              padding:
-                                  const EdgeInsets.only(left: 40.0, right: 70),
-                            ),
-                            IconButton(
-                              onPressed: () async {
-                                await model.filterFavourites();
-                              },
-                              icon: model.galleryImagesShown.length ==
-                                      model.favouriteGalleryImagesShown.length
-                                  ? const Icon(Icons.favorite_border)
-                                  : const Icon(Icons.favorite),
-                              iconSize: 25,
-                              splashRadius: 18,
-                              tooltip: 'View Favourites',
-                              color: primaryColour,
-                              alignment: AlignmentDirectional.bottomEnd,
-                            ),
-                          ],
+              bottomNavigationBar: BottomAppBar(
+                color: transparentColour,
+                padding: const EdgeInsets.only(left: 50.0, right: 50.0),
+                height: 50,
+                shape: const CircularNotchedRectangle(),
+                notchMargin: 10,
+                child: ClipPath(
+                  clipper: const ShapeBorderClipper(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(40),
+                              topLeft: Radius.circular(40)))),
+                  child: DecoratedBox(
+                    decoration:
+                        const BoxDecoration(color: secondaryBackgroundColour),
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        IconButton(
+                          onPressed: model.galleryImagesShown.isEmpty
+                              ? null
+                              : () async {
+                                  await model.reorderAcendingDecending();
+                                },
+                          icon: const Icon(Icons.swap_vert),
+                          iconSize: 25,
+                          splashRadius: 18,
+                          tooltip: 'Order By Date',
+                          color: primaryColour,
                         ),
-                      ),
+                        IconButton(
+                          onPressed: model.galleryImagesShown.isEmpty
+                              ? null
+                              : () {
+                                  model.toggleDraggableReordering();
+                                },
+                          icon: model.draggableReordering
+                              ? const Icon(Icons.grid_view)
+                              : const Icon(Icons.move_down),
+                          iconSize: 25,
+                          splashRadius: 18,
+                          tooltip: 'Enable Draggable Reordering',
+                          color: primaryColour,
+                        ),
+                        IconButton(
+                          onPressed: model.galleryImagesShown.isEmpty
+                              ? null
+                              : () async {
+                                  await model.filterFavourites();
+                                },
+                          icon: model.galleryImagesShown.length ==
+                                  model.favouriteGalleryImagesShown.length
+                              ? const Icon(Icons.favorite_border)
+                              : const Icon(Icons.favorite),
+                          iconSize: 25,
+                          splashRadius: 18,
+                          tooltip: 'View Favourites',
+                          color: primaryColour,
+                          padding: const EdgeInsets.only(left: 150),
+                        ),
+                      ],
                     ),
                   ),
                 ),
