@@ -104,7 +104,11 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
     ThisUser? userData = await _userService.getUserData();
 
     if (userData != null) {
-      _userIcon = userData.avatar ?? "";
+      if (userData.avatar != null) {
+        if (await File(userData.avatar!).exists()) {
+          _userIcon = userData.avatar ?? "";
+        }
+      }
     }
   }
 
@@ -121,22 +125,7 @@ class GalleryViewModel extends BaseViewModel implements Initialisable {
       log.i('adding gallery image paths to list');
       //only add if path exists
       for (ThisImage galleryImage in getGalleryImages) {
-        log.i('try adding image');
-        if (galleryImage.path.isNotEmpty) {
-          log.i('there is a path');
-          try {
-            var truePath = await File(galleryImage.path).exists();
-            log.i(truePath);
-            if (truePath == true) {
-              addGalleryImagesToGallery(galleryImage);
-            }
-          } on PathNotFoundException {
-            //all these checks arnt resolving the throw error?
-            log.i('path not found exception for $galleryImage');
-          } catch (e) {
-            log.i('error for $galleryImage');
-          }
-        }
+        addGalleryImagesToGallery(galleryImage);
       }
 
       return true;

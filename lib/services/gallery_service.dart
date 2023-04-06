@@ -107,15 +107,9 @@ class GalleryService {
         //print(imageDocSnapshot.id);
         //why is this all the sudden throwing exception and not handleing it
         if (path.isNotEmpty) {
-          try {
-            if (await File(path).exists()) {
-              galleryImages.add(imageDocSnapshot);
-            } else {
-              log.i('did not add $imageDocSnapshot');
-            }
-          } on PathNotFoundException {
-            log.i('did not add $imageDocSnapshot');
-          } catch (e) {
+          if (await File(path).exists()) {
+            galleryImages.add(imageDocSnapshot);
+          } else {
             log.i('did not add $imageDocSnapshot');
           }
         }

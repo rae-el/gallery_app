@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gallery_app/models/this_user.dart';
@@ -40,7 +42,7 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
   String _userImagePath = "";
   String get userImagePath => _userImagePath;
 
-    final String _logoLocation = 'assets/monstera_logo.png';
+  final String _logoLocation = 'assets/monstera_logo.png';
   String get logoLocation => _logoLocation;
 
   @override
@@ -61,8 +63,12 @@ class ProfileViewModel extends BaseViewModel implements Initialisable {
       _uid = userData.id ?? "";
       _userEmail = userData.email ?? "";
       _userName = userData.username ?? "";
-      _userImagePath = userData.avatar ?? "";
       _userDescription = userData.description ?? "";
+      if (userData.avatar != null) {
+        if (await File(userData.avatar!).exists()) {
+          _userImagePath = userData.avatar ?? "";
+        }
+      }
 
       //assign values to the controllers
       nameField.text = _userName;
